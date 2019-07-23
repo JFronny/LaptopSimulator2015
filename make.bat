@@ -9,10 +9,16 @@ if %arg%==full goto full
 if %arg%==clean goto clean
 if %arg%==debug goto debug
 if %arg%==release goto release
+if %arg%==pull goto pull
+if %arg%==push goto push
+if %arg%==help goto help
 echo Invalid.
 :noinput
 set /p arg="arg: "
 goto select
+:help
+echo [full,clean,debug,release,pull,push,help]
+goto noinput
 :full
 set full=1
 echo Please wait a bit.
@@ -33,6 +39,10 @@ if %full%==1 (
     set full=2
     goto debug
 )
+if %full%==10 (
+    set full=11
+    goto push
+)
 goto exit
 :debug
 echo Building Debug
@@ -51,6 +61,21 @@ if %full%==3 (
     goto clean
 )
 goto exit
+:pull
+git pull
+goto exit
+:push
+if %full%==0 (
+    set full=10
+    goto clean
+)
+set /p inp1="Message: "
+if %full%==11 (
+    git add .
+	echo %inp1%
+    git commit -m "%inp1%"
+    git push -u origin master
+)
 :exit
 echo Done
 timeout /t 2 /nobreak >nul
