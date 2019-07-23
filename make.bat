@@ -72,7 +72,6 @@ if %full%==0 (
 set /p inp1="Message: "
 if %full%==11 (
     git add .
-	echo %inp1%
     git commit -m "%inp1%"
     git push -u origin master
 )
