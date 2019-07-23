@@ -1,0 +1,1 @@
+1: internal globalisation (switch case with languages)
