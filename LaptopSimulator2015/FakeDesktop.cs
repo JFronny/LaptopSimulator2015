@@ -451,9 +451,14 @@ namespace LaptopSimulator2015
             if (tmp && MessageBox.Show(strings.langWarning, "LaptopSimulator2015", MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
                 winShouldClose = true;
+                string ex = "";
+                if (Application.ExecutablePath.Contains(" "))
+                    ex = "\"\" \"" + Application.ExecutablePath + "\"";
+                else
+                    ex = Application.ExecutablePath;
                 Process.Start(new ProcessStartInfo
                 {
-                    Arguments = "/C timeout /t 2 /nobreak >nul && start \"" + Application.ExecutablePath + "\"",
+                    Arguments = "/C timeout /t 2 /nobreak >nul && start " + ex,
                     WindowStyle = ProcessWindowStyle.Hidden,
                     CreateNoWindow = true,
                     FileName = "cmd.exe"
