@@ -625,7 +625,7 @@ namespace LaptopSimulator2015
         private System.Windows.Forms.Label levelWindowTitle;
         private System.Windows.Forms.Panel levelWindowIcon;
         private System.Windows.Forms.Label levelWindowText1;
-        private TabControlH levelWindowContents;
+        private LaptopSimulator2015.FakeDesktop.TabControlH levelWindowContents;
         private System.Windows.Forms.TabPage levelWindow1;
         private System.Windows.Forms.TabPage levelWindow2;
         private System.Windows.Forms.Button levelWindowC1;

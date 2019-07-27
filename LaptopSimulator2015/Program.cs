@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Runtime.InteropServices;
+using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 
@@ -18,7 +19,7 @@ namespace LaptopSimulator2015
             Console.Title = "LaptopSimulator2015";
 #if DEBUG
             FileStream filestream = new FileStream(".log", FileMode.Create);
-            var streamwriter = new StreamWriter(filestream);
+            StreamWriter streamwriter = new StreamWriter(filestream);
             streamwriter.AutoFlush = true;
             Console.SetOut(streamwriter);
             Console.SetError(streamwriter);

@@ -59,123 +59,87 @@ namespace LaptopSimulator2015.Levels
 
         public Panel desktopIcon { get; set; }
 
-        public int installerProgressSteps => 200;
+        public int installerProgressSteps => 500;
 
-        List<Point> invadersAliens = new List<Point>();
-        List<Point> invadersBullets = new List<Point>();
-        Point invadersPlayer;
-        uint invadersPrevTime = 0;
+        List<Vector2> invadersAliens = new List<Vector2>();
+        List<Vector2> invadersBullets = new List<Vector2>();
+        Vector2 invadersPlayer;
+        uint minigamePrevTime = 0;
         bool invadersCanShoot = true;
 
-        public void gameTick(Graphics g, Panel invadersPanel, Timer invadersTimer, uint invadersTime)
+        public void gameTick(Graphics g, Panel minigamePanel, Timer minigameTimer, uint minigameTime)
         {
             try
             {
                 g.Clear(Color.Black);
                 for (int i = 0; i < invadersAliens.Count; i++)
                 {
-                    g.FillRectangle(new SolidBrush(Color.Red), new Rectangle(invadersAliens[i], new Size(10, 10)));
+                    g.FillRectangle(new SolidBrush(Color.Red), new Rectangle(invadersAliens[i].toPoint(), new Size(10, 10)));
                 }
                 for (int i = 0; i < invadersBullets.Count; i++)
                 {
-                    g.FillRectangle(new SolidBrush(Color.White), new Rectangle(invadersBullets[i], new Size(5, 5)));
+                    g.FillRectangle(new SolidBrush(Color.White), new Rectangle(invadersBullets[i].toPoint(), new Size(5, 5)));
                 }
-                g.FillRectangle(new SolidBrush(Color.Green), new Rectangle(invadersPlayer, new Size(10, 10)));
+                g.FillRectangle(new SolidBrush(Color.Green), new Rectangle(invadersPlayer.toPoint(), new Size(10, 10)));
                 Random random = new Random();
-                if (invadersTime != invadersPrevTime)
+                if (minigameTime != minigamePrevTime)
                 {
-                    if (random.Next(0, 100000) < invadersTime + 1300)
-                        invadersAliens.Add(new Point(invadersPanel.Width, random.Next(invadersPanel.Height - 10)));
-                    invadersPrevTime = invadersTime;
+                    minigamePrevTime = minigameTime;
+                    if (random.Next(0, 100000) < minigameTime + 1300)
+                        invadersAliens.Add(new Vector2(minigamePanel.Width, random.Next(minigamePanel.Height - 10)));
                     for (int i = 0; i < invadersAliens.Count; i++)
                     {
-                        invadersAliens[i] = new Point(invadersAliens[i].X - 1, invadersAliens[i].Y);
-                        if (Math.Pow(invadersPlayer.X - invadersAliens[i].X, 2) + Math.Pow(invadersPlayer.Y - invadersAliens[i].Y, 2) < 100 | invadersAliens[i].X < 0)
+                        invadersAliens[i].X -= 1;
+                        if (invadersPlayer.distanceFromSquared(invadersAliens[i]) < 100 | invadersAliens[i].X < 0)
                         {
-                            invadersTimer.Enabled = false;
-                            g.Clear(Color.Red);
-                            g.SmoothingMode = SmoothingMode.AntiAlias;
-                            g.InterpolationMode = InterpolationMode.HighQualityBicubic;
-                            g.PixelOffsetMode = PixelOffsetMode.HighQuality;
-                            RectangleF rectf = new RectangleF(invadersPanel.Width / 2, invadersPanel.Height / 2, 90, 50);
-                            g.DrawString("Lost.", new Font("Tahoma", 20), Brushes.Black, rectf);
+                            throw new Exception("The VM was shut down to prevent damage to your Machine.", new Exception("0717750f-3508-4bc2-841e-f3b077c676fe"));
                         }
                     }
-                    invadersCanShoot = invadersCanShoot | !IsKeyDown(Keys.Space);
-                    List<int> aliensToRemove = new List<int>();
-                    List<int> bulletsToRemove = new List<int>();
+                    invadersCanShoot = invadersCanShoot | !Input.IsKeyDown(Keys.Space);
+                    List<Vector2> aliensToRemove = new List<Vector2>();
+                    List<Vector2> bulletsToRemove = new List<Vector2>();
                     for (int i = 0; i < invadersBullets.Count; i++)
                     {
-                        invadersBullets[i] = new Point(invadersBullets[i].X + 4, invadersBullets[i].Y);
+                        invadersBullets[i].X += 4;
                         for (int j = 0; j < invadersAliens.Count; j++)
                         {
-                            if (Math.Pow(invadersBullets[i].X - invadersAliens[j].X - 2.5f, 2) + Math.Pow(invadersBullets[i].Y - invadersAliens[j].Y - 2.5f, 2) < 56.25f)
+                            if (invadersBullets[i].distanceFromSquared(invadersAliens[j] + new Vector2(2.5f, 2.5f)) < 56.25f)
                             {
-                                if (!aliensToRemove.Contains(j))
-                                    aliensToRemove.Add(j);
-                                if (!bulletsToRemove.Contains(i))
-                                    bulletsToRemove.Add(i);
+                                aliensToRemove.Add(invadersAliens[j]);
+                                bulletsToRemove.Add(invadersBullets[i]);
                             }
                         }
-                        if (invadersBullets[i].X > invadersPanel.Width)
-                            bulletsToRemove.Add(i);
+                        if (invadersBullets[i].X > minigamePanel.Width)
+                            bulletsToRemove.Add(invadersBullets[i]);
                     }
-                    aliensToRemove = aliensToRemove.Distinct().ToList();
-                    aliensToRemove.Sort();
-                    aliensToRemove.Reverse();
-                    bulletsToRemove = bulletsToRemove.Distinct().ToList();
-                    bulletsToRemove.Sort();
-                    bulletsToRemove.Reverse();
-                    for (int i = 0; i < aliensToRemove.Count; i++)
-                    {
-                        try
-                        {
-                            invadersAliens.RemoveAt(aliensToRemove[i]);
-                        }
-                        catch { }
-                    }
-                    for (int i = 0; i < bulletsToRemove.Count; i++)
-                    {
-                        try
-                        {
-                            invadersBullets.RemoveAt(bulletsToRemove[i]);
-                        }
-                        catch { }
-                    }
-                    if (IsKeyDown(Keys.W))
+                    invadersAliens = invadersAliens.Except(aliensToRemove.Distinct()).Distinct().ToList();
+                    invadersBullets = invadersBullets.Except(bulletsToRemove.Distinct()).Distinct().ToList();
+                    if (Input.IsKeyDown(Keys.W))
                         invadersPlayer.Y -= 2;
-                    if (IsKeyDown(Keys.A))
+                    if (Input.IsKeyDown(Keys.A))
                         invadersPlayer.X -= 2;
-                    if (IsKeyDown(Keys.S))
+                    if (Input.IsKeyDown(Keys.S))
                         invadersPlayer.Y += 2;
-                    if (IsKeyDown(Keys.D))
+                    if (Input.IsKeyDown(Keys.D))
                         invadersPlayer.X += 2;
-                    if (IsKeyDown(Keys.Space) & invadersCanShoot)
+                    if (Input.IsKeyDown(Keys.Space) & invadersCanShoot)
                     {
-                        invadersBullets.Add(invadersPlayer);
+                        invadersBullets.Add(new Vector2(invadersPlayer));
                         invadersCanShoot = false;
                     }
-                    if (invadersPlayer.X < 0)
-                        invadersPlayer.X = invadersPanel.Width;
-                    if (invadersPlayer.X > invadersPanel.Width)
-                        invadersPlayer.X = 0;
-                    if (invadersPlayer.Y < 0)
-                        invadersPlayer.Y = invadersPanel.Height;
-                    if (invadersPlayer.Y > invadersPanel.Height)
-                        invadersPlayer.Y = 0;
                 }
             }
-            catch (Exception ex) { Console.WriteLine(ex.ToString()); }
+            catch (Exception ex) { if (ex.InnerException?.Message == "0717750f-3508-4bc2-841e-f3b077c676fe") throw new Exception(ex.Message); else Console.WriteLine(ex.ToString()); }
         }
 
-        bool IsKeyDown(Keys key) => Input.IsKeyDown(key);
-
-        public void initGame(Graphics g, Panel invadersPanel, Timer invadersTimer)
+        public void initGame(Graphics g, Panel minigamePanel, Timer minigameTimer)
         {
-            invadersPlayer = new Point(invadersPanel.Width / 4, invadersPanel.Height / 2);
-            invadersAliens = new List<Point>();
-            invadersBullets = new List<Point>();
-            invadersPrevTime = 0;
+            invadersPlayer = new Vector2(minigamePanel.Width / 4, minigamePanel.Height / 2);
+            invadersPlayer.bounds_wrap = true;
+            invadersPlayer.bounds = new Rectangle(-10, -10, minigamePanel.Width + 10, minigamePanel.Height + 10);
+            invadersAliens = new List<Vector2>();
+            invadersBullets = new List<Vector2>();
+            minigamePrevTime = 0;
             invadersCanShoot = true;
         }
     }

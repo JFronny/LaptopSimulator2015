@@ -17,7 +17,7 @@ namespace LaptopSimulator2015
         int gameClock { get; }
         Panel desktopIcon { get; set; }
         int installerProgressSteps { get; }
-        void initGame(Graphics g, Panel invadersPanel, Timer invadersTimer);
-        void gameTick(Graphics g, Panel invadersPanel, Timer invadersTimer, uint invadersTime);
+        void initGame(Graphics g, Panel minigamePanel, Timer minigameTimer);
+        void gameTick(Graphics g, Panel minigamePanel, Timer minigameTimer, uint minigameTime);
     }
 }

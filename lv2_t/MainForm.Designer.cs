@@ -1,4 +1,4 @@
-﻿namespace SIT
+﻿namespace lv2_t
 {
     partial class MainForm
     {
@@ -13,7 +13,7 @@
         /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
         protected override void Dispose(bool disposing)
         {
-            if (disposing & (components != null))
+            if (disposing && (components != null))
             {
                 components.Dispose();
             }
@@ -29,22 +29,17 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            this.invadersPanel = new System.Windows.Forms.Panel();
+            this.minigameClockT = new System.Windows.Forms.Timer(this.components);
             this.button1 = new System.Windows.Forms.Button();
-            this.invadersTimer = new System.Windows.Forms.Timer(this.components);
-            this.invadersPanel.SuspendLayout();
+            this.minigamePanel = new System.Windows.Forms.Panel();
+            this.minigamePanel.SuspendLayout();
             this.SuspendLayout();
             // 
-            // invadersPanel
+            // minigameClockT
             // 
-            this.invadersPanel.BackColor = System.Drawing.Color.Black;
-            this.invadersPanel.Controls.Add(this.button1);
-            this.invadersPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.invadersPanel.Location = new System.Drawing.Point(0, 0);
-            this.invadersPanel.Name = "invadersPanel";
-            this.invadersPanel.Size = new System.Drawing.Size(800, 450);
-            this.invadersPanel.TabIndex = 0;
-            this.invadersPanel.Paint += new System.Windows.Forms.PaintEventHandler(this.Panel1_Paint);
+            this.minigameClockT.Enabled = true;
+            this.minigameClockT.Interval = 17;
+            this.minigameClockT.Tick += new System.EventHandler(this.MinigameClockT_Tick);
             // 
             // button1
             // 
@@ -57,20 +52,24 @@
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.Button1_Click);
             // 
-            // invadersTimer
+            // minigamePanel
             // 
-            this.invadersTimer.Enabled = true;
-            this.invadersTimer.Interval = 17;
-            this.invadersTimer.Tick += new System.EventHandler(this.Timer1_Tick);
+            this.minigamePanel.BackColor = System.Drawing.Color.Black;
+            this.minigamePanel.Controls.Add(this.button1);
+            this.minigamePanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.minigamePanel.Location = new System.Drawing.Point(0, 0);
+            this.minigamePanel.Name = "minigamePanel";
+            this.minigamePanel.Size = new System.Drawing.Size(800, 450);
+            this.minigamePanel.TabIndex = 1;
+            this.minigamePanel.Paint += new System.Windows.Forms.PaintEventHandler(this.MinigamePanel_Paint);
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.SystemColors.Control;
             this.ClientSize = new System.Drawing.Size(800, 450);
             this.ControlBox = false;
-            this.Controls.Add(this.invadersPanel);
+            this.Controls.Add(this.minigamePanel);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
@@ -78,17 +77,17 @@
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Form1";
-            this.invadersPanel.ResumeLayout(false);
+            this.Text = "MainForm";
+            this.minigamePanel.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
 
         #endregion
 
-        private System.Windows.Forms.Panel invadersPanel;
-        private System.Windows.Forms.Timer invadersTimer;
+        private System.Windows.Forms.Timer minigameClockT;
         private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Panel minigamePanel;
     }
 }
 
