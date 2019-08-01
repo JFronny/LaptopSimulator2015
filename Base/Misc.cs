@@ -23,5 +23,7 @@ namespace Base
         public static float i2f(int input) => input;
         public static double i2d(int input) => input;
         public static double f2d(float input) => input;
+        public static double rad2deg(double input) => (360 * input) / (2 * Math.PI);
+        public static double deg2rad(double input) => ((2 * Math.PI) * input) / 360;
     }
 }

@@ -19,11 +19,11 @@ namespace LaptopSimulator2015
             {
                 components.Dispose();
             }
-            if (ptrHook != IntPtr.Zero)
+            /*if (ptrHook != IntPtr.Zero)
             {
                 UnhookWindowsHookEx(ptrHook);
                 ptrHook = IntPtr.Zero;
-            }
+            }*/
             base.Dispose(disposing);
         }
 
@@ -49,7 +49,7 @@ namespace LaptopSimulator2015
             this.options_2 = new System.Windows.Forms.Panel();
             this.levelWindow = new System.Windows.Forms.Panel();
             this.levelWindowC1 = new System.Windows.Forms.Button();
-            this.levelWindowContents = new LaptopSimulator2015.FakeDesktop.TabControlH();
+            this.levelWindowContents = new System.Windows.Forms.TabControl();
             this.levelWindow1 = new System.Windows.Forms.TabPage();
             this.levelWindowText1 = new System.Windows.Forms.Label();
             this.levelWindow2 = new System.Windows.Forms.TabPage();
@@ -69,6 +69,7 @@ namespace LaptopSimulator2015
             this.minigamePanel = new System.Windows.Forms.Panel();
             this.minigameClockT = new System.Windows.Forms.Timer(this.components);
             this.optionsWindow = new System.Windows.Forms.Panel();
+            this.optionsWindowReset = new System.Windows.Forms.Button();
             this.optionsWindowLang = new System.Windows.Forms.ComboBox();
             this.optionsWindowSubs = new System.Windows.Forms.CheckBox();
             this.optionsWindowExit = new System.Windows.Forms.Button();
@@ -252,24 +253,27 @@ namespace LaptopSimulator2015
             // 
             // levelWindowContents
             // 
+            this.levelWindowContents.Appearance = System.Windows.Forms.TabAppearance.Buttons;
             this.levelWindowContents.Controls.Add(this.levelWindow1);
             this.levelWindowContents.Controls.Add(this.levelWindow2);
             this.levelWindowContents.Controls.Add(this.levelWindow3);
             this.levelWindowContents.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.levelWindowContents.ItemSize = new System.Drawing.Size(20, 15);
             this.levelWindowContents.Location = new System.Drawing.Point(0, 20);
             this.levelWindowContents.Name = "levelWindowContents";
             this.levelWindowContents.SelectedIndex = 0;
             this.levelWindowContents.Size = new System.Drawing.Size(502, 248);
+            this.levelWindowContents.SizeMode = System.Windows.Forms.TabSizeMode.Fixed;
             this.levelWindowContents.TabIndex = 2;
             this.levelWindowContents.TabStop = false;
             // 
             // levelWindow1
             // 
             this.levelWindow1.Controls.Add(this.levelWindowText1);
-            this.levelWindow1.Location = new System.Drawing.Point(4, 22);
+            this.levelWindow1.Location = new System.Drawing.Point(4, 19);
             this.levelWindow1.Name = "levelWindow1";
             this.levelWindow1.Padding = new System.Windows.Forms.Padding(3);
-            this.levelWindow1.Size = new System.Drawing.Size(494, 222);
+            this.levelWindow1.Size = new System.Drawing.Size(494, 225);
             this.levelWindow1.TabIndex = 0;
             this.levelWindow1.UseVisualStyleBackColor = true;
             // 
@@ -288,10 +292,10 @@ namespace LaptopSimulator2015
             this.levelWindow2.Controls.Add(this.captchaBox);
             this.levelWindow2.Controls.Add(this.captchaPanel);
             this.levelWindow2.Controls.Add(this.levelWindowText2);
-            this.levelWindow2.Location = new System.Drawing.Point(4, 22);
+            this.levelWindow2.Location = new System.Drawing.Point(4, 14);
             this.levelWindow2.Name = "levelWindow2";
             this.levelWindow2.Padding = new System.Windows.Forms.Padding(3);
-            this.levelWindow2.Size = new System.Drawing.Size(494, 222);
+            this.levelWindow2.Size = new System.Drawing.Size(494, 230);
             this.levelWindow2.TabIndex = 1;
             this.levelWindow2.UseVisualStyleBackColor = true;
             // 
@@ -328,9 +332,9 @@ namespace LaptopSimulator2015
             // 
             this.levelWindow3.Controls.Add(this.levelWindowProgress);
             this.levelWindow3.Controls.Add(this.levelWindowText3);
-            this.levelWindow3.Location = new System.Drawing.Point(4, 22);
+            this.levelWindow3.Location = new System.Drawing.Point(4, 14);
             this.levelWindow3.Name = "levelWindow3";
-            this.levelWindow3.Size = new System.Drawing.Size(494, 222);
+            this.levelWindow3.Size = new System.Drawing.Size(494, 230);
             this.levelWindow3.TabIndex = 2;
             this.levelWindow3.UseVisualStyleBackColor = true;
             // 
@@ -441,6 +445,7 @@ namespace LaptopSimulator2015
             // optionsWindow
             // 
             this.optionsWindow.BackColor = System.Drawing.SystemColors.Window;
+            this.optionsWindow.Controls.Add(this.optionsWindowReset);
             this.optionsWindow.Controls.Add(this.optionsWindowLang);
             this.optionsWindow.Controls.Add(this.optionsWindowSubs);
             this.optionsWindow.Controls.Add(this.optionsWindowExit);
@@ -453,6 +458,17 @@ namespace LaptopSimulator2015
             this.optionsWindow.Size = new System.Drawing.Size(502, 94);
             this.optionsWindow.TabIndex = 6;
             this.optionsWindow.Visible = false;
+            // 
+            // optionsWindowReset
+            // 
+            this.optionsWindowReset.BackColor = System.Drawing.Color.Red;
+            this.optionsWindowReset.Location = new System.Drawing.Point(332, 64);
+            this.optionsWindowReset.Name = "optionsWindowReset";
+            this.optionsWindowReset.Size = new System.Drawing.Size(75, 23);
+            this.optionsWindowReset.TabIndex = 7;
+            this.optionsWindowReset.Text = "Reset";
+            this.optionsWindowReset.UseVisualStyleBackColor = false;
+            this.optionsWindowReset.Click += new System.EventHandler(this.OptionsWindowReset_Click);
             // 
             // optionsWindowLang
             // 
@@ -625,7 +641,7 @@ namespace LaptopSimulator2015
         private System.Windows.Forms.Label levelWindowTitle;
         private System.Windows.Forms.Panel levelWindowIcon;
         private System.Windows.Forms.Label levelWindowText1;
-        private LaptopSimulator2015.FakeDesktop.TabControlH levelWindowContents;
+        private System.Windows.Forms.TabControl levelWindowContents;
         private System.Windows.Forms.TabPage levelWindow1;
         private System.Windows.Forms.TabPage levelWindow2;
         private System.Windows.Forms.Button levelWindowC1;
@@ -656,5 +672,6 @@ namespace LaptopSimulator2015
         private System.Windows.Forms.ComboBox optionsWindowLang;
         private System.Windows.Forms.Label levelWindowHeaderExit;
         private System.Windows.Forms.Label optionsWindowHeaderExit;
+        private System.Windows.Forms.Button optionsWindowReset;
     }
 }

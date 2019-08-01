@@ -3,11 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows.Forms;
 using System.Media;
-using System.Runtime.ExceptionServices;
 using System.Reflection;
 using System.Diagnostics;
 using System.IO;
@@ -19,16 +17,6 @@ namespace LaptopSimulator2015
         #region Base
         List<Level> levels = new List<Level>();
         bool winShouldClose = false;
-        class TabControlH : TabControl
-        {
-            protected override void WndProc(ref Message m)
-            {
-                if (m.Msg == 0x1328 & !DesignMode)
-                    m.Result = (IntPtr)1;
-                else
-                    base.WndProc(ref m);
-            }
-        }
 
         enum Mode
         {
@@ -65,52 +53,12 @@ namespace LaptopSimulator2015
                 subsLabel.Visible = optionsWindowSubs.Checked;
                 if (_mode == Mode.mainMenu)
                     winMenuStart.Select();
-            }
-        }
-
-        // Structure contain information about low-level keyboard input event
-        [StructLayout(LayoutKind.Sequential)]
-        private struct KBDLLHOOKSTRUCT
-        {
-            public Keys key;
-            public int scanCode;
-            public int flags;
-            public int time;
-            public IntPtr extra;
-        }
-
-        //System level functions to be used for hook and unhook keyboard input
-        private delegate IntPtr LowLevelKeyboardProc(int nCode, IntPtr wParam, IntPtr lParam);
-        [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
-        private static extern IntPtr SetWindowsHookEx(int id, LowLevelKeyboardProc callback, IntPtr hMod, uint dwThreadId);
-        [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
-        private static extern bool UnhookWindowsHookEx(IntPtr hook);
-        [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
-        private static extern IntPtr CallNextHookEx(IntPtr hook, int nCode, IntPtr wp, IntPtr lp);
-        [DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
-        private static extern IntPtr GetModuleHandle(string name);
-        [DllImport("user32.dll", CharSet = CharSet.Auto)]
-        private static extern short GetAsyncKeyState(Keys key);
-
-
-        //Declaring Global objects
-        private IntPtr ptrHook;
-
-        private LowLevelKeyboardProc objKeyboardProcess;
-
-        private IntPtr captureKey(int nCode, IntPtr wp, IntPtr lp)
-        {
-            if (nCode >= 0)
-            {
-                KBDLLHOOKSTRUCT objKeyInfo = (KBDLLHOOKSTRUCT)Marshal.PtrToStructure(lp, typeof(KBDLLHOOKSTRUCT));
-                if (objKeyInfo.key == Keys.RWin | objKeyInfo.key == Keys.LWin)
+                for (int i = 0; i < levels.Count; i++)
                 {
-                    if (wp == (IntPtr)0x0101)
-                        WinKey_Click(null, null);
-                    return (IntPtr)1;
+                    levels[i].desktopIcon.Visible = levels[i].LevelNumber >= Settings.Default.level;
+                    Console.WriteLine(levels[i].LevelNumber + " - " + _mode.ToString() + ": " + levels[i].desktopIcon.Visible.ToString());
                 }
             }
-            return CallNextHookEx(ptrHook, nCode, wp, lp);
         }
 
         public FakeDesktop()
@@ -118,9 +66,8 @@ namespace LaptopSimulator2015
             Directory.SetCurrentDirectory(Path.GetDirectoryName(Application.ExecutablePath));
             if (!Directory.Exists("Levels"))
                 Directory.CreateDirectory("Levels");
-            objKeyboardProcess = new LowLevelKeyboardProc(captureKey);
-            ptrHook = SetWindowsHookEx(13, objKeyboardProcess, GetModuleHandle(Process.GetCurrentProcess().MainModule.ModuleName), 0);
             InitializeComponent();
+            levelWindowContents.ItemSize = new Size(0, 1);
             optionsWindowLang.Text = Settings.Default.lang.Name;
             Thread.CurrentThread.CurrentUICulture = Settings.Default.lang;
             optionsWindowWam.Value = Settings.Default.wam;
@@ -150,27 +97,26 @@ namespace LaptopSimulator2015
             for (int i = 0; i < tmp.Count; i++)
             {
                 levels.Add((Level)Activator.CreateInstance(tmp[i]));
+                levels[i].desktopIcon = new Panel();
                 Panel tmp1 = new Panel();
-                Panel tmp2 = new Panel();
 
-                tmp1.Size = new Size(50, 50);
-                tmp1.BackColor = Color.FromArgb(128, 128, 255);
-                tmp1.Name = "lvl" + i.ToString() + "_1";
-                tmp1.Visible = i >= Settings.Default.level;
+                levels[i].desktopIcon.Size = new Size(50, 50);
+                levels[i].desktopIcon.BackColor = Color.FromArgb(128, 128, 255);
+                levels[i].desktopIcon.Name = "lvl" + i.ToString() + "_1";
+                levels[i].desktopIcon.Visible = levels[i].LevelNumber >= Settings.Default.level;
 
-                tmp2.BackColor = Color.Blue;
-                tmp2.BackgroundImageLayout = ImageLayout.Stretch;
-                tmp2.BackgroundImage = levels[i].installerIcon;
-                tmp2.Anchor = (AnchorStyles)15;
-                tmp2.Name = "lvl" + i.ToString() + "_2";
-                tmp2.Location = new Point(2, 2);
-                tmp2.Size = new Size(46, 46);
-                tmp2.Tag = i;
-                tmp2.DoubleClick += (sender, e) => { level_Start((int)((Panel)sender).Tag); };
+                tmp1.BackColor = Color.Blue;
+                tmp1.BackgroundImageLayout = ImageLayout.Stretch;
+                tmp1.BackgroundImage = levels[i].installerIcon;
+                tmp1.Anchor = (AnchorStyles)15;
+                tmp1.Name = "lvl" + i.ToString() + "_2";
+                tmp1.Location = new Point(2, 2);
+                tmp1.Size = new Size(46, 46);
+                tmp1.Tag = i;
+                tmp1.DoubleClick += (sender, e) => { level_Start((int)((Panel)sender).Tag); };
 
-                tmp1.Controls.Add(tmp2);
-                winDesktop.Controls.Add(tmp1);
-                levels[i].desktopIcon = tmp1;
+                levels[i].desktopIcon.Controls.Add(tmp1);
+                winDesktop.Controls.Add(levels[i].desktopIcon);
             }
             levels = levels.OrderBy(lv => lv.LevelNumber).ToList();
             mode = Mode.mainMenu;
@@ -311,14 +257,18 @@ namespace LaptopSimulator2015
                     break;
                 case 2:
                     LevelWindowHeaderExit_Click(sender, e);
-                    if (levelInd == Settings.Default.level)
+                    if (levels[levelInd].LevelNumber >= Settings.Default.level)
                     {
-                        Settings.Default.level = Math.Min(levels.Count - 1, levelInd);
+                        int closest = int.MaxValue;
+                        for (int i = 0; i < levels.Count; i++)
+                            if (levels[i].LevelNumber < closest & levels[i].LevelNumber > levels[levelInd].LevelNumber)
+                                closest = levels[i].LevelNumber;
+                        if (closest != int.MaxValue)
+                            Settings.Default.level = closest;
                         Settings.Default.Save();
                         for (int i = 0; i < levels.Count; i++)
-                        {
-                            levels[i].desktopIcon.Visible = i >= Settings.Default.level;
-                        }
+                            levels[i].desktopIcon.Visible = levels[i].LevelNumber >= Settings.Default.level;
+                        mode = Mode.game;
                     }
                     break;
             }
@@ -383,28 +333,6 @@ namespace LaptopSimulator2015
         {
             minigameTime++;
             minigamePanel.Invalidate();
-        }
-
-        [DllImport("user32.dll", CharSet = CharSet.Auto, ExactSpelling = true)]
-        private static extern short GetKeyState(int keyCode);
-
-        public static bool IsKeyDown(Keys key)
-        {
-            try
-            {
-                int state = 0;
-                short retVal = GetKeyState((int)key);
-                if ((retVal & 0x8000) == 0x8000)
-                    state |= 1;
-                if ((retVal & 1) == 1)
-                    state |= 2;
-                return 1 == (state & 1);
-            }
-            catch (Exception e1)
-            {
-                Console.WriteLine("Invader: IsKeyDown failed:\r\n" + e1.ToString());
-                return false;
-            }
         }
         #endregion
 
@@ -528,6 +456,17 @@ namespace LaptopSimulator2015
             {
                 rndCol = Color.FromArgb(128, rndCol.R, rndCol.G, rndCol.B);
                 e.Graphics.FillRectangle(new SolidBrush(rndCol), new RectangleF(Point.Empty, ((Control)sender).Size));
+            }
+        }
+        private void OptionsWindowReset_Click(object sender, EventArgs e)
+        {
+            if (MessageBox.Show(strings.resetWarning1, "", MessageBoxButtons.YesNo) == DialogResult.Yes && MessageBox.Show(strings.resetWarning2, "", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            {
+                Settings.Default.wam = 0;
+                Settings.Default.mlg = false;
+                Settings.Default.subs = true;
+                Settings.Default.level = 1;
+                Settings.Default.Save();
             }
         }
         #endregion

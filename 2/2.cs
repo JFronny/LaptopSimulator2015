@@ -66,15 +66,17 @@ namespace LaptopSimulator2015.Levels
         uint minigamePrevTime = 0;
         uint lives = 3;
 
-        public void gameTick(Graphics g, Panel minigamePanel, Timer minigameTimer, uint minigameTime)
+        public void gameTick(Graphics e, Panel minigamePanel, Timer minigameTimer, uint minigameTime)
         {
+            BufferedGraphics buffer = BufferedGraphicsManager.Current.Allocate(e, new Rectangle(0, 0, minigamePanel.Width, minigamePanel.Height));
+            Graphics g = buffer.Graphics;
             try
             {
-                Random random = new Random();
                 for (int i = 0; i < enemies.Count; i++)
                     g.FillRectangle(new SolidBrush(Color.Red), new Rectangle(enemies[i].toPoint(), new Size(10, 10)));
                 g.FillRectangle(new SolidBrush(Color.Green), new Rectangle(player.toPoint(), new Size(10, 10)));
                 g.DrawString(lives.ToString(), new Font("Tahoma", 7), Brushes.White, new Rectangle(player.toPoint(), new Size(10, 10)));
+                Random random = new Random();
                 if (minigameTime != minigamePrevTime)
                 {
                     minigamePrevTime = minigameTime;
@@ -117,6 +119,8 @@ namespace LaptopSimulator2015.Levels
                     }
                     enemies = enemies.Except(enemiesToRemove.Distinct()).Distinct().ToList();
                 }
+                buffer.Render();
+                buffer.Dispose();
             }
             catch (Exception ex) { if (ex.InnerException?.Message == "0717750f-3508-4bc2-841e-f3b077c676fe") throw new Exception(ex.Message); else Console.WriteLine(ex.ToString()); }
         }

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.IO;
+#if !DEBUG
 using System.Runtime.InteropServices;
+#endif
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;

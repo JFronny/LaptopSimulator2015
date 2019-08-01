@@ -37,14 +37,15 @@ namespace lv2_t
         int lives = 3;
         private void MinigamePanel_Paint(object sender, PaintEventArgs e)
         {
-            Graphics g = e.Graphics;
+            BufferedGraphics buffer = BufferedGraphicsManager.Current.Allocate(e.Graphics, new Rectangle(0, 0, minigamePanel.Width, minigamePanel.Height));
+            Graphics g = buffer.Graphics;
             try
             {
-                Random random = new Random();
                 for (int i = 0; i < enemies.Count; i++)
                     g.FillRectangle(new SolidBrush(Color.Red), new Rectangle(enemies[i].toPoint(), new Size(10, 10)));
                 g.FillRectangle(new SolidBrush(Color.Green), new Rectangle(player.toPoint(), new Size(10, 10)));
                 g.DrawString(lives.ToString(), new Font("Tahoma", 7), Brushes.White, new Rectangle(player.toPoint(), new Size(10, 10)));
+                Random random = new Random();
                 if (minigameTime != minigamePrevTime)
                 {
                     minigamePrevTime = minigameTime;
@@ -87,6 +88,8 @@ namespace lv2_t
                     }
                     enemies = enemies.Except(enemiesToRemove.Distinct()).Distinct().ToList();
                 }
+                buffer.Render();
+                buffer.Dispose();
             }
             catch (Exception ex)
             {
@@ -100,6 +103,7 @@ namespace lv2_t
                     SizeF sLen = g.MeasureString("Lost.", new Font("Tahoma", 20));
                     RectangleF rectf = new RectangleF(minigamePanel.Width / 2 - sLen.Width / 2, minigamePanel.Height / 2 - sLen.Height / 2, 90, 50);
                     g.DrawString("Lost.", new Font("Tahoma", 20), Brushes.Black, rectf);
+                    buffer.Render();
                 }
                 else
 #if DEBUG

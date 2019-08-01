@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="captchaLetters" xml:space="preserve">
-    <value>ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789</value>
+    <value>ABCDEFGHIJKLMNPQRSTUVWXYZ123456789</value>
   </data>
   <data name="consoleError" xml:space="preserve">
     <value>An unhandled Exception occured and the Application was terminated. Please contact the developer.</value>
@@ -155,6 +155,12 @@
   </data>
   <data name="ramInstallerWindowText3" xml:space="preserve">
     <value>Please wait for the installation to finish...</value>
+  </data>
+  <data name="resetWarning1" xml:space="preserve">
+    <value>Are you sure you want to reset you progress?</value>
+  </data>
+  <data name="resetWarning2" xml:space="preserve">
+    <value>Are you absolutly sure you want to reset you progress? This is your last chance to turn back!</value>
   </data>
   <data name="winMenuExit1" xml:space="preserve">
     <value>Exit</value>

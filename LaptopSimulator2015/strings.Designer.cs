@@ -70,7 +70,7 @@ namespace LaptopSimulator2015 {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.
+        ///   Looks up a localized string similar to ABCDEFGHIJKLMNPQRSTUVWXYZ123456789.
         /// </summary>
         internal static string captchaLetters {
             get {
@@ -174,6 +174,24 @@ namespace LaptopSimulator2015 {
         internal static string ramInstallerWindowText3 {
             get {
                 return ResourceManager.GetString("ramInstallerWindowText3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to reset you progress?.
+        /// </summary>
+        internal static string resetWarning1 {
+            get {
+                return ResourceManager.GetString("resetWarning1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Are you absolutly sure you want to reset you progress? This is your last chance to turn back!.
+        /// </summary>
+        internal static string resetWarning2 {
+            get {
+                return ResourceManager.GetString("resetWarning2", resourceCulture);
             }
         }
         

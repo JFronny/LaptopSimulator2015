@@ -13,6 +13,7 @@ namespace Base
         public static readonly Vector2 Zero = new Vector2(Point.Empty);
         double x_unchecked = 0;
         double y_unchecked = 0;
+        public object Tag;
         void check()
         {
             if (!bounds.IsEmpty)
@@ -91,10 +92,10 @@ namespace Base
         public PointF toPointF() => new PointF(Misc.d2f(X), Misc.d2f(Y));
         public double distanceFromSquared(Vector2 other) => Math.Pow(X - other.X, 2) + Math.Pow(Y - other.Y, 2);
         public double distanceFrom(Vector2 other) => Math.Sqrt(distanceFromSquared(other));
-        public void moveInDirection(double angle = 0, double distance = 1)
+        public void moveInDirection(double radians = 0, double distance = 1)
         {
-            X += Math.Cos(angle) * distance;
-            Y += Math.Sin(angle) * distance;
+            X += Math.Cos(radians) * distance;
+            Y += Math.Sin(radians) * distance;
         }
 
         public double getDirection(Vector2 other) => Math.Atan((other.X - X) / (other.Y - Y));

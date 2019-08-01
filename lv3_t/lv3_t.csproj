@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{D80DBBF2-307F-40A0-86F1-871C8DAA394B}</ProjectGuid>
+    <ProjectGuid>{244E68E6-90D2-447D-B380-13CA8DD3D4EC}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>SIT</RootNamespace>
-    <AssemblyName>SIT</AssemblyName>
+    <RootNamespace>lv3_t</RootNamespace>
+    <AssemblyName>lv3_t</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -86,8 +86,4 @@
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <PropertyGroup>
-    <PreBuildEvent>
-    </PreBuildEvent>
-  </PropertyGroup>
 </Project>

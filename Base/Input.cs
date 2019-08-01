@@ -5,6 +5,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Windows.Input;
 
 namespace Base
 {
@@ -13,6 +14,7 @@ namespace Base
         [DllImport("user32.dll", CharSet = CharSet.Auto, ExactSpelling = true)]
         private static extern short GetKeyState(int keyCode);
 
+        //public static bool IsKeyDown(Key key) => Keyboard.IsKeyDown(key);
         public static bool IsKeyDown(Keys key)
         {
             try
@@ -30,6 +32,10 @@ namespace Base
                 Console.WriteLine("Invader: IsKeyDown failed:\r\n" + e1.ToString());
                 return false;
             }
+            /*Enum.TryParse(key.ToString(), out Key k);
+            if (k == Key.None)
+                return false;
+            return IsKeyDown(k);*/
         }
     }
 }

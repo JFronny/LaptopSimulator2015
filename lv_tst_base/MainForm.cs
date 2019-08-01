@@ -28,7 +28,8 @@ namespace lv_tst_base
 
         private void MinigamePanel_Paint(object sender, PaintEventArgs e)
         {
-            Graphics g = e.Graphics;
+            BufferedGraphics buffer = BufferedGraphicsManager.Current.Allocate(e.Graphics, new Rectangle(0, 0, minigamePanel.Width, minigamePanel.Height));
+            Graphics g = buffer.Graphics;
             try
             {
                 g.Clear(Color.Black);
@@ -39,6 +40,7 @@ namespace lv_tst_base
                     minigamePrevTime = minigameTime;
                     //Game Logic
                 }
+                buffer.Render();
             }
             catch (Exception ex)
             {
@@ -52,6 +54,7 @@ namespace lv_tst_base
                     SizeF sLen = g.MeasureString("Lost.", new Font("Tahoma", 20));
                     RectangleF rectf = new RectangleF(minigamePanel.Width / 2 - sLen.Width / 2, minigamePanel.Height / 2 - sLen.Height / 2, 90, 50);
                     g.DrawString("Lost.", new Font("Tahoma", 20), Brushes.Black, rectf);
+                    buffer.Render();
                 }
                 else
 #if DEBUG

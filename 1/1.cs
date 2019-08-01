@@ -66,9 +66,12 @@ namespace LaptopSimulator2015.Levels
         Vector2 invadersPlayer;
         uint minigamePrevTime = 0;
         bool invadersCanShoot = true;
+        double speedMod = 5;
 
-        public void gameTick(Graphics g, Panel minigamePanel, Timer minigameTimer, uint minigameTime)
+        public void gameTick(Graphics e, Panel minigamePanel, Timer minigameTimer, uint minigameTime)
         {
+            BufferedGraphics buffer = BufferedGraphicsManager.Current.Allocate(e, new Rectangle(0, 0, minigamePanel.Width, minigamePanel.Height));
+            Graphics g = buffer.Graphics;
             try
             {
                 g.Clear(Color.Black);
@@ -89,7 +92,7 @@ namespace LaptopSimulator2015.Levels
                         invadersAliens.Add(new Vector2(minigamePanel.Width, random.Next(minigamePanel.Height - 10)));
                     for (int i = 0; i < invadersAliens.Count; i++)
                     {
-                        invadersAliens[i].X -= 1;
+                        invadersAliens[i].X -= 1.2;
                         if (invadersPlayer.distanceFromSquared(invadersAliens[i]) < 100 | invadersAliens[i].X < 0)
                         {
                             throw new Exception("The VM was shut down to prevent damage to your Machine.", new Exception("0717750f-3508-4bc2-841e-f3b077c676fe"));
@@ -114,20 +117,25 @@ namespace LaptopSimulator2015.Levels
                     }
                     invadersAliens = invadersAliens.Except(aliensToRemove.Distinct()).Distinct().ToList();
                     invadersBullets = invadersBullets.Except(bulletsToRemove.Distinct()).Distinct().ToList();
+                    speedMod += 0.1;
+                    speedMod = Math.Max(Math.Min(speedMod, 5), 1);
                     if (Input.IsKeyDown(Keys.W))
-                        invadersPlayer.Y -= 2;
+                        invadersPlayer.Y -= speedMod;
                     if (Input.IsKeyDown(Keys.A))
-                        invadersPlayer.X -= 2;
+                        invadersPlayer.X -= speedMod;
                     if (Input.IsKeyDown(Keys.S))
-                        invadersPlayer.Y += 2;
+                        invadersPlayer.Y += speedMod;
                     if (Input.IsKeyDown(Keys.D))
-                        invadersPlayer.X += 2;
+                        invadersPlayer.X += speedMod;
                     if (Input.IsKeyDown(Keys.Space) & invadersCanShoot)
                     {
                         invadersBullets.Add(new Vector2(invadersPlayer));
                         invadersCanShoot = false;
+                        speedMod--;
                     }
                 }
+                buffer.Render();
+                buffer.Dispose();
             }
             catch (Exception ex) { if (ex.InnerException?.Message == "0717750f-3508-4bc2-841e-f3b077c676fe") throw new Exception(ex.Message); else Console.WriteLine(ex.ToString()); }
         }
@@ -141,6 +149,7 @@ namespace LaptopSimulator2015.Levels
             invadersBullets = new List<Vector2>();
             minigamePrevTime = 0;
             invadersCanShoot = true;
+            speedMod = 5;
         }
     }
 }

@@ -117,61 +117,7 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="captchaLetters" xml:space="preserve">
-    <value>ABCDEFGHIJKLMNPQRSTUVWXYZ123456789</value>
-  </data>
-  <data name="consoleError" xml:space="preserve">
-    <value>Ein Fehler trat auf und die Anwendung wurde beendet. Melden sie dies bitte an den Entwickler.</value>
-  </data>
-  <data name="consolePress" xml:space="preserve">
-    <value>Drücken Sie eine beliebige Taste.</value>
-  </data>
-  <data name="consoleQuit" xml:space="preserve">
-    <value>B E E N D E T . . .</value>
-  </data>
-  <data name="consoleStarting" xml:space="preserve">
-    <value>S T A R T E T . . .</value>
-  </data>
-  <data name="continue" xml:space="preserve">
-    <value>Fortfahren</value>
-  </data>
-  <data name="fakeDesktopTitle1" xml:space="preserve">
-    <value>Falscher Desktop</value>
-  </data>
-  <data name="langWarning" xml:space="preserve">
-    <value>WARNUNG: Wir empfehlen, das Spiel nach der Änderung neu zu starten. Neu starten?</value>
-  </data>
-  <data name="optionsWindowMLG" xml:space="preserve">
-    <value>MLG-Modus</value>
-  </data>
-  <data name="optionsWindowTitle" xml:space="preserve">
-    <value>Optionen</value>
-  </data>
-  <data name="optionsWindowWam" xml:space="preserve">
-    <value>RAM</value>
-  </data>
-  <data name="ramInstallerWindowText2" xml:space="preserve">
-    <value>Um zu überprüfen ob sie ein Mensch sind, bitten wir sie, diese Captcha auszufüllen.</value>
-  </data>
-  <data name="ramInstallerWindowText3" xml:space="preserve">
-    <value>Bitte warten sie...</value>
-  </data>
-  <data name="resetWarning1" xml:space="preserve">
-    <value>Bist du sicher, dass du deinen Fortschritt zurücksetzten möchtest?</value>
-  </data>
-  <data name="resetWarning2" xml:space="preserve">
-    <value>Bist du dir wirklich sicher, dass du deinen Fortschritt zurücksetzten möchtest? Dies ist deine letzte Möglichkeit, dies abzubrechen!</value>
-  </data>
-  <data name="winMenuExit1" xml:space="preserve">
-    <value>Beenden</value>
-  </data>
-  <data name="winMenuExit2" xml:space="preserve">
-    <value>Bist du sicher?</value>
-  </data>
-  <data name="winMenuStart" xml:space="preserve">
-    <value>Start</value>
-  </data>
-  <data name="winMenuText" xml:space="preserve">
-    <value>Hallo und Willkommen in diesem Spiel. Mein Name ist CreepyCrafter24. (Im Übrigen: Dieses Spiel entstand ursprünglich aus einer Unterhaltung mit einem Klassenkameraden. Lustig, oder?)</value>
-  </data>
+  <metadata name="minigameClockT.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>17, 17</value>
+  </metadata>
 </root>
