@@ -61,13 +61,13 @@ namespace lv2_t
                         else
                             enemies.Add(new Vector2(0, tst - minigamePanel.Width * 2 - minigamePanel.Height + 10));
                     }
-                    if (Input.IsKeyDown(Keys.W))
+                    if (Input.Up)
                         player.Y -= 5;
-                    if (Input.IsKeyDown(Keys.A))
+                    if (Input.Left)
                         player.X -= 5;
-                    if (Input.IsKeyDown(Keys.S))
+                    if (Input.Down)
                         player.Y += 5;
-                    if (Input.IsKeyDown(Keys.D))
+                    if (Input.Right)
                         player.X += 5;
                     List<Vector2> enemiesToRemove = new List<Vector2>();
                     for (int i = 0; i < enemies.Count; i++)

@@ -9,6 +9,7 @@ using System.Media;
 using System.Reflection;
 using System.Diagnostics;
 using System.IO;
+using System.Drawing.Drawing2D;
 
 namespace LaptopSimulator2015
 {
@@ -54,10 +55,7 @@ namespace LaptopSimulator2015
                 if (_mode == Mode.mainMenu)
                     winMenuStart.Select();
                 for (int i = 0; i < levels.Count; i++)
-                {
-                    levels[i].desktopIcon.Visible = levels[i].LevelNumber >= Settings.Default.level;
-                    Console.WriteLine(levels[i].LevelNumber + " - " + _mode.ToString() + ": " + levels[i].desktopIcon.Visible.ToString());
-                }
+                    levels[i].desktopIcon.Visible = levels[i].LevelNumber <= Settings.Default.level;
             }
         }
 
@@ -103,7 +101,7 @@ namespace LaptopSimulator2015
                 levels[i].desktopIcon.Size = new Size(50, 50);
                 levels[i].desktopIcon.BackColor = Color.FromArgb(128, 128, 255);
                 levels[i].desktopIcon.Name = "lvl" + i.ToString() + "_1";
-                levels[i].desktopIcon.Visible = levels[i].LevelNumber >= Settings.Default.level;
+                levels[i].desktopIcon.Visible = levels[i].LevelNumber <= Settings.Default.level;
 
                 tmp1.BackColor = Color.Blue;
                 tmp1.BackgroundImageLayout = ImageLayout.Stretch;
@@ -242,7 +240,9 @@ namespace LaptopSimulator2015
                         minigamePanel.Visible = true;
                         minigamePanel.Enabled = true;
                         minigameClockT.Enabled = true;
+#if !DEBUG
                         levelWindowC1.Enabled = false;
+#endif
                         g.Clear(Color.Red);
                         g.DrawString("DANGER!", new Font("Microsoft Sans Serif", 100f), new SolidBrush(Color.White), 100, 150);
                         g.DrawString("VIRUS DETECTED", new Font("Microsoft Sans Serif", 20f), new SolidBrush(Color.White), 0, 300);
@@ -267,7 +267,7 @@ namespace LaptopSimulator2015
                             Settings.Default.level = closest;
                         Settings.Default.Save();
                         for (int i = 0; i < levels.Count; i++)
-                            levels[i].desktopIcon.Visible = levels[i].LevelNumber >= Settings.Default.level;
+                            levels[i].desktopIcon.Visible = levels[i].LevelNumber <= Settings.Default.level;
                         mode = Mode.game;
                     }
                     break;
@@ -295,10 +295,29 @@ namespace LaptopSimulator2015
 
         private void CaptchaPanel_Click(object sender, EventArgs e)
         {
-            CaptchaGenerator cap = new CaptchaGenerator(6, strings.captchaLetters);
-            cap.Generate();
-            captchaPanel.BackgroundImage = cap.Captcha;
-            captchaBox.Tag = cap.Text;
+            Random rnd = new Random();
+            string Chars = strings.captchaLetters;
+            captchaBox.Tag = "";
+            captchaPanel.BackgroundImage = new Bitmap(175, 60, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+            using (Graphics g = Graphics.FromImage(captchaPanel.BackgroundImage))
+            {
+                g.FillRectangle(new LinearGradientBrush(new Point(0, 0), new Point(175, 60), Color.FromArgb(rnd.Next(180, 255), rnd.Next(180, 255), rnd.Next(180, 255)), Color.FromArgb(rnd.Next(180, 255), rnd.Next(180, 255), rnd.Next(180, 255))), new Rectangle(0, 0, 175, 60));
+                g.FillRectangle(new HatchBrush((HatchStyle)rnd.Next(53), Color.FromArgb(rnd.Next(180, 255), rnd.Next(180, 255), rnd.Next(180, 255)), Color.Transparent), new Rectangle(0, 0, 175, 60));
+                for (int i = 0; i < 6; i++)
+                {
+                    int y = rnd.Next(8, 13);
+                    int fontSize = rnd.Next(12, 18);
+                    g.TranslateTransform(25 * (i) + 10, (30 - fontSize) / 2);
+                    g.RotateTransform(rnd.Next(-20, 20));
+                    int tmpR = rnd.Next(0, 200);
+                    int tmpG = rnd.Next(0, (200 - tmpR) / 2);
+                    string s = Chars[rnd.Next(Chars.Length)].ToString();
+                    captchaBox.Tag = (string)captchaBox.Tag + s;
+                    g.DrawString(s, new Font(new string[] { "Arial", "Consolas", "Verdena" }[rnd.Next(3)], fontSize), new SolidBrush(Color.FromArgb(tmpR, tmpG, Math.Max(0, 200 - tmpR - tmpG))), new PointF(5, y));
+                    g.ResetTransform();
+                }
+                g.FillRectangle(new HatchBrush((HatchStyle)rnd.Next(Enum.GetValues(typeof(HatchStyle)).Length), Color.FromArgb(rnd.Next(10, 50), rnd.Next(180, 255), rnd.Next(180, 255), rnd.Next(180, 255)), Color.FromArgb(rnd.Next(10, 50), rnd.Next(180, 255), rnd.Next(180, 255), rnd.Next(180, 255))), new Rectangle(0, 0, 175, 60));
+            }
             captchaBox.Text = "";
         }
 
@@ -325,7 +344,7 @@ namespace LaptopSimulator2015
             levelWindowC1.Enabled = true;
         }
 
-        #region Minigame
+#region Minigame
         uint minigameTime = 0;
         private void InvadersPanel_Paint(object sender, PaintEventArgs e) => levels[levelInd].gameTick(e.Graphics, minigamePanel, minigameClockT, minigameTime);
 
@@ -334,10 +353,10 @@ namespace LaptopSimulator2015
             minigameTime++;
             minigamePanel.Invalidate();
         }
-        #endregion
+#endregion
 
-        #endregion
-        #region Options
+#endregion
+#region Options
         private void Options_2_DoubleClick(object sender, EventArgs e)
         {
             winDesktop.Enabled = false;
@@ -393,6 +412,7 @@ namespace LaptopSimulator2015
                 });
                 Application.Exit();
             }
+            mode = Mode.game;
         }
 
         bool tmpoptionsmlgcanchange = false;
@@ -467,8 +487,9 @@ namespace LaptopSimulator2015
                 Settings.Default.subs = true;
                 Settings.Default.level = 1;
                 Settings.Default.Save();
+                mode = Mode.game;
             }
         }
-        #endregion
+#endregion
     }
 }

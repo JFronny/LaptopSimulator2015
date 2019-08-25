@@ -37,5 +37,11 @@ namespace Base
                 return false;
             return IsKeyDown(k);*/
         }
+
+        public static bool Up => IsKeyDown(Keys.Up) || IsKeyDown(Keys.W);
+        public static bool Left => IsKeyDown(Keys.Left) || IsKeyDown(Keys.A);
+        public static bool Down => IsKeyDown(Keys.Down) || IsKeyDown(Keys.S);
+        public static bool Right => IsKeyDown(Keys.Right) || IsKeyDown(Keys.D);
+        public static bool Action => IsKeyDown(Keys.Space) || IsKeyDown(Keys.Q) || IsKeyDown(Keys.E);
     }
 }

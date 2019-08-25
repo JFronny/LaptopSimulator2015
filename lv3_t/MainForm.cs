@@ -80,7 +80,7 @@ namespace lv3_t
                     }
                     cannon = new Vector2(center);
                     cannon.moveInDirection(Misc.deg2rad(playerRot), 20);
-                    if (Input.IsKeyDown(Keys.Space))
+                    if (Input.Action)
                     {
                         firing = true;
                         power = Math.Min(power + 5, 100);
@@ -101,13 +101,13 @@ namespace lv3_t
                     }
                     targ = new Vector2(center);
                     targ.Tag = playerRot;
-                    if (Input.IsKeyDown(Keys.W))
+                    if (Input.Up)
                         cannonL += 100 / power;
-                    if (Input.IsKeyDown(Keys.S))
+                    if (Input.Down)
                         cannonL -= 100 / power;
-                    if (Input.IsKeyDown(Keys.D))
+                    if (Input.Right)
                         playerRot += 80 / power;
-                    if (Input.IsKeyDown(Keys.A))
+                    if (Input.Left)
                         playerRot -= 80 / power;
                     while (playerRot > 360)
                         playerRot -= 360;

@@ -78,17 +78,17 @@ namespace SIT
                     invadersBullets = invadersBullets.Except(bulletsToRemove.Distinct()).Distinct().ToList();
                     speedMod += 0.1;
                     speedMod = Math.Max(Math.Min(speedMod, 5), 1);
-                    if (Input.IsKeyDown(Keys.W))
+                    if (Input.Up)
                         invadersPlayer.Y -= speedMod;
-                    if (Input.IsKeyDown(Keys.A))
+                    if (Input.Left)
                         invadersPlayer.X -= speedMod;
-                    if (Input.IsKeyDown(Keys.S))
+                    if (Input.Down)
                         invadersPlayer.Y += speedMod;
-                    if (Input.IsKeyDown(Keys.D))
+                    if (Input.Right)
                         invadersPlayer.X += speedMod;
-                    if (Input.IsKeyDown(Keys.Space) & invadersCanShoot)
+                    if (Input.Action & invadersCanShoot)
                     {
-                        invadersBullets.Add(new Vector2(invadersPlayer));
+                        invadersBullets.Add(new Vector2(0, 2.5) + invadersPlayer);
                         invadersCanShoot = false;
                         speedMod--;
                     }
