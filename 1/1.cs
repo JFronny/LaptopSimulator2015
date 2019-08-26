@@ -98,7 +98,7 @@ namespace LaptopSimulator2015.Levels
                             throw new Exception("The VM was shut down to prevent damage to your Machine.", new Exception("0717750f-3508-4bc2-841e-f3b077c676fe"));
                         }
                     }
-                    invadersCanShoot = invadersCanShoot | !Input.IsKeyDown(Keys.Space);
+                    invadersCanShoot = invadersCanShoot | !Input.Action;
                     List<Vector2> aliensToRemove = new List<Vector2>();
                     List<Vector2> bulletsToRemove = new List<Vector2>();
                     for (int i = 0; i < invadersBullets.Count; i++)
