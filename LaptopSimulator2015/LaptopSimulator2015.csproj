@@ -116,6 +116,21 @@
       <Name>Base</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Cryengine.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\GameMaker.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Godot.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Unity.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Unreal.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>if not exist "$(TargetDir)Levels" mkdir "$(TargetDir)Levels"
