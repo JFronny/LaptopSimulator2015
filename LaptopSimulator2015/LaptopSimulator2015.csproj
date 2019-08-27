@@ -67,6 +67,12 @@
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
     <Compile Include="Settings.cs" />
+    <Compile Include="Splash.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Splash.Designer.cs">
+      <DependentUpon>Splash.cs</DependentUpon>
+    </Compile>
     <Compile Include="strings.de.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -88,6 +94,9 @@
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Splash.resx">
+      <DependentUpon>Splash.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="strings.de.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -117,19 +126,19 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Cryengine.png" />
+    <EmbeddedResource Include="Resources\Cryengine.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\GameMaker.png" />
+    <EmbeddedResource Include="Resources\GameMaker.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Godot.png" />
+    <EmbeddedResource Include="Resources\Godot.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Unity.png" />
+    <EmbeddedResource Include="Resources\Unity.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Unreal.png" />
+    <EmbeddedResource Include="Resources\Unreal.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

@@ -1,4 +1,6 @@
-﻿using System;
+﻿using LaptopSimulator2015.Properties;
+using System;
+using System.Drawing;
 using System.IO;
 #if !DEBUG
 using System.Runtime.InteropServices;
@@ -11,6 +13,7 @@ namespace LaptopSimulator2015
 {
     class Program
     {
+        public static Splash splash;
         static void Main(string[] args)
         {
 #if !DEBUG
@@ -19,6 +22,9 @@ namespace LaptopSimulator2015
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Console.Title = "LaptopSimulator2015";
+            splash = new Splash();
+            splash.Show();
+            Thread.Sleep(2000);
 #if DEBUG
             FileStream filestream = new FileStream(".log", FileMode.Create);
             StreamWriter streamwriter = new StreamWriter(filestream);

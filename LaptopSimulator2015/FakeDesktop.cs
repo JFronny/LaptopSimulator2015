@@ -118,6 +118,7 @@ namespace LaptopSimulator2015
             }
             levels = levels.OrderBy(lv => lv.LevelNumber).ToList();
             mode = Mode.mainMenu;
+            Program.splash.Close();
         }
         static Assembly AssemblyResolveHandler(object source, ResolveEventArgs e) => Assembly.LoadFrom(e.Name);
 
@@ -316,7 +317,7 @@ namespace LaptopSimulator2015
                     g.DrawString(s, new Font(new string[] { "Arial", "Consolas", "Verdena" }[rnd.Next(3)], fontSize), new SolidBrush(Color.FromArgb(tmpR, tmpG, Math.Max(0, 200 - tmpR - tmpG))), new PointF(5, y));
                     g.ResetTransform();
                 }
-                g.FillRectangle(new HatchBrush((HatchStyle)rnd.Next(Enum.GetValues(typeof(HatchStyle)).Length), Color.FromArgb(rnd.Next(10, 50), rnd.Next(180, 255), rnd.Next(180, 255), rnd.Next(180, 255)), Color.FromArgb(rnd.Next(10, 50), rnd.Next(180, 255), rnd.Next(180, 255), rnd.Next(180, 255))), new Rectangle(0, 0, 175, 60));
+                g.FillRectangle(new HatchBrush((HatchStyle)rnd.Next(53), Color.FromArgb(rnd.Next(10, 50), rnd.Next(180, 255), rnd.Next(180, 255), rnd.Next(180, 255)), Color.FromArgb(rnd.Next(10, 50), rnd.Next(180, 255), rnd.Next(180, 255), rnd.Next(180, 255))), new Rectangle(0, 0, 175, 60));
             }
             captchaBox.Text = "";
         }
