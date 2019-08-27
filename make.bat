@@ -12,12 +12,12 @@ if %arg%==release goto release
 if %arg%==pull goto pull
 if %arg%==push goto push
 if %arg%==help goto help
-echo Invalid.
+echo Invalid, try [help]
 :noinput
 set /p arg="arg: "
 goto select
 :help
-echo [full,clean,debug,release,pull,push,help]
+echo [full], [clean], [debug], [release], [pull], [push], [help]
 goto noinput
 :full
 set full=1
