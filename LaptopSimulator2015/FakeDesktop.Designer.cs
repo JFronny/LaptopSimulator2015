@@ -36,6 +36,7 @@ namespace LaptopSimulator2015
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FakeDesktop));
             this.winKey = new System.Windows.Forms.Button();
             this.winMenuPanel = new System.Windows.Forms.Panel();
             this.winMenuStart = new System.Windows.Forms.Button();
@@ -73,14 +74,14 @@ namespace LaptopSimulator2015
             this.optionsWindowLang = new System.Windows.Forms.ComboBox();
             this.optionsWindowSubs = new System.Windows.Forms.CheckBox();
             this.optionsWindowExit = new System.Windows.Forms.Button();
-            this.optionsWindowMLG = new System.Windows.Forms.CheckBox();
+            this.optionsWindowLSD = new System.Windows.Forms.CheckBox();
             this.optionsWindowWamLabel = new System.Windows.Forms.Label();
             this.optionsWindowWam = new System.Windows.Forms.TrackBar();
             this.optionsWindowHeader = new System.Windows.Forms.Panel();
             this.optionsWindowHeaderExit = new System.Windows.Forms.Label();
             this.optionsWindowIcon = new System.Windows.Forms.Panel();
             this.optionsWindowTitle = new System.Windows.Forms.Label();
-            this.mlgEffectT = new System.Windows.Forms.Timer(this.components);
+            this.lsdEffectT = new System.Windows.Forms.Timer(this.components);
             this.winMenuPanel.SuspendLayout();
             this.winTaskbar.SuspendLayout();
             this.winDesktop.SuspendLayout();
@@ -220,7 +221,7 @@ namespace LaptopSimulator2015
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.options_2.BackColor = System.Drawing.Color.Blue;
-            this.options_2.BackgroundImage = global::LaptopSimulator2015.Properties.Resources.pcoptimizerpro;
+            this.options_2.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("options_2.BackgroundImage")));
             this.options_2.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.options_2.Location = new System.Drawing.Point(2, 2);
             this.options_2.Name = "options_2";
@@ -292,10 +293,10 @@ namespace LaptopSimulator2015
             this.levelWindow2.Controls.Add(this.captchaBox);
             this.levelWindow2.Controls.Add(this.captchaPanel);
             this.levelWindow2.Controls.Add(this.levelWindowText2);
-            this.levelWindow2.Location = new System.Drawing.Point(4, 14);
+            this.levelWindow2.Location = new System.Drawing.Point(4, 19);
             this.levelWindow2.Name = "levelWindow2";
             this.levelWindow2.Padding = new System.Windows.Forms.Padding(3);
-            this.levelWindow2.Size = new System.Drawing.Size(494, 230);
+            this.levelWindow2.Size = new System.Drawing.Size(494, 225);
             this.levelWindow2.TabIndex = 1;
             this.levelWindow2.UseVisualStyleBackColor = true;
             // 
@@ -332,9 +333,9 @@ namespace LaptopSimulator2015
             // 
             this.levelWindow3.Controls.Add(this.levelWindowProgress);
             this.levelWindow3.Controls.Add(this.levelWindowText3);
-            this.levelWindow3.Location = new System.Drawing.Point(4, 14);
+            this.levelWindow3.Location = new System.Drawing.Point(4, 19);
             this.levelWindow3.Name = "levelWindow3";
-            this.levelWindow3.Size = new System.Drawing.Size(494, 230);
+            this.levelWindow3.Size = new System.Drawing.Size(494, 225);
             this.levelWindow3.TabIndex = 2;
             this.levelWindow3.UseVisualStyleBackColor = true;
             // 
@@ -385,7 +386,6 @@ namespace LaptopSimulator2015
             // 
             // levelWindowIcon
             // 
-            this.levelWindowIcon.BackgroundImage = global::LaptopSimulator2015.Properties.Resources.pcoptimizerpro;
             this.levelWindowIcon.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.levelWindowIcon.Location = new System.Drawing.Point(0, 0);
             this.levelWindowIcon.Name = "levelWindowIcon";
@@ -449,7 +449,7 @@ namespace LaptopSimulator2015
             this.optionsWindow.Controls.Add(this.optionsWindowLang);
             this.optionsWindow.Controls.Add(this.optionsWindowSubs);
             this.optionsWindow.Controls.Add(this.optionsWindowExit);
-            this.optionsWindow.Controls.Add(this.optionsWindowMLG);
+            this.optionsWindow.Controls.Add(this.optionsWindowLSD);
             this.optionsWindow.Controls.Add(this.optionsWindowWamLabel);
             this.optionsWindow.Controls.Add(this.optionsWindowWam);
             this.optionsWindow.Controls.Add(this.optionsWindowHeader);
@@ -501,18 +501,18 @@ namespace LaptopSimulator2015
             this.optionsWindowExit.UseVisualStyleBackColor = true;
             this.optionsWindowExit.Click += new System.EventHandler(this.OptionsWindowExit_Click);
             // 
-            // optionsWindowMLG
+            // optionsWindowLSD
             // 
-            this.optionsWindowMLG.AutoSize = true;
-            this.optionsWindowMLG.Font = new System.Drawing.Font("Comic Sans MS", 7F);
-            this.optionsWindowMLG.ForeColor = System.Drawing.Color.Red;
-            this.optionsWindowMLG.Location = new System.Drawing.Point(17, 64);
-            this.optionsWindowMLG.Name = "optionsWindowMLG";
-            this.optionsWindowMLG.Size = new System.Drawing.Size(75, 18);
-            this.optionsWindowMLG.TabIndex = 3;
-            this.optionsWindowMLG.Text = "MLG Mode";
-            this.optionsWindowMLG.UseVisualStyleBackColor = true;
-            this.optionsWindowMLG.CheckedChanged += new System.EventHandler(this.OptionsWindowMLG_CheckedChanged);
+            this.optionsWindowLSD.AutoSize = true;
+            this.optionsWindowLSD.Font = new System.Drawing.Font("Comic Sans MS", 7F);
+            this.optionsWindowLSD.ForeColor = System.Drawing.Color.Red;
+            this.optionsWindowLSD.Location = new System.Drawing.Point(17, 64);
+            this.optionsWindowLSD.Name = "optionsWindowLSD";
+            this.optionsWindowLSD.Size = new System.Drawing.Size(73, 18);
+            this.optionsWindowLSD.TabIndex = 3;
+            this.optionsWindowLSD.Text = "LSD Mode";
+            this.optionsWindowLSD.UseVisualStyleBackColor = true;
+            this.optionsWindowLSD.CheckedChanged += new System.EventHandler(this.OptionsWindowLSD_CheckedChanged);
             // 
             // optionsWindowWamLabel
             // 
@@ -529,6 +529,7 @@ namespace LaptopSimulator2015
             this.optionsWindowWam.Name = "optionsWindowWam";
             this.optionsWindowWam.Size = new System.Drawing.Size(380, 45);
             this.optionsWindowWam.TabIndex = 1;
+            this.optionsWindowWam.Scroll += new System.EventHandler(this.OptionsWindowWam_Scroll);
             // 
             // optionsWindowHeader
             // 
@@ -560,7 +561,7 @@ namespace LaptopSimulator2015
             // 
             // optionsWindowIcon
             // 
-            this.optionsWindowIcon.BackgroundImage = global::LaptopSimulator2015.Properties.Resources.pcoptimizerpro;
+            this.optionsWindowIcon.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("optionsWindowIcon.BackgroundImage")));
             this.optionsWindowIcon.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.optionsWindowIcon.Location = new System.Drawing.Point(0, 0);
             this.optionsWindowIcon.Name = "optionsWindowIcon";
@@ -576,10 +577,10 @@ namespace LaptopSimulator2015
             this.optionsWindowTitle.TabIndex = 0;
             this.optionsWindowTitle.Text = "PCOptimizerPro";
             // 
-            // mlgEffectT
+            // lsdEffectT
             // 
-            this.mlgEffectT.Enabled = true;
-            this.mlgEffectT.Tick += new System.EventHandler(this.MlgTimer_Tick);
+            this.lsdEffectT.Enabled = true;
+            this.lsdEffectT.Tick += new System.EventHandler(this.LsdTimer_Tick);
             // 
             // FakeDesktop
             // 
@@ -662,11 +663,11 @@ namespace LaptopSimulator2015
         private System.Windows.Forms.Panel optionsWindowHeader;
         private System.Windows.Forms.Panel optionsWindowIcon;
         private System.Windows.Forms.Label optionsWindowTitle;
-        private System.Windows.Forms.CheckBox optionsWindowMLG;
+        private System.Windows.Forms.CheckBox optionsWindowLSD;
         private System.Windows.Forms.Label optionsWindowWamLabel;
         private System.Windows.Forms.TrackBar optionsWindowWam;
         private System.Windows.Forms.Button optionsWindowExit;
-        private System.Windows.Forms.Timer mlgEffectT;
+        private System.Windows.Forms.Timer lsdEffectT;
         private System.Windows.Forms.CheckBox optionsWindowSubs;
         private System.Windows.Forms.Label subsLabel;
         private System.Windows.Forms.ComboBox optionsWindowLang;

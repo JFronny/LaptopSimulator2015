@@ -20,15 +20,17 @@ namespace lv4_t
         public MainForm()
         {
             InitializeComponent();
-            player = new Vector2(minigamePanel.Width / 2, 0);
-            player.bounds = new Rectangle(-5, 0, minigamePanel.Width + 10, 0);
-            player.bounds_wrap = true;
             playerV = new Vector2();
             playerV.bounds = new Rectangle(-5, -20, 10, 40);
             playerV.bounds_wrap = false;
             for (int i = 0; i < 5; i++)
                 for (int j = 0; j < 2; j++)
                     platforms.Add(new Vector2(rnd.Next(minigamePanel.Width), i * (minigamePanel.Height / 5)));
+            player = new Vector2(platforms[0].X, -10);
+            player.bounds = new Rectangle(-5, 0, minigamePanel.Width + 10, 0);
+            player.bounds_wrap = true;
+            lazor = player.X;
+            lazorTime = 50;
         }
 
         private void Button1_Click(object sender, EventArgs e) => Application.Exit();
@@ -41,8 +43,11 @@ namespace lv4_t
         Random rnd = new Random();
         Vector2 player = new Vector2();
         Vector2 playerV = new Vector2();
+        double lazor;
+        double lazorTime;
         int jmpj;
         List<Vector2> platforms = new List<Vector2>();
+
         private void MinigamePanel_Paint(object sender, PaintEventArgs e)
         {
             BufferedGraphics buffer = BufferedGraphicsManager.Current.Allocate(e.Graphics, new Rectangle(0, 0, minigamePanel.Width, minigamePanel.Height));
@@ -57,14 +62,34 @@ namespace lv4_t
                     g.FillRectangle(new SolidBrush(Color.White), plat2rect(i));
                     onPlatform |= isOnPlatform(i);
                 }
+                if (lazorTime >= 0 && lazorTime <= 30)
+                {
+                    g.FillRectangle(new SolidBrush(Color.DarkGray), new RectangleF((float)lazor - 1, 0, 2, minigamePanel.Height));
+                    g.FillRectangle(new SolidBrush(Color.Red), new RectangleF((float)lazor - 1, 0, 2, minigamePanel.Height - (float)Misc.map(0, 30, 0, minigamePanel.Height, lazorTime)));
+                }
                 Random random = new Random();
                 if (minigameTime != minigamePrevTime)
                 {
+                    lazorTime -= minigameTime - minigamePrevTime;
                     minigamePrevTime = minigameTime;
+                    if (lazorTime <= 0)
+                    {
+                        g.FillRectangle(new SolidBrush(Color.Red), new RectangleF((float)lazor - 5, 0, 10, minigamePanel.Height));
+                        if (lazorTime <= -2)
+                        {
+                            lazorTime = 40;
+                            lazor = player.X;
+                        }
+                        else
+                        {
+                            if (player.X >= lazor - 5 && player.X <= lazor + 5)
+                                throw new Exception("The VM was shut down to prevent damage to your Machine.", new Exception("0717750f-3508-4bc2-841e-f3b077c676fe"));
+                        }
+                    }
                     if (onPlatform)
                         playerV.Y = Math.Min(playerV.Y, 0);
                     else
-                        playerV.Y += 0.05f + Math.Pow(0.9, Math.Max(playerV.Y + 1, 0));
+                        playerV.Y += 1;
                     playerV.X /= 1.2f;
                     if (onPlatform)
                         jmpj = 10;
@@ -73,13 +98,16 @@ namespace lv4_t
                         jmpj = 0;
                     if ((onPlatform || jmpj > 0) && Input.Up)
                     {
-                        playerV.Y -= Math.Sqrt(jmpj);
+                        playerV.Y -= jmpj / 6d + 1.5;
                         jmpj--;
                     }
+                    double movementFactor = 15;
+                    if (onPlatform)
+                        movementFactor /= 4;
                     if (Input.Left)
-                        playerV.X -= 5;
+                        playerV.X -= movementFactor;
                     if (Input.Right)
-                        playerV.X += 5;
+                        playerV.X += movementFactor;
                     player.X += playerV.X;
                     onPlatform = false;
                     if (playerV.Y < 0)
@@ -95,7 +123,7 @@ namespace lv4_t
                     List<Vector2> platformsToRemove = new List<Vector2>();
                     for (int i = 0; i < platforms.Count; i++)
                     {
-                        platforms[i].Y++;
+                        platforms[i].Y += 1.7;
                         if (platforms[i].Y > minigamePanel.Height)
                         {
                             platforms[i].Y = 0;

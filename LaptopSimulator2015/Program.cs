@@ -16,16 +16,14 @@ namespace LaptopSimulator2015
         public static Splash splash;
         static void Main(string[] args)
         {
-#if !DEBUG
-            AppDomain.CurrentDomain.UnhandledException += UnhandledExceptionTrapper;
-#endif
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
+            Settings.Load();
             Console.Title = "LaptopSimulator2015";
             splash = new Splash();
             splash.Show();
             Thread.Sleep(2000);
-#if DEBUG
+#if !DEBUG
             FileStream filestream = new FileStream(".log", FileMode.Create);
             StreamWriter streamwriter = new StreamWriter(filestream);
             streamwriter.AutoFlush = true;
@@ -41,30 +39,5 @@ namespace LaptopSimulator2015
             Thread.Sleep(1000);
             Console.Clear();
         }
-#if !DEBUG
-        static void UnhandledExceptionTrapper(object sender, UnhandledExceptionEventArgs e)
-        {
-            for (int i = 0; i < Application.OpenForms.Count; i++)
-            try { Application.OpenForms[i].Close(); } catch {  }
-            SetForegroundWindow(GetConsoleWindow());
-            Console.Clear();
-            Console.BackgroundColor = ConsoleColor.Red;
-            Console.ForegroundColor = ConsoleColor.White;
-            Console.WriteLine(strings.consoleError + "\r\n");
-            Console.WriteLine(e.ExceptionObject.ToString());
-            Console.WriteLine("\r\n" + strings.consolePress);
-            Thread.Sleep(1000);
-            Console.ReadKey();
-            Console.Clear();
-            Environment.Exit(1);
-        }
-
-        [DllImport("kernel32.dll", ExactSpelling = true)]
-        public static extern IntPtr GetConsoleWindow();
-
-        [DllImport("user32.dll")]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        public static extern bool SetForegroundWindow(IntPtr hWnd);
-#endif
     }
 }

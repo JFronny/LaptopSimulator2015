@@ -156,7 +156,7 @@ namespace LaptopSimulator2015.Levels
                 buffer.Render();
                 buffer.Dispose();
             }
-            catch (Exception ex) { if (ex.InnerException?.Message == "0717750f-3508-4bc2-841e-f3b077c676fe") throw new Exception(ex.Message); else Console.WriteLine(ex.ToString()); }
+            catch (Exception ex) { if (ex.InnerException?.Message == "0717750f-3508-4bc2-841e-f3b077c676fe") Misc.closeGameWindow.Invoke(); else Console.WriteLine(ex.ToString()); }
         }
 
         public void initGame(Graphics g, Panel minigamePanel, Timer minigameTimer)

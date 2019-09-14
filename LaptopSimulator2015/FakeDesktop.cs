@@ -10,6 +10,8 @@ using System.Reflection;
 using System.Diagnostics;
 using System.IO;
 using System.Drawing.Drawing2D;
+using System.Runtime.InteropServices;
+using Base;
 
 namespace LaptopSimulator2015
 {
@@ -17,6 +19,7 @@ namespace LaptopSimulator2015
     {
         #region Base
         List<Level> levels = new List<Level>();
+        SoundPlayer fans;
         bool winShouldClose = false;
 
         enum Mode
@@ -39,7 +42,7 @@ namespace LaptopSimulator2015
                 levelWindowText2.Text = strings.ramInstallerWindowText2;
                 levelWindowText3.Text = strings.ramInstallerWindowText3;
                 levelWindowC1.Text = strings._continue;
-                optionsWindowMLG.Text = strings.optionsWindowMLG;
+                optionsWindowLSD.Text = strings.optionsWindowLSD;
                 optionsWindowTitle.Text = strings.optionsWindowTitle;
                 optionsWindowWamLabel.Text = strings.optionsWindowWam;
                 levelWindow.Visible = false;
@@ -55,9 +58,15 @@ namespace LaptopSimulator2015
                 if (_mode == Mode.mainMenu)
                     winMenuStart.Select();
                 for (int i = 0; i < levels.Count; i++)
-                    levels[i].desktopIcon.Visible = levels[i].LevelNumber <= Settings.Default.level;
+                    levels[i].desktopIcon.Visible = levels[i].LevelNumber <= Settings.level;
             }
         }
+
+        [DllImport("winmm.dll")]
+        public static extern int waveOutGetVolume(IntPtr hwo, out uint dwVolume);
+
+        [DllImport("winmm.dll")]
+        public static extern int waveOutSetVolume(IntPtr hwo, uint dwVolume);
 
         public FakeDesktop()
         {
@@ -66,19 +75,23 @@ namespace LaptopSimulator2015
                 Directory.CreateDirectory("Levels");
             InitializeComponent();
             levelWindowContents.ItemSize = new Size(0, 1);
-            optionsWindowLang.Text = Settings.Default.lang.Name;
-            Thread.CurrentThread.CurrentUICulture = Settings.Default.lang;
-            optionsWindowWam.Value = Settings.Default.wam;
-            tmpoptionsmlgcanchange = Settings.Default.mlg;
-            optionsWindowMLG.Checked = Settings.Default.mlg;
-            optionsWindowSubs.Checked = Settings.Default.subs;
+            optionsWindowLang.Text = Settings.lang.Name;
+            Thread.CurrentThread.CurrentUICulture = Settings.lang;
+            optionsWindowWam.Value = Settings.wam;
+            int NewVolume = ((ushort.MaxValue / 10) * Settings.wam);
+            uint NewVolumeAllChannels = ((uint)NewVolume & 0x0000ffff) | ((uint)NewVolume << 16);
+            waveOutSetVolume(IntPtr.Zero, NewVolumeAllChannels);
+            tmpoptionslsdcanchange = Settings.lsd;
+            optionsWindowLSD.Checked = Settings.lsd;
+            optionsWindowSubs.Checked = Settings.subs;
             Text = strings.fakeDesktopTitle;
             winMenuExit.Text = strings.winMenuExit1;
             winMenuStart.Text = strings.winMenuStart;
             winMenuText.Text = strings.winMenuText;
             levelWindowTitle.Text = "";
             winTimeLabel.Text = DateTime.Now.Hour.ToString("00") + ":" + DateTime.Now.Minute.ToString("00");
-            new SoundPlayer(Resources.fans).PlayLooping();
+            fans = new SoundPlayer(Resources.fans);
+            fans.PlayLooping();
             Control[] controls = getControls(ignore: new List<Control> { minigamePanel }).ToArray();
             for (int i = 0; i < controls.Length; i++)
             {
@@ -101,7 +114,7 @@ namespace LaptopSimulator2015
                 levels[i].desktopIcon.Size = new Size(50, 50);
                 levels[i].desktopIcon.BackColor = Color.FromArgb(128, 128, 255);
                 levels[i].desktopIcon.Name = "lvl" + i.ToString() + "_1";
-                levels[i].desktopIcon.Visible = levels[i].LevelNumber <= Settings.Default.level;
+                levels[i].desktopIcon.Visible = levels[i].LevelNumber <= Settings.level;
 
                 tmp1.BackColor = Color.Blue;
                 tmp1.BackgroundImageLayout = ImageLayout.Stretch;
@@ -119,6 +132,7 @@ namespace LaptopSimulator2015
             levels = levels.OrderBy(lv => lv.LevelNumber).ToList();
             mode = Mode.mainMenu;
             Program.splash.Close();
+            Misc.closeGameWindow = new Action(closeLevelWindow);
         }
         static Assembly AssemblyResolveHandler(object source, ResolveEventArgs e) => Assembly.LoadFrom(e.Name);
 
@@ -258,17 +272,17 @@ namespace LaptopSimulator2015
                     break;
                 case 2:
                     LevelWindowHeaderExit_Click(sender, e);
-                    if (levels[levelInd].LevelNumber >= Settings.Default.level)
+                    if (levels[levelInd].LevelNumber >= Settings.level)
                     {
                         int closest = int.MaxValue;
                         for (int i = 0; i < levels.Count; i++)
                             if (levels[i].LevelNumber < closest & levels[i].LevelNumber > levels[levelInd].LevelNumber)
                                 closest = levels[i].LevelNumber;
                         if (closest != int.MaxValue)
-                            Settings.Default.level = closest;
-                        Settings.Default.Save();
+                            Settings.level = closest;
+                        Settings.Save();
                         for (int i = 0; i < levels.Count; i++)
-                            levels[i].desktopIcon.Visible = levels[i].LevelNumber <= Settings.Default.level;
+                            levels[i].desktopIcon.Visible = levels[i].LevelNumber <= Settings.level;
                         mode = Mode.game;
                     }
                     break;
@@ -332,8 +346,11 @@ namespace LaptopSimulator2015
             }
         }
 
-        private void LevelWindowHeaderExit_Click(object sender, EventArgs e)
+        private void LevelWindowHeaderExit_Click(object sender, EventArgs e) => closeLevelWindow();
+
+        private void closeLevelWindow()
         {
+            BackColor = Color.FromArgb(100, 0, 255);
             levelWindow.Visible = false;
             minigamePanel.Visible = false;
             minigamePanel.Enabled = false;
@@ -343,6 +360,8 @@ namespace LaptopSimulator2015
             levelWindowProgress.Value = 0;
             levelWindowProgressT.Enabled = false;
             levelWindowC1.Enabled = true;
+            Thread.Sleep(100);
+            BackColor = Color.Blue;
         }
 
 #region Minigame
@@ -381,21 +400,31 @@ namespace LaptopSimulator2015
 
         private void OptionsWindowHeader_MouseUp(object sender, MouseEventArgs e) => optionsWindowMoving = false;
 
+        private void OptionsWindowWam_Scroll(object sender, EventArgs e)
+        {
+            int NewVolume = ((ushort.MaxValue / 10) * optionsWindowWam.Value);
+            uint NewVolumeAllChannels = ((uint)NewVolume & 0x0000ffff) | ((uint)NewVolume << 16);
+            waveOutSetVolume(IntPtr.Zero, NewVolumeAllChannels);
+        }
+
         private void OptionsWindowExit_Click(object sender, EventArgs e)
         {
-            Settings.Default.wam = optionsWindowWam.Value;
-            Settings.Default.mlg = optionsWindowMLG.Checked;
-            Settings.Default.subs = optionsWindowSubs.Checked;
+            Settings.wam = optionsWindowWam.Value;
+            Settings.lsd = optionsWindowLSD.Checked;
+            Settings.subs = optionsWindowSubs.Checked;
+            int NewVolume = ((ushort.MaxValue / 10) * Settings.wam);
+            uint NewVolumeAllChannels = ((uint)NewVolume & 0x0000ffff) | ((uint)NewVolume << 16);
+            waveOutSetVolume(IntPtr.Zero, NewVolumeAllChannels);
             bool tmp = false;
-            if (Settings.Default.lang.Name != optionsWindowLang.Text)
+            if (Settings.lang.Name != optionsWindowLang.Text)
             {
-                Settings.Default.lang = System.Globalization.CultureInfo.GetCultureInfo(optionsWindowLang.Text);
+                Settings.lang = System.Globalization.CultureInfo.GetCultureInfo(optionsWindowLang.Text);
                 tmp = true;
             }
             winDesktop.Enabled = true;
             optionsWindow.Visible = false;
             subsLabel.Visible = optionsWindowSubs.Checked;
-            Settings.Default.Save();
+            Settings.Save();
             if (tmp && MessageBox.Show(strings.langWarning, "LaptopSimulator2015", MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
                 winShouldClose = true;
@@ -416,43 +445,43 @@ namespace LaptopSimulator2015
             mode = Mode.game;
         }
 
-        bool tmpoptionsmlgcanchange = false;
-        private void OptionsWindowMLG_CheckedChanged(object sender, EventArgs e)
+        bool tmpoptionslsdcanchange = false;
+        private void OptionsWindowLSD_CheckedChanged(object sender, EventArgs e)
         {
-            if (optionsWindowMLG.Checked)
+            if (optionsWindowLSD.Checked)
             {
-                if (tmpoptionsmlgcanchange)
+                if (tmpoptionslsdcanchange)
                 {
-                    optionsWindowMLG.Checked = true;
-                    tmpoptionsmlgcanchange = false;
+                    optionsWindowLSD.Checked = true;
+                    tmpoptionslsdcanchange = false;
                 }
                 else
                 {
-                    optionsWindowMLG.Checked = false;
+                    optionsWindowLSD.Checked = false;
                     try
                     {
                         if (MessageBox.Show("Are you SURE?\r\n(This will break EVERYTHING!)", "WARNING", MessageBoxButtons.YesNo) == DialogResult.Yes)
                         {
-                            tmpoptionsmlgcanchange = true;
-                            optionsWindowMLG.Checked = true;
+                            tmpoptionslsdcanchange = true;
+                            optionsWindowLSD.Checked = true;
                         }
                     }
                     catch (Exception e1)
                     {
-                        Console.WriteLine("MLGThreadException:\r\n" + e1.ToString());
+                        Console.WriteLine("LSDThreadException:\r\n" + e1.ToString());
                     }
                 }
             }
         }
 
-        private void MlgTimer_Tick(object sender, EventArgs e)
+        private void LsdTimer_Tick(object sender, EventArgs e)
         {
             try
             {
                 Random rndg = new Random();
                 rndCol = Color.FromArgb(rndg.Next(255), rndg.Next(255), rndg.Next(255));
-                optionsWindowMLG.ForeColor = rndCol;
-                if (Settings.Default.mlg)
+                optionsWindowLSD.ForeColor = rndCol;
+                if (Settings.lsd)
                 {
                     ForeColor = rndCol;
                     Font = new Font("Comic Sans MS", 7f);
@@ -465,7 +494,7 @@ namespace LaptopSimulator2015
             }
             catch (Exception e1)
             {
-                Console.WriteLine("MLGTimer Failed: \r\n" + e1.ToString());
+                Console.WriteLine("LSDTimer Failed: \r\n" + e1.ToString());
             }
         }
 
@@ -473,7 +502,7 @@ namespace LaptopSimulator2015
 
         private void Control_Paint(object sender, PaintEventArgs e)
         {
-            if (Settings.Default.mlg)
+            if (Settings.lsd)
             {
                 rndCol = Color.FromArgb(128, rndCol.R, rndCol.G, rndCol.B);
                 e.Graphics.FillRectangle(new SolidBrush(rndCol), new RectangleF(Point.Empty, ((Control)sender).Size));
@@ -483,14 +512,14 @@ namespace LaptopSimulator2015
         {
             if (MessageBox.Show(strings.resetWarning1, "", MessageBoxButtons.YesNo) == DialogResult.Yes && MessageBox.Show(strings.resetWarning2, "", MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
-                Settings.Default.wam = 0;
-                Settings.Default.mlg = false;
-                Settings.Default.subs = true;
-                Settings.Default.level = 1;
-                Settings.Default.Save();
+                Settings.wam = 0;
+                Settings.lsd = false;
+                Settings.subs = true;
+                Settings.level = 1;
+                Settings.Save();
                 mode = Mode.game;
             }
         }
-#endregion
+        #endregion
     }
 }

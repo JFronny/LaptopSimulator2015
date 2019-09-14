@@ -8,6 +8,7 @@ namespace Base
 {
     public static class Misc
     {
+        public static Action closeGameWindow;
         public static float d2f(double input)
         {
             float result = Convert.ToSingle(input);
@@ -25,5 +26,10 @@ namespace Base
         public static double f2d(float input) => input;
         public static double rad2deg(double input) => (360 * input) / (2 * Math.PI);
         public static double deg2rad(double input) => ((2 * Math.PI) * input) / 360;
+        public static double map(double originalStart, double originalEnd, double newStart, double newEnd, double value)
+        {
+            double scale = (newEnd - newStart) / (originalEnd - originalStart);
+            return newStart + ((value - originalStart) * scale);
+        }
     }
 }

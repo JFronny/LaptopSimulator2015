@@ -141,8 +141,8 @@
   <data name="langWarning" xml:space="preserve">
     <value>WARNUNG: Wir empfehlen, das Spiel nach der Änderung neu zu starten. Neu starten?</value>
   </data>
-  <data name="optionsWindowMLG" xml:space="preserve">
-    <value>MLG-Modus</value>
+  <data name="optionsWindowLSD" xml:space="preserve">
+    <value>LSD-Modus</value>
   </data>
   <data name="optionsWindowTitle" xml:space="preserve">
     <value>Optionen</value>

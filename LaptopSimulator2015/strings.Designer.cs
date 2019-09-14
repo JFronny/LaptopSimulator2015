@@ -133,11 +133,11 @@ namespace LaptopSimulator2015 {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to MLG Mode.
+        ///   Looks up a localized string similar to LSD Mode.
         /// </summary>
-        internal static string optionsWindowMLG {
+        internal static string optionsWindowLSD {
             get {
-                return ResourceManager.GetString("optionsWindowMLG", resourceCulture);
+                return ResourceManager.GetString("optionsWindowLSD", resourceCulture);
             }
         }
         

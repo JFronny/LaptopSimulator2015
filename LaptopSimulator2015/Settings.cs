@@ -1,28 +1,45 @@
-﻿namespace LaptopSimulator2015.Properties {
-    
-    
-    // This class allows you to handle specific events on the settings class:
-    //  The SettingChanging event is raised before a setting's value is changed.
-    //  The PropertyChanged event is raised after a setting's value is changed.
-    //  The SettingsLoaded event is raised after the setting values are loaded.
-    //  The SettingsSaving event is raised before the setting values are saved.
-    internal sealed partial class Settings {
-        
-        public Settings() {
-            // // To add event handlers for saving and changing settings, uncomment the lines below:
-            //
-            // this.SettingChanging += this.SettingChangingEventHandler;
-            //
-            // this.SettingsSaving += this.SettingsSavingEventHandler;
-            //
+﻿using System.Globalization;
+using System.IO;
+using System.Windows.Forms;
+using System.Xml.Linq;
+
+namespace LaptopSimulator2015 {
+    public static class Settings {
+        static string xmlfile;
+        public static void Save()
+        {
+            XElement xmldoc_temp = new XElement("save");
+            xmldoc_temp.Add(new XElement("wam", wam));
+            xmldoc_temp.Add(new XElement("lsd", lsd));
+            xmldoc_temp.Add(new XElement("subs", subs));
+            xmldoc_temp.Add(new XElement("level", level));
+            xmldoc_temp.Add(new XElement("lang", lang));
+            xmldoc_temp.Save(xmlfile);
         }
-        
-        private void SettingChangingEventHandler(object sender, System.Configuration.SettingChangingEventArgs e) {
-            // Add code to handle the SettingChangingEvent event here.
+        public static void Load()
+        {
+            xmlfile = Path.GetDirectoryName(Application.ExecutablePath) + @"\save.xml";
+            if (!File.Exists(xmlfile))
+            {
+                XElement xmldoc_temp = new XElement("save");
+                xmldoc_temp.Add(new XElement("wam", 10));
+                xmldoc_temp.Add(new XElement("lsd", false));
+                xmldoc_temp.Add(new XElement("subs", true));
+                xmldoc_temp.Add(new XElement("level", 1));
+                xmldoc_temp.Add(new XElement("lang", CultureInfo.CurrentCulture));
+                xmldoc_temp.Save(xmlfile);
+            }
+            XElement xmldoc = XElement.Load(xmlfile);
+            wam = int.Parse(xmldoc.Element("wam").Value);
+            lsd = bool.Parse(xmldoc.Element("lsd").Value);
+            subs = bool.Parse(xmldoc.Element("subs").Value);
+            level = int.Parse(xmldoc.Element("level").Value);
+            lang = CultureInfo.GetCultureInfo(xmldoc.Element("lang").Value);
         }
-        
-        private void SettingsSavingEventHandler(object sender, System.ComponentModel.CancelEventArgs e) {
-            // Add code to handle the SettingsSaving event here.
-        }
+        public static int wam;
+        public static bool lsd;
+        public static bool subs;
+        public static int level;
+        public static CultureInfo lang;
     }
 }
