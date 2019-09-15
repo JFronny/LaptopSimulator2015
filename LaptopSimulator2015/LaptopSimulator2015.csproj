@@ -134,7 +134,13 @@
   <PropertyGroup>
     <PostBuildEvent>if not exist "$(TargetDir)Levels" mkdir "$(TargetDir)Levels"
 if exist "$(SolutionDir)tmp" copy $(SolutionDir)tmp\* "$(TargetDir)Levels"
-rmdir /s /q "$(SolutionDir)tmp"</PostBuildEvent>
+rmdir /s /q "$(SolutionDir)tmp"
+
+if not exist "$(TargetDir)Goals" mkdir "$(TargetDir)Goals"
+if exist "$(SolutionDir)tmp1" copy $(SolutionDir)tmp1\* "$(TargetDir)Goals"
+rmdir /s /q "$(SolutionDir)tmp1"
+
+del /q "$(TargetDir)save.xml"</PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
     <PreBuildEvent>

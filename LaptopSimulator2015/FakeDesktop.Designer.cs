@@ -45,6 +45,7 @@ namespace LaptopSimulator2015
             this.winMenuExit = new System.Windows.Forms.Button();
             this.winTaskbar = new System.Windows.Forms.Panel();
             this.subsLabel = new System.Windows.Forms.Label();
+            this.winTimeLabel = new System.Windows.Forms.Label();
             this.winDesktop = new System.Windows.Forms.FlowLayoutPanel();
             this.options_1 = new System.Windows.Forms.Panel();
             this.options_2 = new System.Windows.Forms.Panel();
@@ -65,9 +66,9 @@ namespace LaptopSimulator2015
             this.levelWindowIcon = new System.Windows.Forms.Panel();
             this.levelWindowTitle = new System.Windows.Forms.Label();
             this.levelWindowProgressT = new System.Windows.Forms.Timer(this.components);
-            this.winTimeLabel = new System.Windows.Forms.Label();
             this.winTimeTimer = new System.Windows.Forms.Timer(this.components);
             this.minigamePanel = new System.Windows.Forms.Panel();
+            this.minigameClose = new System.Windows.Forms.Label();
             this.minigameClockT = new System.Windows.Forms.Timer(this.components);
             this.optionsWindow = new System.Windows.Forms.Panel();
             this.optionsWindowReset = new System.Windows.Forms.Button();
@@ -93,6 +94,7 @@ namespace LaptopSimulator2015
             this.levelWindow2.SuspendLayout();
             this.levelWindow3.SuspendLayout();
             this.levelWindowHeader.SuspendLayout();
+            this.minigamePanel.SuspendLayout();
             this.optionsWindow.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.optionsWindowWam)).BeginInit();
             this.optionsWindowHeader.SuspendLayout();
@@ -190,10 +192,24 @@ namespace LaptopSimulator2015
             // 
             this.subsLabel.AutoSize = true;
             this.subsLabel.BackColor = System.Drawing.Color.Navy;
-            this.subsLabel.Location = new System.Drawing.Point(6, 9);
+            this.subsLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.subsLabel.ForeColor = System.Drawing.Color.White;
+            this.subsLabel.Location = new System.Drawing.Point(6, 7);
             this.subsLabel.Name = "subsLabel";
-            this.subsLabel.Size = new System.Drawing.Size(0, 13);
+            this.subsLabel.Size = new System.Drawing.Size(0, 16);
             this.subsLabel.TabIndex = 0;
+            // 
+            // winTimeLabel
+            // 
+            this.winTimeLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.winTimeLabel.AutoSize = true;
+            this.winTimeLabel.BackColor = System.Drawing.Color.Navy;
+            this.winTimeLabel.ForeColor = System.Drawing.Color.White;
+            this.winTimeLabel.Location = new System.Drawing.Point(1305, 9);
+            this.winTimeLabel.Name = "winTimeLabel";
+            this.winTimeLabel.Size = new System.Drawing.Size(49, 13);
+            this.winTimeLabel.TabIndex = 0;
+            this.winTimeLabel.Text = "00:00:00";
             // 
             // winDesktop
             // 
@@ -410,18 +426,6 @@ namespace LaptopSimulator2015
             // 
             this.levelWindowProgressT.Tick += new System.EventHandler(this.LevelWindowProgressT_Tick);
             // 
-            // winTimeLabel
-            // 
-            this.winTimeLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.winTimeLabel.AutoSize = true;
-            this.winTimeLabel.BackColor = System.Drawing.Color.Navy;
-            this.winTimeLabel.ForeColor = System.Drawing.Color.White;
-            this.winTimeLabel.Location = new System.Drawing.Point(1305, 9);
-            this.winTimeLabel.Name = "winTimeLabel";
-            this.winTimeLabel.Size = new System.Drawing.Size(49, 13);
-            this.winTimeLabel.TabIndex = 0;
-            this.winTimeLabel.Text = "00:00:00";
-            // 
             // winTimeTimer
             // 
             this.winTimeTimer.Enabled = true;
@@ -432,12 +436,27 @@ namespace LaptopSimulator2015
             // 
             this.minigamePanel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.minigamePanel.BackColor = System.Drawing.Color.Black;
+            this.minigamePanel.Controls.Add(this.minigameClose);
             this.minigamePanel.Location = new System.Drawing.Point(564, 421);
             this.minigamePanel.Name = "minigamePanel";
             this.minigamePanel.Size = new System.Drawing.Size(800, 450);
             this.minigamePanel.TabIndex = 6;
             this.minigamePanel.Visible = false;
             this.minigamePanel.Paint += new System.Windows.Forms.PaintEventHandler(this.InvadersPanel_Paint);
+            // 
+            // minigameClose
+            // 
+            this.minigameClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.minigameClose.BackColor = System.Drawing.Color.Red;
+            this.minigameClose.Font = new System.Drawing.Font("Marlett", 12F);
+            this.minigameClose.Location = new System.Drawing.Point(760, 0);
+            this.minigameClose.Name = "minigameClose";
+            this.minigameClose.Size = new System.Drawing.Size(40, 20);
+            this.minigameClose.TabIndex = 4;
+            this.minigameClose.Text = "r";
+            this.minigameClose.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.minigameClose.Visible = false;
+            this.minigameClose.Click += new System.EventHandler(this.MinigameClose_Click);
             // 
             // minigameClockT
             // 
@@ -464,9 +483,9 @@ namespace LaptopSimulator2015
             // optionsWindowReset
             // 
             this.optionsWindowReset.BackColor = System.Drawing.Color.Red;
-            this.optionsWindowReset.Location = new System.Drawing.Point(332, 64);
+            this.optionsWindowReset.Location = new System.Drawing.Point(355, 64);
             this.optionsWindowReset.Name = "optionsWindowReset";
-            this.optionsWindowReset.Size = new System.Drawing.Size(75, 23);
+            this.optionsWindowReset.Size = new System.Drawing.Size(93, 23);
             this.optionsWindowReset.TabIndex = 7;
             this.optionsWindowReset.Text = "Reset";
             this.optionsWindowReset.UseVisualStyleBackColor = false;
@@ -495,9 +514,9 @@ namespace LaptopSimulator2015
             // 
             // optionsWindowExit
             // 
-            this.optionsWindowExit.Location = new System.Drawing.Point(413, 64);
+            this.optionsWindowExit.Location = new System.Drawing.Point(454, 64);
             this.optionsWindowExit.Name = "optionsWindowExit";
-            this.optionsWindowExit.Size = new System.Drawing.Size(75, 23);
+            this.optionsWindowExit.Size = new System.Drawing.Size(34, 23);
             this.optionsWindowExit.TabIndex = 4;
             this.optionsWindowExit.Text = "OK";
             this.optionsWindowExit.UseVisualStyleBackColor = true;
@@ -604,6 +623,7 @@ namespace LaptopSimulator2015
             this.Text = "FakeDesktop";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FakeDesktop_FormClosing);
+            this.Load += new System.EventHandler(this.FakeDesktop_Load);
             this.winMenuPanel.ResumeLayout(false);
             this.winTaskbar.ResumeLayout(false);
             this.winTaskbar.PerformLayout();
@@ -618,6 +638,7 @@ namespace LaptopSimulator2015
             this.levelWindow3.PerformLayout();
             this.levelWindowHeader.ResumeLayout(false);
             this.levelWindowHeader.PerformLayout();
+            this.minigamePanel.ResumeLayout(false);
             this.optionsWindow.ResumeLayout(false);
             this.optionsWindow.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.optionsWindowWam)).EndInit();
@@ -675,5 +696,6 @@ namespace LaptopSimulator2015
         private System.Windows.Forms.Label optionsWindowHeaderExit;
         private System.Windows.Forms.Button optionsWindowReset;
         private System.Windows.Forms.ToolTip toolTip;
+        private System.Windows.Forms.Label minigameClose;
     }
 }

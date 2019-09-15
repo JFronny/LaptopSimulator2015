@@ -18,7 +18,7 @@ namespace LaptopSimulator2015
     public partial class FakeDesktop : Form
     {
         #region Base
-        List<Level> levels = new List<Level>();
+        List<Minigame> levels = new List<Minigame>();
         SoundPlayer fans;
         bool winShouldClose = false;
 
@@ -45,6 +45,8 @@ namespace LaptopSimulator2015
                 optionsWindowLSD.Text = strings.optionsWindowLSD;
                 optionsWindowTitle.Text = strings.optionsWindowTitle;
                 optionsWindowWamLabel.Text = strings.optionsWindowWam;
+                optionsWindowReset.Text = strings.optionsWindowReset;
+                optionsWindowSubs.Text = strings.optionsWindowSubs;
                 levelWindow.Visible = false;
                 minigamePanel.Visible = false;
                 optionsWindow.Visible = false;
@@ -57,10 +59,11 @@ namespace LaptopSimulator2015
                 subsLabel.Visible = optionsWindowSubs.Checked;
                 if (_mode == Mode.mainMenu)
                     winMenuStart.Select();
-                for (int i = 0; i < levels.Count; i++)
-                    levels[i].desktopIcon.Visible = levels[i].LevelNumber <= Settings.level;
+                if (tmp__mode_uiv)
+                    updateIconVisibility();
             }
         }
+        bool tmp__mode_uiv = false;
 
         [DllImport("winmm.dll")]
         public static extern int waveOutGetVolume(IntPtr hwo, out uint dwVolume);
@@ -73,6 +76,8 @@ namespace LaptopSimulator2015
             Directory.SetCurrentDirectory(Path.GetDirectoryName(Application.ExecutablePath));
             if (!Directory.Exists("Levels"))
                 Directory.CreateDirectory("Levels");
+            if (!Directory.Exists("Goals"))
+                Directory.CreateDirectory("Goals");
             InitializeComponent();
             toolTip.SetToolTip(options_2, strings.optionsWindowTitle);
             levelWindowContents.ItemSize = new Size(0, 1);
@@ -95,48 +100,159 @@ namespace LaptopSimulator2015
             fans.PlayLooping();
             Control[] controls = getControls(ignore: new List<Control> { minigamePanel }).ToArray();
             for (int i = 0; i < controls.Length; i++)
-            {
                 controls[i].Paint += Control_Paint;
-            }
-            levels = new List<Level>();
-            AppDomain ad = AppDomain.CurrentDomain;
-            ad.AssemblyResolve += AssemblyResolveHandler;
-            foreach (string s in Directory.GetFiles("Levels"))
-                if (Path.GetExtension(s) == ".dll")
-                    ad.Load(s);
-            List<Type> tmp = ad.GetAssemblies().SelectMany(s => s.GetTypes()).Where(p => typeof(Level).IsAssignableFrom(p)).ToList();
-            tmp.Remove(typeof(Level));
-            for (int i = 0; i < tmp.Count; i++)
+            levels = Directory.GetFiles("Levels").Concat(Directory.GetFiles("Goals")).Where(s => Path.GetExtension(s) == ".dll").Select(s => Assembly.LoadFrom(s))
+                .SelectMany(s => s.GetTypes()).Where(p => typeof(Minigame).IsAssignableFrom(p) && p != typeof(Minigame) && p != typeof(Level) && p != typeof(Goal)).Distinct()
+                .Select(s => (Minigame)Activator.CreateInstance(s)).OrderBy(lv => lv.levelNumber).ToList();
+            for (int i = 0; i < levels.Count; i++)
             {
-                levels.Add((Level)Activator.CreateInstance(tmp[i]));
                 levels[i].desktopIcon = new Panel();
                 Panel tmp1 = new Panel();
 
                 levels[i].desktopIcon.Size = new Size(50, 50);
                 levels[i].desktopIcon.BackColor = Color.FromArgb(128, 128, 255);
                 levels[i].desktopIcon.Name = "lvl" + i.ToString() + "_1";
-                levels[i].desktopIcon.Visible = levels[i].LevelNumber <= Settings.level;
+                levels[i].desktopIcon.Visible = levels[i].levelNumber <= Settings.level;
 
                 tmp1.BackColor = Color.Blue;
                 tmp1.BackgroundImageLayout = ImageLayout.Stretch;
-                tmp1.BackgroundImage = levels[i].installerIcon;
+                tmp1.BackgroundImage = levels[i].icon;
                 tmp1.Anchor = (AnchorStyles)15;
                 tmp1.Name = "lvl" + i.ToString() + "_2";
                 tmp1.Location = new Point(2, 2);
                 tmp1.Size = new Size(46, 46);
                 tmp1.Tag = i;
-                tmp1.DoubleClick += (sender, e) => { level_Start((int)((Panel)sender).Tag); };
-                toolTip.SetToolTip(tmp1, strings.lvPref + " " + (i + 1).ToString() + ": " + levels[i].installerHeader);
+                tmp1.DoubleClick += (sender, e) =>
+                {
+                    levelInd = (int)((Panel)sender).Tag;
+                    levelWindowIcon.BackgroundImage = levels[levelInd].icon;
+                    levelWindowTitle.Text = levels[levelInd].name;
+                    minigameClockT.Interval = levels[levelInd].gameClock;
+                    winDesktop.Enabled = false;
+                    if (typeof(Level).IsAssignableFrom(levels[levelInd].GetType()))
+                    {
+                        Misc.closeGameWindow = new Action(() => {
+                            base.BackColor = Color.FromArgb(100, 0, 255);
+                            levelWindow.Visible = false;
+                            minigamePanel.Visible = false;
+                            minigamePanel.Enabled = false;
+                            minigameClockT.Enabled = false;
+                            winDesktop.Enabled = true;
+                            levelWindowContents.SelectedIndex = 0;
+                            levelWindowProgress.Value = 0;
+                            levelWindowProgressT.Enabled = false;
+                            levelWindowC1.Enabled = true;
+                            Thread.Sleep(100);
+                            base.BackColor = Color.Blue;
+                        });
+                        levelWindowProgress.Maximum = ((Level)levels[levelInd]).installerProgressSteps;
+                        levelWindowText1.Text = ((Level)levels[levelInd]).installerText;
+                        levelWindow.Visible = true;
+                    }
+                    else
+                    {
+                        Goal goal = ((Goal)levels[levelInd]);
+                        if (goal.playableAfter <= Settings.level)
+                        {
+                            Graphics g = minigamePanel.CreateGraphics();
+                            levels[levelInd].initGame(g, minigamePanel, minigameClockT);
+                            minigamePanel.Visible = true;
+                            minigamePanel.Enabled = true;
+                            minigameClockT.Enabled = true;
+                            minigameClose.Visible = true;
+                            g.Flush();
+                            Misc.closeGameWindow = new Action(() => {
+                                base.BackColor = Color.FromArgb(100, 0, 255);
+                                minigamePanel.Visible = false;
+                                minigamePanel.Enabled = false;
+                                minigameClockT.Enabled = false;
+                                winDesktop.Enabled = true;
+                                minigameClose.Visible = false;
+                                Thread.Sleep(100);
+                                base.BackColor = Color.Blue;
+                            });
+                            minigamePanel.Show();
+                        }
+                        else
+                        {
+                            base.BackColor = Color.FromArgb(100, 0, 255);
+                            if (levels[levelInd].levelNumber == Settings.level)
+                            {
+                                playDialog(goal.incompleteText);
+                                incrementLevel();
+                            }
+                            Thread.Sleep(100);
+                            base.BackColor = Color.Blue;
+                            winDesktop.Enabled = true;
+                        }
+                    }
+                };
+                toolTip.SetToolTip(tmp1, strings.lvPref + " " + (i + 1).ToString() + ": " + levels[i].name);
 
                 levels[i].desktopIcon.Controls.Add(tmp1);
                 winDesktop.Controls.Add(levels[i].desktopIcon);
             }
-            levels = levels.OrderBy(lv => lv.LevelNumber).ToList();
+        }
+
+        private void FakeDesktop_Load(object sender, EventArgs e)
+        {
             mode = Mode.mainMenu;
             Program.splash.Close();
-            Misc.closeGameWindow = new Action(closeLevelWindow);
+            GC.Collect();
+            tmp__mode_uiv = true;
         }
-        static Assembly AssemblyResolveHandler(object source, ResolveEventArgs e) => Assembly.LoadFrom(e.Name);
+
+        void updateIconVisibility(bool ignoreSub = false)
+        {
+            for (int i = 0; i < levels.Count; i++)
+            {
+                if ((!ignoreSub) && ((typeof(Goal).IsAssignableFrom(levels[i].GetType()) && levels[i].desktopIcon.Visible != levels[i].levelNumber <= Settings.level) || (levels[i].levelNumber == 0 && Settings.level == 0)))
+                {
+                    string[] at = ((Goal)levels[i]).availableText;
+                    new Thread(() =>
+                    {
+                        Invoke((MethodInvoker)delegate () { winDesktop.Enabled = false; });
+                        playDialog(at).Join();
+                        Invoke((MethodInvoker)delegate ()
+                        {
+                            winDesktop.Enabled = true;
+                            updateIconVisibility(true);
+                        });
+                    }).Start();
+                }
+                levels[i].desktopIcon.Visible = levels[i].levelNumber <= Settings.level;
+            }
+        }
+
+        Thread playDialog(string[] lines)
+        {
+            var tmp = new Thread(() =>
+            {
+                for (int i = 0; i < lines.Length; i++)
+                {
+                    Invoke((MethodInvoker)delegate () { subsLabel.Text = lines[i]; });
+                    Thread.Sleep(2000);
+                }
+                Invoke((MethodInvoker)delegate () { subsLabel.Text = ""; });
+            });
+            tmp.Start();
+            return tmp;
+        }
+
+        void incrementLevel()
+        {
+            int closest = int.MaxValue;
+            for (int i = 0; i < levels.Count; i++)
+                if (levels[i].levelNumber < closest & levels[i].levelNumber > levels[levelInd].levelNumber)
+                    closest = levels[i].levelNumber;
+            if (closest != int.MaxValue)
+                Settings.level = closest;
+            Settings.Save();
+            updateIconVisibility();
+            for (int i = 0; i < levels.Count; i++)
+                if (typeof(Goal).IsAssignableFrom(levels[i].GetType()) && ((Goal)levels[i]).playableAfter == Settings.level)
+                    playDialog(((Goal)levels[i]).completeText);
+        }
 
         public List<Control> getControls(Control parent = null, List<Control> ignore = null)
         {
@@ -203,24 +319,12 @@ namespace LaptopSimulator2015
             else
                 winMenuExit.Text = strings.winMenuExit2;
         }
-
         private void WinMenuStart_Click(object sender, EventArgs e) => mode = Mode.game;
 
         private void WinTimeTimer_Tick(object sender, EventArgs e) => winTimeLabel.Text = DateTime.Now.ToString("hh:mm:ss", Settings.lang);
         #endregion
         #region Level
         int levelInd = 0;
-        private void level_Start(int level)
-        {
-            levelInd = level;
-            levelWindowIcon.BackgroundImage = levels[level].installerIcon;
-            levelWindowTitle.Text = levels[level].installerHeader;
-            levelWindowText1.Text = levels[level].installerText;
-            minigameClockT.Interval = levels[level].gameClock;
-            levelWindowProgress.Maximum = levels[level].installerProgressSteps;
-            winDesktop.Enabled = false;
-            levelWindow.Visible = true;
-        }
 
         bool levelWindowMoving = false;
         Point levelWindowDiff = Point.Empty;
@@ -274,17 +378,9 @@ namespace LaptopSimulator2015
                     break;
                 case 2:
                     LevelWindowHeaderExit_Click(sender, e);
-                    if (levels[levelInd].LevelNumber >= Settings.level)
+                    if (levels[levelInd].levelNumber >= Settings.level)
                     {
-                        int closest = int.MaxValue;
-                        for (int i = 0; i < levels.Count; i++)
-                            if (levels[i].LevelNumber < closest & levels[i].LevelNumber > levels[levelInd].LevelNumber)
-                                closest = levels[i].LevelNumber;
-                        if (closest != int.MaxValue)
-                            Settings.level = closest;
-                        Settings.Save();
-                        for (int i = 0; i < levels.Count; i++)
-                            levels[i].desktopIcon.Visible = levels[i].LevelNumber <= Settings.level;
+                        incrementLevel();
                         mode = Mode.game;
                     }
                     break;
@@ -348,25 +444,10 @@ namespace LaptopSimulator2015
             }
         }
 
-        private void LevelWindowHeaderExit_Click(object sender, EventArgs e) => closeLevelWindow();
+        private void LevelWindowHeaderExit_Click(object sender, EventArgs e) => Misc.closeGameWindow.Invoke();
+        private void MinigameClose_Click(object sender, EventArgs e) => Misc.closeGameWindow.Invoke();
 
-        private void closeLevelWindow()
-        {
-            BackColor = Color.FromArgb(100, 0, 255);
-            levelWindow.Visible = false;
-            minigamePanel.Visible = false;
-            minigamePanel.Enabled = false;
-            minigameClockT.Enabled = false;
-            winDesktop.Enabled = true;
-            levelWindowContents.SelectedIndex = 0;
-            levelWindowProgress.Value = 0;
-            levelWindowProgressT.Enabled = false;
-            levelWindowC1.Enabled = true;
-            Thread.Sleep(100);
-            BackColor = Color.Blue;
-        }
-
-#region Minigame
+        #region Minigame
         uint minigameTime = 0;
         private void InvadersPanel_Paint(object sender, PaintEventArgs e) => levels[levelInd].gameTick(e.Graphics, minigamePanel, minigameClockT, minigameTime);
 
@@ -375,10 +456,10 @@ namespace LaptopSimulator2015
             minigameTime++;
             minigamePanel.Invalidate();
         }
-#endregion
+        #endregion
 
-#endregion
-#region Options
+        #endregion
+        #region Options
         private void Options_2_DoubleClick(object sender, EventArgs e)
         {
             winDesktop.Enabled = false;

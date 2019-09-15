@@ -24,7 +24,7 @@ namespace LaptopSimulator2015 {
                 xmldoc_temp.Add(new XElement("wam", 10));
                 xmldoc_temp.Add(new XElement("lsd", false));
                 xmldoc_temp.Add(new XElement("subs", true));
-                xmldoc_temp.Add(new XElement("level", 1));
+                xmldoc_temp.Add(new XElement("level", 0));
                 xmldoc_temp.Add(new XElement("lang", CultureInfo.CurrentCulture));
                 xmldoc_temp.Save(_xmlfile);
             }

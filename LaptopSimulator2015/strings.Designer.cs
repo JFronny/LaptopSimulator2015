@@ -160,6 +160,24 @@ namespace LaptopSimulator2015 {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Reset.
+        /// </summary>
+        internal static string optionsWindowReset {
+            get {
+                return ResourceManager.GetString("optionsWindowReset", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Subtitles.
+        /// </summary>
+        internal static string optionsWindowSubs {
+            get {
+                return ResourceManager.GetString("optionsWindowSubs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Options.
         /// </summary>
         internal static string optionsWindowTitle {

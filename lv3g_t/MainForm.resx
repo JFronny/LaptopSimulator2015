@@ -117,73 +117,7 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="captchaLetters" xml:space="preserve">
-    <value>ABCDEFGHIJKLMNPQRSTUVWXYZ123456789</value>
-  </data>
-  <data name="consoleError" xml:space="preserve">
-    <value>An unhandled Exception occured and the Application was terminated. Please contact the developer.</value>
-  </data>
-  <data name="consolePress" xml:space="preserve">
-    <value>Press any Key to quit.</value>
-  </data>
-  <data name="consoleQuit" xml:space="preserve">
-    <value>E X I T E D .</value>
-  </data>
-  <data name="consoleStarting" xml:space="preserve">
-    <value>S T A R T I N G . . .</value>
-  </data>
-  <data name="continue" xml:space="preserve">
-    <value>Continue</value>
-  </data>
-  <data name="fakeDesktopTitle" xml:space="preserve">
-    <value>Fake Desktop</value>
-  </data>
-  <data name="langWarning" xml:space="preserve">
-    <value>WARNING: We recommend you restart your game to apply these changes. Restart?</value>
-  </data>
-  <data name="lvPref" xml:space="preserve">
-    <value>Level</value>
-  </data>
-  <data name="optionsWindowLSD" xml:space="preserve">
-    <value>LSD Mode</value>
-  </data>
-  <data name="optionsWindowLSDWarning" xml:space="preserve">
-    <value>Are you SURE?\r\n(This will break EVERYTHING!)</value>
-  </data>
-  <data name="optionsWindowReset" xml:space="preserve">
-    <value>Reset</value>
-  </data>
-  <data name="optionsWindowSubs" xml:space="preserve">
-    <value>Subtitles</value>
-  </data>
-  <data name="optionsWindowTitle" xml:space="preserve">
-    <value>Options</value>
-  </data>
-  <data name="optionsWindowWam" xml:space="preserve">
-    <value>Dedodated Wam</value>
-  </data>
-  <data name="ramInstallerWindowText2" xml:space="preserve">
-    <value>To verify that you are human we ask you to fill in this Captcha. This will only take a second.</value>
-  </data>
-  <data name="ramInstallerWindowText3" xml:space="preserve">
-    <value>Please wait for the installation to finish...</value>
-  </data>
-  <data name="resetWarning1" xml:space="preserve">
-    <value>Are you sure you want to reset you progress?</value>
-  </data>
-  <data name="resetWarning2" xml:space="preserve">
-    <value>Are you absolutly sure you want to reset you progress? This is your last chance to turn back!</value>
-  </data>
-  <data name="winMenuExit1" xml:space="preserve">
-    <value>Exit</value>
-  </data>
-  <data name="winMenuExit2" xml:space="preserve">
-    <value>Are you sure?</value>
-  </data>
-  <data name="winMenuStart" xml:space="preserve">
-    <value>Start</value>
-  </data>
-  <data name="winMenuText" xml:space="preserve">
-    <value>Hello and welcome to my game, I hope you'll like it. My name is CreepyCrafter24, btw. (FunFact: This game was originally created as the result of a conversation with a classmate)</value>
-  </data>
+  <metadata name="minigameClockT.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>17, 17</value>
+  </metadata>
 </root>

@@ -13,7 +13,7 @@ namespace LaptopSimulator2015.Levels
     class Lvl1 : Level
     {
         static Image _installer;
-        public string installerHeader
+        public string name
         {
             get {
                 switch (CultureInfo.CurrentUICulture.Name.Split('-')[0])
@@ -39,7 +39,7 @@ namespace LaptopSimulator2015.Levels
             }
         }
 
-        public Image installerIcon
+        public Image icon
         {
             get {
                 if (_installer == null)
@@ -53,7 +53,7 @@ namespace LaptopSimulator2015.Levels
             }
         }
 
-        public int LevelNumber => 1;
+        public int levelNumber => 1;
 
         public int gameClock => 17;
 

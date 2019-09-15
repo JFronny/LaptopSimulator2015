@@ -150,6 +150,12 @@
   <data name="optionsWindowLSDWarning" xml:space="preserve">
     <value>Bist du dir sicher? (ALLES wird verbuggt werden!)</value>
   </data>
+  <data name="optionsWindowReset" xml:space="preserve">
+    <value>Zurücksetzen</value>
+  </data>
+  <data name="optionsWindowSubs" xml:space="preserve">
+    <value>Untertitel</value>
+  </data>
   <data name="optionsWindowTitle" xml:space="preserve">
     <value>Optionen</value>
   </data>
