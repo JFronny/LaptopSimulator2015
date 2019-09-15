@@ -62,16 +62,18 @@ namespace LaptopSimulator2015.Levels
 
         public int installerProgressSteps => 500;
         uint minigamePrevTime = 0;
+        
         Vector2 center;
         Vector2 cannon;
         Vector2 targ;
-        List<Vector2> targets = new List<Vector2>();
+        List<Vector2> targets;
         Rectangle player => new Rectangle(center.toPoint().X - 5, center.toPoint().Y - 5, 10, 10);
-        double playerRot = 0;
-        double cannonL = 30;
-        double power = 10;
-        bool firing = false;
-        uint lastTarget = 0;
+        double playerRot;
+        double cannonL;
+        double power;
+        bool firing;
+        uint lastTarget;
+
         public void gameTick(Graphics e, Panel minigamePanel, Timer minigameTimer, uint minigameTime)
         {
             BufferedGraphics buffer = BufferedGraphicsManager.Current.Allocate(e, new Rectangle(0, 0, minigamePanel.Width, minigamePanel.Height));
@@ -162,8 +164,8 @@ namespace LaptopSimulator2015.Levels
         public void initGame(Graphics g, Panel minigamePanel, Timer minigameTimer)
         {
             center = new Vector2(minigamePanel.Width / 2, minigamePanel.Height / 2);
-            cannon = center;
-            targ = center;
+            cannon = new Vector2(center);
+            targ = new Vector2(center);
             targets = new List<Vector2>();
             playerRot = 0;
             cannonL = 30;

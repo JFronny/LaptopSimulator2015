@@ -5,7 +5,7 @@ using System.Xml.Linq;
 
 namespace LaptopSimulator2015 {
     public static class Settings {
-        static string xmlfile;
+        public static readonly string _xmlfile = Path.GetDirectoryName(Application.ExecutablePath) + @"\save.xml";
         public static void Save()
         {
             XElement xmldoc_temp = new XElement("save");
@@ -14,12 +14,11 @@ namespace LaptopSimulator2015 {
             xmldoc_temp.Add(new XElement("subs", subs));
             xmldoc_temp.Add(new XElement("level", level));
             xmldoc_temp.Add(new XElement("lang", lang));
-            xmldoc_temp.Save(xmlfile);
+            xmldoc_temp.Save(_xmlfile);
         }
         public static void Load()
         {
-            xmlfile = Path.GetDirectoryName(Application.ExecutablePath) + @"\save.xml";
-            if (!File.Exists(xmlfile))
+            if (!File.Exists(_xmlfile))
             {
                 XElement xmldoc_temp = new XElement("save");
                 xmldoc_temp.Add(new XElement("wam", 10));
@@ -27,9 +26,9 @@ namespace LaptopSimulator2015 {
                 xmldoc_temp.Add(new XElement("subs", true));
                 xmldoc_temp.Add(new XElement("level", 1));
                 xmldoc_temp.Add(new XElement("lang", CultureInfo.CurrentCulture));
-                xmldoc_temp.Save(xmlfile);
+                xmldoc_temp.Save(_xmlfile);
             }
-            XElement xmldoc = XElement.Load(xmlfile);
+            XElement xmldoc = XElement.Load(_xmlfile);
             wam = int.Parse(xmldoc.Element("wam").Value);
             lsd = bool.Parse(xmldoc.Element("lsd").Value);
             subs = bool.Parse(xmldoc.Element("subs").Value);

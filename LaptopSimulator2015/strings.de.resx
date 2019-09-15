@@ -141,8 +141,14 @@
   <data name="langWarning" xml:space="preserve">
     <value>WARNUNG: Wir empfehlen, das Spiel nach der Änderung neu zu starten. Neu starten?</value>
   </data>
+  <data name="lvPref" xml:space="preserve">
+    <value>Level</value>
+  </data>
   <data name="optionsWindowLSD" xml:space="preserve">
     <value>LSD-Modus</value>
+  </data>
+  <data name="optionsWindowLSDWarning" xml:space="preserve">
+    <value>Bist du dir sicher? (ALLES wird verbuggt werden!)</value>
   </data>
   <data name="optionsWindowTitle" xml:space="preserve">
     <value>Optionen</value>

@@ -20,18 +20,34 @@ namespace Base
             {
                 if (bounds_wrap)
                 {
-                    if (bounds.X != 0 & bounds.Width < 0)
-                        throw new ArgumentException("bounds.Width must be greater than or equal to 0");
-                    while (bounds.X != 0 & x_unchecked > bounds.X + bounds.Width)
-                        x_unchecked -= bounds.Width;
-                    while (bounds.X != 0 & x_unchecked < bounds.X)
-                        x_unchecked += bounds.Width;
-                    if (bounds.Y != 0 & bounds.Height < 0)
-                        throw new ArgumentException("bounds.Height must be greater than or equal to 0");
-                    while (bounds.Y != 0 & y_unchecked > bounds.Y + bounds.Height)
-                        y_unchecked -= bounds.Height;
-                    while (bounds.Y != 0 & y_unchecked < bounds.Y)
-                        y_unchecked += bounds.Height;
+                    if (!(bounds.X == 0 && bounds.Width == 0))
+                    {
+                        if (bounds.Width == 0)
+                            x_unchecked = bounds.X;
+                        else
+                        {
+                            if (bounds.Width < 0)
+                                throw new ArgumentException("bounds.Width must be greater than or equal to 0");
+                            while (x_unchecked > bounds.X + bounds.Width)
+                                x_unchecked -= bounds.Width;
+                            while (x_unchecked < bounds.X)
+                                x_unchecked += bounds.Width;
+                        }
+                    }
+                    if (!(bounds.Y == 0 && bounds.Height == 0))
+                    {
+                        if (bounds.Height == 0)
+                            y_unchecked = bounds.Y;
+                        else
+                        {
+                            if (bounds.Height < 0)
+                                throw new ArgumentException("bounds.Height must be greater than or equal to 0");
+                            while (y_unchecked > bounds.Y + bounds.Height)
+                                y_unchecked -= bounds.Height;
+                            while (y_unchecked < bounds.Y)
+                                y_unchecked += bounds.Height;
+                        }
+                    }
                 }
                 else
                 {

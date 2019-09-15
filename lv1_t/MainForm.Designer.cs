@@ -61,7 +61,7 @@
             // 
             this.minigameClockT.Enabled = true;
             this.minigameClockT.Interval = 17;
-            this.minigameClockT.Tick += new System.EventHandler(this.Timer1_Tick);
+            this.minigameClockT.Tick += new System.EventHandler(this.MinigameClockT_Tick);
             // 
             // MainForm
             // 

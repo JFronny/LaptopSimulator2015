@@ -61,10 +61,11 @@ namespace LaptopSimulator2015.Levels
         public Panel desktopIcon { get; set; }
 
         public int installerProgressSteps => 500;
-        List<Vector2> enemies = new List<Vector2>();
-        Vector2 player;
         uint minigamePrevTime = 0;
-        uint lives = 3;
+
+        List<Vector2> enemies;
+        Vector2 player;
+        int lives;
 
         public void gameTick(Graphics e, Panel minigamePanel, Timer minigameTimer, uint minigameTime)
         {
@@ -75,7 +76,7 @@ namespace LaptopSimulator2015.Levels
                 for (int i = 0; i < enemies.Count; i++)
                     g.FillRectangle(new SolidBrush(Color.Red), new Rectangle(enemies[i].toPoint(), new Size(10, 10)));
                 g.FillRectangle(new SolidBrush(Color.Green), new Rectangle(player.toPoint(), new Size(10, 10)));
-                g.DrawString(lives.ToString(), new Font("Tahoma", 7), Brushes.White, new Rectangle(player.toPoint(), new Size(10, 10)));
+                Drawing.DrawSizedString(g, lives.ToString(), 7, (player + new PointF(5, 5)).toPointF(), Brushes.White, true);
                 Random random = new Random();
                 if (minigameTime != minigamePrevTime)
                 {
@@ -104,17 +105,17 @@ namespace LaptopSimulator2015.Levels
                     for (int i = 0; i < enemies.Count; i++)
                     {
                         enemies[i].moveTowards(player, Math.Max(6, Math.Sqrt(minigameTime / 100 + 1)));
-                        if (player.distanceFromSquared(enemies[i]) < 100)
+                        for (int j = 0; j < enemies.Count; j++)
+                        {
+                            if (i != j && enemies[i].distanceFromSquared(enemies[j]) < 25 && !enemiesToRemove.Contains(enemies[j]))
+                                enemiesToRemove.Add(enemies[i]);
+                        }
+                        if (player.distanceFromSquared(enemies[i]) < 100 && !enemiesToRemove.Contains(enemies[i]))
                         {
                             lives--;
                             enemiesToRemove.Add(enemies[i]);
                             if (lives <= 0)
                                 throw new Exception("The VM was shut down to prevent damage to your Machine.", new Exception("0717750f-3508-4bc2-841e-f3b077c676fe"));
-                        }
-                        for (int j = 0; j < enemies.Count; j++)
-                        {
-                            if (i != j & enemies[i].distanceFromSquared(enemies[j]) < 25)
-                                enemiesToRemove.Add(enemies[i]);
                         }
                     }
                     enemies = enemies.Except(enemiesToRemove.Distinct()).Distinct().ToList();
@@ -127,10 +128,10 @@ namespace LaptopSimulator2015.Levels
 
         public void initGame(Graphics g, Panel minigamePanel, Timer minigameTimer)
         {
+            enemies = new List<Vector2>();
             player = new Vector2(minigamePanel.Width / 2, minigamePanel.Height / 2);
             player.bounds_wrap = true;
             player.bounds = new Rectangle(-10, -10, minigamePanel.Width + 10, minigamePanel.Height + 10);
-            enemies = new List<Vector2>();
             lives = 3;
         }
     }

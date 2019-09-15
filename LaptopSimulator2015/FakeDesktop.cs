@@ -74,6 +74,7 @@ namespace LaptopSimulator2015
             if (!Directory.Exists("Levels"))
                 Directory.CreateDirectory("Levels");
             InitializeComponent();
+            toolTip.SetToolTip(options_2, strings.optionsWindowTitle);
             levelWindowContents.ItemSize = new Size(0, 1);
             optionsWindowLang.Text = Settings.lang.Name;
             Thread.CurrentThread.CurrentUICulture = Settings.lang;
@@ -89,7 +90,7 @@ namespace LaptopSimulator2015
             winMenuStart.Text = strings.winMenuStart;
             winMenuText.Text = strings.winMenuText;
             levelWindowTitle.Text = "";
-            winTimeLabel.Text = DateTime.Now.Hour.ToString("00") + ":" + DateTime.Now.Minute.ToString("00");
+            winTimeLabel.Text = DateTime.Now.ToString("hh:mm:ss", Settings.lang);
             fans = new SoundPlayer(Resources.fans);
             fans.PlayLooping();
             Control[] controls = getControls(ignore: new List<Control> { minigamePanel }).ToArray();
@@ -125,6 +126,7 @@ namespace LaptopSimulator2015
                 tmp1.Size = new Size(46, 46);
                 tmp1.Tag = i;
                 tmp1.DoubleClick += (sender, e) => { level_Start((int)((Panel)sender).Tag); };
+                toolTip.SetToolTip(tmp1, strings.lvPref + " " + (i + 1).ToString() + ": " + levels[i].installerHeader);
 
                 levels[i].desktopIcon.Controls.Add(tmp1);
                 winDesktop.Controls.Add(levels[i].desktopIcon);
@@ -204,7 +206,7 @@ namespace LaptopSimulator2015
 
         private void WinMenuStart_Click(object sender, EventArgs e) => mode = Mode.game;
 
-        private void WinTimeTimer_Tick(object sender, EventArgs e) => winTimeLabel.Text = DateTime.Now.Hour.ToString("00") + ":" + DateTime.Now.Minute.ToString("00");
+        private void WinTimeTimer_Tick(object sender, EventArgs e) => winTimeLabel.Text = DateTime.Now.ToString("hh:mm:ss", Settings.lang);
         #endregion
         #region Level
         int levelInd = 0;
@@ -460,7 +462,7 @@ namespace LaptopSimulator2015
                     optionsWindowLSD.Checked = false;
                     try
                     {
-                        if (MessageBox.Show("Are you SURE?\r\n(This will break EVERYTHING!)", "WARNING", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                        if (MessageBox.Show(strings.optionsWindowLSDWarning, "", MessageBoxButtons.YesNo) == DialogResult.Yes)
                         {
                             tmpoptionslsdcanchange = true;
                             optionsWindowLSD.Checked = true;
@@ -512,12 +514,21 @@ namespace LaptopSimulator2015
         {
             if (MessageBox.Show(strings.resetWarning1, "", MessageBoxButtons.YesNo) == DialogResult.Yes && MessageBox.Show(strings.resetWarning2, "", MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
-                Settings.wam = 0;
-                Settings.lsd = false;
-                Settings.subs = true;
-                Settings.level = 1;
-                Settings.Save();
-                mode = Mode.game;
+                File.Delete(Settings._xmlfile);
+                winShouldClose = true;
+                string ex = "";
+                if (Application.ExecutablePath.Contains(" "))
+                    ex = "\"\" \"" + Application.ExecutablePath + "\"";
+                else
+                    ex = Application.ExecutablePath;
+                Process.Start(new ProcessStartInfo
+                {
+                    Arguments = "/C timeout /t 2 /nobreak >nul & del \"" + Settings._xmlfile + "\" & start " + ex,
+                    WindowStyle = ProcessWindowStyle.Hidden,
+                    CreateNoWindow = true,
+                    FileName = "cmd.exe"
+                });
+                Application.Exit();
             }
         }
         #endregion

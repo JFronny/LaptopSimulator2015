@@ -141,11 +141,17 @@
   <data name="langWarning" xml:space="preserve">
     <value>WARNING: We recommend you restart your game to apply these changes. Restart?</value>
   </data>
+  <data name="lvPref" xml:space="preserve">
+    <value>Level</value>
+  </data>
   <data name="optionsWindowLSD" xml:space="preserve">
     <value>LSD Mode</value>
   </data>
+  <data name="optionsWindowLSDWarning" xml:space="preserve">
+    <value>Are you SURE?\r\n(This will break EVERYTHING!)</value>
+  </data>
   <data name="optionsWindowTitle" xml:space="preserve">
-    <value>PCOptimizerPro</value>
+    <value>Options</value>
   </data>
   <data name="optionsWindowWam" xml:space="preserve">
     <value>Dedodated Wam</value>

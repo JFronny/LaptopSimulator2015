@@ -7,6 +7,7 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -15,13 +16,12 @@ namespace lv3_t
     public partial class MainForm : Form
     {
         #region FRMBD
-        uint minigameTime = 0;
-        uint minigamePrevTime = 0;
+        uint minigameTime;
+        uint minigamePrevTime;
         public MainForm()
         {
             InitializeComponent();
-            cannon = center;
-            targ = center;
+            _initGame();
         }
 
         private void Button1_Click(object sender, EventArgs e) => Application.Exit();
@@ -30,17 +30,36 @@ namespace lv3_t
             minigameTime++;
             minigamePanel.Invalidate();
         }
+
+        private void _initGame()
+        {
+            minigameTime = 0;
+            minigamePrevTime = 0;
+            initGame();
+        }
         #endregion
-        Vector2 center => new Vector2(minigamePanel.Width / 2, minigamePanel.Height / 2);
+        Vector2 center;
         Vector2 cannon;
         Vector2 targ;
-        List<Vector2> targets = new List<Vector2>();
+        List<Vector2> targets;
         Rectangle player => new Rectangle(center.toPoint().X - 5, center.toPoint().Y - 5, 10, 10);
-        double playerRot = 0;
-        double cannonL = 30;
-        double power = 10;
-        bool firing = false;
-        uint lastTarget = 0;
+        double playerRot;
+        double cannonL;
+        double power;
+        bool firing;
+        uint lastTarget;
+        private void initGame()
+        {
+            center = new Vector2(minigamePanel.Width / 2, minigamePanel.Height / 2);
+            cannon = new Vector2(center);
+            targ = new Vector2(center);
+            targets = new List<Vector2>();
+            playerRot = 0;
+            cannonL = 30;
+            power = 10;
+            firing = false;
+            lastTarget = 0;
+        }
         private void MinigamePanel_Paint(object sender, PaintEventArgs e)
         {
             BufferedGraphics buffer = BufferedGraphicsManager.Current.Allocate(e.Graphics, new Rectangle(0, 0, minigamePanel.Width, minigamePanel.Height));
@@ -129,16 +148,11 @@ namespace lv3_t
             {
                 if (ex.InnerException?.Message == "0717750f-3508-4bc2-841e-f3b077c676fe")
                 {
-                    minigameClockT.Enabled = false;
                     g.Clear(Color.Red);
-                    g.SmoothingMode = SmoothingMode.AntiAlias;
-                    g.InterpolationMode = InterpolationMode.HighQualityBicubic;
-                    g.PixelOffsetMode = PixelOffsetMode.HighQuality;
-                    SizeF sLen = g.MeasureString("Lost.", new Font("Tahoma", 20));
-                    RectangleF rectf = new RectangleF(minigamePanel.Width / 2 - sLen.Width / 2, minigamePanel.Height / 2 - sLen.Height / 2, 90, 50);
-                    g.DrawString("Lost.", new Font("Tahoma", 20), Brushes.Black, rectf);
+                    Drawing.DrawSizedString(g, "Lost.", 20, new PointF(minigamePanel.Width / 2, minigamePanel.Height / 2), Brushes.Black, true);
                     buffer.Render();
-                    buffer.Dispose();
+                    Thread.Sleep(500);
+                    _initGame();
                 }
                 else
 #if DEBUG

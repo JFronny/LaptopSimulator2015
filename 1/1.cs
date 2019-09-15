@@ -60,13 +60,13 @@ namespace LaptopSimulator2015.Levels
         public Panel desktopIcon { get; set; }
 
         public int installerProgressSteps => 500;
-
-        List<Vector2> invadersAliens = new List<Vector2>();
-        List<Vector2> invadersBullets = new List<Vector2>();
-        Vector2 invadersPlayer;
         uint minigamePrevTime = 0;
-        bool invadersCanShoot = true;
-        double speedMod = 5;
+
+        List<Vector2> enemies;
+        List<Vector2> bullets;
+        Vector2 player;
+        double speedMod;
+        bool enemiesCanShoot;
 
         public void gameTick(Graphics e, Panel minigamePanel, Timer minigameTimer, uint minigameTime)
         {
@@ -75,62 +75,62 @@ namespace LaptopSimulator2015.Levels
             try
             {
                 g.Clear(Color.Black);
-                for (int i = 0; i < invadersAliens.Count; i++)
+                for (int i = 0; i < enemies.Count; i++)
                 {
-                    g.FillRectangle(new SolidBrush(Color.Red), new Rectangle(invadersAliens[i].toPoint(), new Size(10, 10)));
+                    g.FillRectangle(new SolidBrush(Color.Red), new Rectangle(enemies[i].toPoint(), new Size(10, 10)));
                 }
-                for (int i = 0; i < invadersBullets.Count; i++)
+                for (int i = 0; i < bullets.Count; i++)
                 {
-                    g.FillRectangle(new SolidBrush(Color.White), new Rectangle(invadersBullets[i].toPoint(), new Size(5, 5)));
+                    g.FillRectangle(new SolidBrush(Color.White), new Rectangle(bullets[i].toPoint(), new Size(5, 5)));
                 }
-                g.FillRectangle(new SolidBrush(Color.Green), new Rectangle(invadersPlayer.toPoint(), new Size(10, 10)));
+                g.FillRectangle(new SolidBrush(Color.Green), new Rectangle(player.toPoint(), new Size(10, 10)));
                 Random random = new Random();
                 if (minigameTime != minigamePrevTime)
                 {
                     minigamePrevTime = minigameTime;
                     if (random.Next(0, 100000) < minigameTime + 1300)
-                        invadersAliens.Add(new Vector2(minigamePanel.Width, random.Next(minigamePanel.Height - 10)));
-                    for (int i = 0; i < invadersAliens.Count; i++)
+                        enemies.Add(new Vector2(minigamePanel.Width, random.Next(minigamePanel.Height - 10)));
+                    for (int i = 0; i < enemies.Count; i++)
                     {
-                        invadersAliens[i].X -= 1.2;
-                        if (invadersPlayer.distanceFromSquared(invadersAliens[i]) < 100 | invadersAliens[i].X < 0)
+                        enemies[i].X -= 1.2;
+                        if (player.distanceFromSquared(enemies[i]) < 100 | enemies[i].X < 0)
                         {
                             throw new Exception("The VM was shut down to prevent damage to your Machine.", new Exception("0717750f-3508-4bc2-841e-f3b077c676fe"));
                         }
                     }
-                    invadersCanShoot = invadersCanShoot | !Input.Action;
-                    List<Vector2> aliensToRemove = new List<Vector2>();
+                    enemiesCanShoot = enemiesCanShoot | !Input.Action;
+                    List<Vector2> enemiesToRemove = new List<Vector2>();
                     List<Vector2> bulletsToRemove = new List<Vector2>();
-                    for (int i = 0; i < invadersBullets.Count; i++)
+                    for (int i = 0; i < bullets.Count; i++)
                     {
-                        invadersBullets[i].X += 4;
-                        for (int j = 0; j < invadersAliens.Count; j++)
+                        bullets[i].X += 4;
+                        for (int j = 0; j < enemies.Count; j++)
                         {
-                            if (invadersBullets[i].distanceFromSquared(invadersAliens[j] + new Vector2(2.5f, 2.5f)) < 56.25f)
+                            if (bullets[i].distanceFromSquared(enemies[j] + new Vector2(2.5f, 2.5f)) < 56.25f)
                             {
-                                aliensToRemove.Add(invadersAliens[j]);
-                                bulletsToRemove.Add(invadersBullets[i]);
+                                enemiesToRemove.Add(enemies[j]);
+                                bulletsToRemove.Add(bullets[i]);
                             }
                         }
-                        if (invadersBullets[i].X > minigamePanel.Width)
-                            bulletsToRemove.Add(invadersBullets[i]);
+                        if (bullets[i].X > minigamePanel.Width)
+                            bulletsToRemove.Add(bullets[i]);
                     }
-                    invadersAliens = invadersAliens.Except(aliensToRemove.Distinct()).Distinct().ToList();
-                    invadersBullets = invadersBullets.Except(bulletsToRemove.Distinct()).Distinct().ToList();
+                    enemies = enemies.Except(enemiesToRemove.Distinct()).Distinct().ToList();
+                    bullets = bullets.Except(bulletsToRemove.Distinct()).Distinct().ToList();
                     speedMod += 0.1;
                     speedMod = Math.Max(Math.Min(speedMod, 5), 1);
                     if (Input.Up)
-                        invadersPlayer.Y -= speedMod;
+                        player.Y -= speedMod;
                     if (Input.Left)
-                        invadersPlayer.X -= speedMod;
+                        player.X -= speedMod;
                     if (Input.Down)
-                        invadersPlayer.Y += speedMod;
+                        player.Y += speedMod;
                     if (Input.Right)
-                        invadersPlayer.X += speedMod;
-                    if (Input.Action & invadersCanShoot)
+                        player.X += speedMod;
+                    if (Input.Action & enemiesCanShoot)
                     {
-                        invadersBullets.Add(new Vector2(0, 2.5) + invadersPlayer);
-                        invadersCanShoot = false;
+                        bullets.Add(new Vector2(0, 2.5) + player);
+                        enemiesCanShoot = false;
                         speedMod--;
                     }
                 }
@@ -142,14 +142,13 @@ namespace LaptopSimulator2015.Levels
 
         public void initGame(Graphics g, Panel minigamePanel, Timer minigameTimer)
         {
-            invadersPlayer = new Vector2(minigamePanel.Width / 4, minigamePanel.Height / 2);
-            invadersPlayer.bounds_wrap = true;
-            invadersPlayer.bounds = new Rectangle(-10, -10, minigamePanel.Width + 10, minigamePanel.Height + 10);
-            invadersAliens = new List<Vector2>();
-            invadersBullets = new List<Vector2>();
-            minigamePrevTime = 0;
-            invadersCanShoot = true;
+            enemies = new List<Vector2>();
+            bullets = new List<Vector2>();
             speedMod = 5;
+            enemiesCanShoot = true;
+            player = new Vector2(minigamePanel.Width / 4, minigamePanel.Height / 2);
+            player.bounds_wrap = true;
+            player.bounds = new Rectangle(-10, -10, minigamePanel.Width + 10, minigamePanel.Height + 10);
         }
     }
 }

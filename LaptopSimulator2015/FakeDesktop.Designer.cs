@@ -82,6 +82,7 @@ namespace LaptopSimulator2015
             this.optionsWindowIcon = new System.Windows.Forms.Panel();
             this.optionsWindowTitle = new System.Windows.Forms.Label();
             this.lsdEffectT = new System.Windows.Forms.Timer(this.components);
+            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.winMenuPanel.SuspendLayout();
             this.winTaskbar.SuspendLayout();
             this.winDesktop.SuspendLayout();
@@ -179,6 +180,7 @@ namespace LaptopSimulator2015
             | System.Windows.Forms.AnchorStyles.Right)));
             this.winTaskbar.BackColor = System.Drawing.Color.Navy;
             this.winTaskbar.Controls.Add(this.subsLabel);
+            this.winTaskbar.Controls.Add(this.winTimeLabel);
             this.winTaskbar.Location = new System.Drawing.Point(30, 889);
             this.winTaskbar.Name = "winTaskbar";
             this.winTaskbar.Size = new System.Drawing.Size(1357, 30);
@@ -414,11 +416,11 @@ namespace LaptopSimulator2015
             this.winTimeLabel.AutoSize = true;
             this.winTimeLabel.BackColor = System.Drawing.Color.Navy;
             this.winTimeLabel.ForeColor = System.Drawing.Color.White;
-            this.winTimeLabel.Location = new System.Drawing.Point(1344, 898);
+            this.winTimeLabel.Location = new System.Drawing.Point(1305, 9);
             this.winTimeLabel.Name = "winTimeLabel";
-            this.winTimeLabel.Size = new System.Drawing.Size(34, 13);
+            this.winTimeLabel.Size = new System.Drawing.Size(49, 13);
             this.winTimeLabel.TabIndex = 0;
-            this.winTimeLabel.Text = "00:00";
+            this.winTimeLabel.Text = "00:00:00";
             // 
             // winTimeTimer
             // 
@@ -592,7 +594,6 @@ namespace LaptopSimulator2015
             this.Controls.Add(this.optionsWindow);
             this.Controls.Add(this.minigamePanel);
             this.Controls.Add(this.levelWindow);
-            this.Controls.Add(this.winTimeLabel);
             this.Controls.Add(this.winMenuPanel);
             this.Controls.Add(this.winTaskbar);
             this.Controls.Add(this.winKey);
@@ -623,7 +624,6 @@ namespace LaptopSimulator2015
             this.optionsWindowHeader.ResumeLayout(false);
             this.optionsWindowHeader.PerformLayout();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
@@ -674,5 +674,6 @@ namespace LaptopSimulator2015
         private System.Windows.Forms.Label levelWindowHeaderExit;
         private System.Windows.Forms.Label optionsWindowHeaderExit;
         private System.Windows.Forms.Button optionsWindowReset;
+        private System.Windows.Forms.ToolTip toolTip;
     }
 }

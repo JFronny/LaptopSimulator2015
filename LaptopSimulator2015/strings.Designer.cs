@@ -133,6 +133,15 @@ namespace LaptopSimulator2015 {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Level.
+        /// </summary>
+        internal static string lvPref {
+            get {
+                return ResourceManager.GetString("lvPref", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to LSD Mode.
         /// </summary>
         internal static string optionsWindowLSD {
@@ -142,7 +151,16 @@ namespace LaptopSimulator2015 {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to PCOptimizerPro.
+        ///   Looks up a localized string similar to Are you SURE?\r\n(This will break EVERYTHING!).
+        /// </summary>
+        internal static string optionsWindowLSDWarning {
+            get {
+                return ResourceManager.GetString("optionsWindowLSDWarning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Options.
         /// </summary>
         internal static string optionsWindowTitle {
             get {
