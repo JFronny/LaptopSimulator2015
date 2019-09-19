@@ -10,6 +10,15 @@ namespace Base
 {
     public static class Drawing
     {
+        /// <summary>
+        /// Draw a string with the given size
+        /// </summary>
+        /// <param name="g">The graphics object to draw the string on</param>
+        /// <param name="s">The string to draw</param>
+        /// <param name="size">The font size of the string</param>
+        /// <param name="location">The location to draw the string at</param>
+        /// <param name="brush">The brush to draw the string with</param>
+        /// <param name="isLocationCentered">Set to true if you want to draw the string around instead of left-down from the location</param>
         public static void DrawSizedString(Graphics g, string s, int size, PointF location, Brush brush, bool isLocationCentered = false)
         {
             SmoothingMode tmpS = g.SmoothingMode;

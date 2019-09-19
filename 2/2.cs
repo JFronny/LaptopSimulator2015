@@ -54,7 +54,7 @@ namespace LaptopSimulator2015.Levels
             }
         }
 
-        public int levelNumber => 2;
+        public int availableAfter => 2;
 
         public int gameClock => 17;
 

@@ -32,7 +32,7 @@ namespace LaptopSimulator2015.Goals
             }
         }
 
-        public int levelNumber => 0;
+        public int availableAfter => 0;
 
         public int gameClock => 300;
 

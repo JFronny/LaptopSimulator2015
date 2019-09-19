@@ -51,7 +51,7 @@ namespace LaptopSimulator2015.Levels
             }
         }
 
-        public int levelNumber => 4;
+        public int availableAfter => 4;
         public int gameClock => 17;
         public Panel desktopIcon { get; set; }
         public int installerProgressSteps => 500;

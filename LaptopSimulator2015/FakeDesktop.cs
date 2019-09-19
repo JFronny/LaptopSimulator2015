@@ -19,6 +19,7 @@ namespace LaptopSimulator2015
     {
         #region Base
         List<Minigame> levels = new List<Minigame>();
+        List<CaptchaGlitch> captchaGlitches = new List<CaptchaGlitch>();
         SoundPlayer fans;
         bool winShouldClose = false;
 
@@ -101,9 +102,12 @@ namespace LaptopSimulator2015
             Control[] controls = getControls(ignore: new List<Control> { minigamePanel }).ToArray();
             for (int i = 0; i < controls.Length; i++)
                 controls[i].Paint += Control_Paint;
-            levels = Directory.GetFiles("Levels").Concat(Directory.GetFiles("Goals")).Where(s => Path.GetExtension(s) == ".dll").Select(s => Assembly.LoadFrom(s))
-                .SelectMany(s => s.GetTypes()).Where(p => typeof(Minigame).IsAssignableFrom(p) && p != typeof(Minigame) && p != typeof(Level) && p != typeof(Goal)).Distinct()
-                .Select(s => (Minigame)Activator.CreateInstance(s)).OrderBy(lv => lv.levelNumber).ToList();
+            IEnumerable<Type> tmp_types = Directory.GetFiles("Levels").Concat(Directory.GetFiles("Goals")).Concat(Directory.GetFiles("Glitches")).Where(s => Path.GetExtension(s) == ".dll").Select(s => Assembly.LoadFrom(s))
+                .SelectMany(s => s.GetTypes());
+            levels = tmp_types.Where(p => typeof(Minigame).IsAssignableFrom(p)).Distinct().Except(new Type[] { typeof(Minigame), typeof(Level), typeof(Goal) })
+                .Select(s => (Minigame)Activator.CreateInstance(s)).OrderBy(lv => lv.availableAfter).ToList();
+            captchaGlitches = tmp_types.Where(p => typeof(CaptchaGlitch).IsAssignableFrom(p)).Distinct().Except(new Type[] { typeof(CaptchaGlitch) })
+                .Select(s => (CaptchaGlitch)Activator.CreateInstance(s)).ToList();
             for (int i = 0; i < levels.Count; i++)
             {
                 levels[i].desktopIcon = new Panel();
@@ -112,7 +116,7 @@ namespace LaptopSimulator2015
                 levels[i].desktopIcon.Size = new Size(50, 50);
                 levels[i].desktopIcon.BackColor = Color.FromArgb(128, 128, 255);
                 levels[i].desktopIcon.Name = "lvl" + i.ToString() + "_1";
-                levels[i].desktopIcon.Visible = levels[i].levelNumber <= Settings.level;
+                levels[i].desktopIcon.Visible = levels[i].availableAfter <= Settings.level;
 
                 tmp1.BackColor = Color.Blue;
                 tmp1.BackgroundImageLayout = ImageLayout.Stretch;
@@ -176,7 +180,7 @@ namespace LaptopSimulator2015
                         else
                         {
                             base.BackColor = Color.FromArgb(100, 0, 255);
-                            if (levels[levelInd].levelNumber == Settings.level)
+                            if (levels[levelInd].availableAfter == Settings.level)
                             {
                                 playDialog(goal.incompleteText);
                                 incrementLevel();
@@ -206,7 +210,7 @@ namespace LaptopSimulator2015
         {
             for (int i = 0; i < levels.Count; i++)
             {
-                if ((!ignoreSub) && ((typeof(Goal).IsAssignableFrom(levels[i].GetType()) && levels[i].desktopIcon.Visible != levels[i].levelNumber <= Settings.level) || (levels[i].levelNumber == 0 && Settings.level == 0)))
+                if ((!ignoreSub) && ((typeof(Goal).IsAssignableFrom(levels[i].GetType()) && levels[i].desktopIcon.Visible != levels[i].availableAfter <= Settings.level) || (levels[i].availableAfter == 0 && Settings.level == 0)))
                 {
                     string[] at = ((Goal)levels[i]).availableText;
                     new Thread(() =>
@@ -220,7 +224,7 @@ namespace LaptopSimulator2015
                         });
                     }).Start();
                 }
-                levels[i].desktopIcon.Visible = levels[i].levelNumber <= Settings.level;
+                levels[i].desktopIcon.Visible = levels[i].availableAfter <= Settings.level;
             }
         }
 
@@ -243,8 +247,8 @@ namespace LaptopSimulator2015
         {
             int closest = int.MaxValue;
             for (int i = 0; i < levels.Count; i++)
-                if (levels[i].levelNumber < closest & levels[i].levelNumber > levels[levelInd].levelNumber)
-                    closest = levels[i].levelNumber;
+                if (levels[i].availableAfter < closest & levels[i].availableAfter > levels[levelInd].availableAfter)
+                    closest = levels[i].availableAfter;
             if (closest != int.MaxValue)
                 Settings.level = closest;
             Settings.Save();
@@ -378,7 +382,7 @@ namespace LaptopSimulator2015
                     break;
                 case 2:
                     LevelWindowHeaderExit_Click(sender, e);
-                    if (levels[levelInd].levelNumber >= Settings.level)
+                    if (levels[levelInd].availableAfter >= Settings.level)
                     {
                         incrementLevel();
                         mode = Mode.game;
@@ -400,8 +404,20 @@ namespace LaptopSimulator2015
                     LevelWindowC1_Click(sender, new EventArgs());
                     break;
                 default:
-                    if (strings.captchaLetters.ToCharArray().Contains(char.Parse(e.KeyChar.ToString().ToUpper())))
-                        captchaBox.Text += e.KeyChar.ToString().ToUpper();
+                    char tmp1 = char.ToUpper(e.KeyChar);
+                    if (strings.captchaLetters.ToUpper().ToCharArray().Contains(tmp1))
+                    {
+                        string tmp2 = tmp1.ToString().ToUpper();
+                        for (int i = 0; i < captchaGlitches.Count; i++)
+                        {
+                            captchaGlitches[i].currentLevel = Settings.level;
+                            if (new Random().NextDouble() < captchaGlitches[i].chance)
+                            {
+                                captchaGlitches[i].apply(tmp1, ref tmp2, strings.captchaLetters.ToUpper().ToCharArray());
+                            }
+                        }
+                        captchaBox.Text += tmp2;
+                    }
                     break;
             }
         }

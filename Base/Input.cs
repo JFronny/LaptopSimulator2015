@@ -13,8 +13,11 @@ namespace Base
     {
         [DllImport("user32.dll", CharSet = CharSet.Auto, ExactSpelling = true)]
         private static extern short GetKeyState(int keyCode);
-
-        //public static bool IsKeyDown(Key key) => Keyboard.IsKeyDown(key);
+        /// <summary>
+        /// Check whether the Key is pressed
+        /// </summary>
+        /// <param name="key">Key to check</param>
+        /// <returns>Whether the key is pressed</returns>
         public static bool IsKeyDown(Keys key)
         {
             try
@@ -32,16 +35,27 @@ namespace Base
                 Console.WriteLine("Invader: IsKeyDown failed:\r\n" + e1.ToString());
                 return false;
             }
-            /*Enum.TryParse(key.ToString(), out Key k);
-            if (k == Key.None)
-                return false;
-            return IsKeyDown(k);*/
         }
 
+        /// <summary>
+        /// Unified input for going up
+        /// </summary>
         public static bool Up => IsKeyDown(Keys.Up) || IsKeyDown(Keys.W);
+        /// <summary>
+        /// Unified input for going left
+        /// </summary>
         public static bool Left => IsKeyDown(Keys.Left) || IsKeyDown(Keys.A);
+        /// <summary>
+        /// Unified input for going down
+        /// </summary>
         public static bool Down => IsKeyDown(Keys.Down) || IsKeyDown(Keys.S);
+        /// <summary>
+        /// Unified input for going right
+        /// </summary>
         public static bool Right => IsKeyDown(Keys.Right) || IsKeyDown(Keys.D);
+        /// <summary>
+        /// Unified input for doing something
+        /// </summary>
         public static bool Action => IsKeyDown(Keys.Space) || IsKeyDown(Keys.Q) || IsKeyDown(Keys.E);
     }
 }
