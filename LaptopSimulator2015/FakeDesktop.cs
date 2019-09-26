@@ -22,7 +22,6 @@ namespace LaptopSimulator2015
         List<CaptchaGlitch> captchaGlitches = new List<CaptchaGlitch>();
         SoundPlayer fans;
         bool winShouldClose = false;
-
         enum Mode
         {
             mainMenu,
@@ -75,12 +74,14 @@ namespace LaptopSimulator2015
         public FakeDesktop()
         {
             Directory.SetCurrentDirectory(Path.GetDirectoryName(Application.ExecutablePath));
-            if (!Directory.Exists("Levels"))
-                Directory.CreateDirectory("Levels");
-            if (!Directory.Exists("Goals"))
-                Directory.CreateDirectory("Goals");
+            if (!Directory.Exists("Content"))
+                Directory.CreateDirectory("Content");
             InitializeComponent();
             toolTip.SetToolTip(options_2, strings.optionsWindowTitle);
+#if DEBUG
+            devWindowOpen.Visible = true;
+            optionsWindowLang.Size = new Size(88, 21);
+#endif
             levelWindowContents.ItemSize = new Size(0, 1);
             optionsWindowLang.Text = Settings.lang.Name;
             Thread.CurrentThread.CurrentUICulture = Settings.lang;
@@ -102,30 +103,37 @@ namespace LaptopSimulator2015
             Control[] controls = getControls(ignore: new List<Control> { minigamePanel }).ToArray();
             for (int i = 0; i < controls.Length; i++)
                 controls[i].Paint += Control_Paint;
-            IEnumerable<Type> tmp_types = Directory.GetFiles("Levels").Concat(Directory.GetFiles("Goals")).Concat(Directory.GetFiles("Glitches")).Where(s => Path.GetExtension(s) == ".dll").Select(s => Assembly.LoadFrom(s))
-                .SelectMany(s => s.GetTypes());
+            IEnumerable<string> tmpdirs = Directory.EnumerateFiles("Content", "*.dll", SearchOption.AllDirectories);
+            IEnumerable<Type> tmp_types = tmpdirs.Select(s => Assembly.LoadFrom(s)).SelectMany(s => s.GetTypes()).Distinct();
             levels = tmp_types.Where(p => typeof(Minigame).IsAssignableFrom(p)).Distinct().Except(new Type[] { typeof(Minigame), typeof(Level), typeof(Goal) })
                 .Select(s => (Minigame)Activator.CreateInstance(s)).OrderBy(lv => lv.availableAfter).ToList();
+#if true || DEBUG
+            //tmpdirs.Select(s => devWindowDllList.Items.Add(s));
+            devWindowDllList.Items.AddRange(tmpdirs.ToArray());
+            devWindowLevelList.Items.AddRange(levels.Select(s => s.availableAfter.ToString() + " - " + s.name + (typeof(Goal).IsAssignableFrom(s.GetType()) ? (" - " + ((Goal)s).playableAfter.ToString() + " (Goal)") : " (Level)")).ToArray());
+#endif
             captchaGlitches = tmp_types.Where(p => typeof(CaptchaGlitch).IsAssignableFrom(p)).Distinct().Except(new Type[] { typeof(CaptchaGlitch) })
                 .Select(s => (CaptchaGlitch)Activator.CreateInstance(s)).ToList();
             for (int i = 0; i < levels.Count; i++)
             {
-                levels[i].desktopIcon = new Panel();
-                Panel tmp1 = new Panel();
-
-                levels[i].desktopIcon.Size = new Size(50, 50);
-                levels[i].desktopIcon.BackColor = Color.FromArgb(128, 128, 255);
-                levels[i].desktopIcon.Name = "lvl" + i.ToString() + "_1";
-                levels[i].desktopIcon.Visible = levels[i].availableAfter <= Settings.level;
-
-                tmp1.BackColor = Color.Blue;
-                tmp1.BackgroundImageLayout = ImageLayout.Stretch;
-                tmp1.BackgroundImage = levels[i].icon;
-                tmp1.Anchor = (AnchorStyles)15;
-                tmp1.Name = "lvl" + i.ToString() + "_2";
-                tmp1.Location = new Point(2, 2);
-                tmp1.Size = new Size(46, 46);
-                tmp1.Tag = i;
+                levels[i].desktopIcon = new Panel
+                {
+                    Size = new Size(50, 50),
+                    BackColor = Color.FromArgb(128, 128, 255),
+                    Name = "lvl" + i.ToString() + "_1",
+                    Visible = levels[i].availableAfter <= Settings.level
+                };
+                Panel tmp1 = new Panel
+                {
+                    BackColor = Color.Blue,
+                    BackgroundImageLayout = ImageLayout.Stretch,
+                    BackgroundImage = levels[i].icon,
+                    Anchor = (AnchorStyles)15,
+                    Name = "lvl" + i.ToString() + "_2",
+                    Location = new Point(2, 2),
+                    Size = new Size(46, 46),
+                    Tag = i
+                };
                 tmp1.DoubleClick += (sender, e) =>
                 {
                     levelInd = (int)((Panel)sender).Tag;
@@ -192,7 +200,6 @@ namespace LaptopSimulator2015
                     }
                 };
                 toolTip.SetToolTip(tmp1, strings.lvPref + " " + (i + 1).ToString() + ": " + levels[i].name);
-
                 levels[i].desktopIcon.Controls.Add(tmp1);
                 winDesktop.Controls.Add(levels[i].desktopIcon);
             }
@@ -226,6 +233,10 @@ namespace LaptopSimulator2015
                 }
                 levels[i].desktopIcon.Visible = levels[i].availableAfter <= Settings.level;
             }
+#if DEBUG
+            devWindowLevelList.SelectedIndex = levels.FindIndex(s => s.availableAfter == Settings.level);
+            //Settings.level = levels[devWindowLevelList.SelectedIndex].availableAfter;
+#endif
         }
 
         Thread playDialog(string[] lines)
@@ -365,9 +376,7 @@ namespace LaptopSimulator2015
                         minigamePanel.Visible = true;
                         minigamePanel.Enabled = true;
                         minigameClockT.Enabled = true;
-#if !DEBUG
                         levelWindowC1.Enabled = false;
-#endif
                         g.Clear(Color.Red);
                         g.DrawString("DANGER!", new Font("Microsoft Sans Serif", 100f), new SolidBrush(Color.White), 100, 150);
                         g.DrawString("VIRUS DETECTED", new Font("Microsoft Sans Serif", 20f), new SolidBrush(Color.White), 0, 300);
@@ -408,14 +417,17 @@ namespace LaptopSimulator2015
                     if (strings.captchaLetters.ToUpper().ToCharArray().Contains(tmp1))
                     {
                         string tmp2 = tmp1.ToString().ToUpper();
-                        for (int i = 0; i < captchaGlitches.Count; i++)
-                        {
-                            captchaGlitches[i].currentLevel = Settings.level;
-                            if (new Random().NextDouble() < captchaGlitches[i].chance)
+                        captchaGlitches.ForEach(s => s.currentLevel = Settings.level);
+                        Random rnd = new Random();
+                        CaptchaGlitch[] capGlN = captchaGlitches.Where(s => !s.postGlitch).ToArray();
+                        List<CaptchaGlitch> capGlP = captchaGlitches.Where(s => s.postGlitch).ToList();
+                        for (int i = 0; i < capGlN.Length;  i++)
+                            if (rnd.NextDouble() < capGlN[i].chance)
                             {
-                                captchaGlitches[i].apply(tmp1, ref tmp2, strings.captchaLetters.ToUpper().ToCharArray());
+                                capGlN[i].apply(tmp1, ref tmp2, strings.captchaLetters.ToUpper().ToCharArray(), rnd);
+                                break;
                             }
-                        }
+                        capGlP.ForEach(s => s.apply(tmp1, ref tmp2, strings.captchaLetters.ToUpper().ToCharArray(), rnd));
                         captchaBox.Text += tmp2;
                     }
                     break;
@@ -434,7 +446,6 @@ namespace LaptopSimulator2015
                 g.FillRectangle(new HatchBrush((HatchStyle)rnd.Next(53), Color.FromArgb(rnd.Next(180, 255), rnd.Next(180, 255), rnd.Next(180, 255)), Color.Transparent), new Rectangle(0, 0, 175, 60));
                 for (int i = 0; i < 6; i++)
                 {
-                    int y = rnd.Next(8, 13);
                     int fontSize = rnd.Next(12, 18);
                     g.TranslateTransform(25 * (i) + 10, (30 - fontSize) / 2);
                     g.RotateTransform(rnd.Next(-20, 20));
@@ -442,7 +453,7 @@ namespace LaptopSimulator2015
                     int tmpG = rnd.Next(0, (200 - tmpR) / 2);
                     string s = Chars[rnd.Next(Chars.Length)].ToString();
                     captchaBox.Tag = (string)captchaBox.Tag + s;
-                    g.DrawString(s, new Font(new string[] { "Arial", "Consolas", "Verdena" }[rnd.Next(3)], fontSize), new SolidBrush(Color.FromArgb(tmpR, tmpG, Math.Max(0, 200 - tmpR - tmpG))), new PointF(5, y));
+                    g.DrawString(s, new Font(new string[] { "Arial", "Consolas", "Verdena" }[rnd.Next(3)], fontSize), new SolidBrush(Color.FromArgb(tmpR, tmpG, Math.Max(0, 200 - tmpR - tmpG))), new PointF(5, rnd.Next(8, 13)));
                     g.ResetTransform();
                 }
                 g.FillRectangle(new HatchBrush((HatchStyle)rnd.Next(53), Color.FromArgb(rnd.Next(10, 50), rnd.Next(180, 255), rnd.Next(180, 255), rnd.Next(180, 255)), Color.FromArgb(rnd.Next(10, 50), rnd.Next(180, 255), rnd.Next(180, 255), rnd.Next(180, 255))), new Rectangle(0, 0, 175, 60));
@@ -628,6 +639,42 @@ namespace LaptopSimulator2015
                 Application.Exit();
             }
         }
+
+        bool devWindowMoving = false;
+        Point devWindowDiff = Point.Empty;
+
+        private void DevWindowHeader_MouseDown(object sender, MouseEventArgs e)
+        {
+            devWindowMoving = true;
+            devWindowDiff = new Point(devWindow.Location.X - Cursor.Position.X, devWindow.Location.Y - Cursor.Position.Y);
+        }
+
+        private void DevWindowHeader_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (devWindowMoving)
+                devWindow.Location = new Point(Cursor.Position.X + devWindowDiff.X, Cursor.Position.Y + devWindowDiff.Y);
+        }
+
+        private void DevWindowHeader_MouseUp(object sender, MouseEventArgs e) => devWindowMoving = false;
+        private void DevWindowHeaderExit_Click(object sender, EventArgs e) => devWindow.Visible = false;
+        private void DevWindowOpen_Click(object sender, EventArgs e) => devWindow.Visible = true;
+        private void DevWindowDllList_SelectedIndexChanged(object sender, EventArgs e) => _ = Process.Start("explorer", "/select," + (((string)devWindowDllList.SelectedItem).Contains(" ") ? "\"" + (string)devWindowDllList.SelectedItem + "\"" : (string)devWindowDllList.SelectedItem));
         #endregion
+
+        private void DevWindowLevelList_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            Settings.level = levels[devWindowLevelList.SelectedIndex].availableAfter;
+            updateIconVisibility();
+        }
+
+        private void DevWindowSkip_Click(object sender, EventArgs e)
+        {
+            if (levelWindow.Visible)
+            {
+                if (levelWindowContents.SelectedIndex == 1)
+                    captchaBox.Text = (string)captchaBox.Tag;
+                LevelWindowC1_Click(sender, e);
+            }
+        }
     }
 }

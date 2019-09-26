@@ -84,6 +84,17 @@ namespace LaptopSimulator2015
             this.optionsWindowTitle = new System.Windows.Forms.Label();
             this.lsdEffectT = new System.Windows.Forms.Timer(this.components);
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.devWindow = new System.Windows.Forms.Panel();
+            this.devWindowHeader = new System.Windows.Forms.Panel();
+            this.devWindowHeaderExit = new System.Windows.Forms.Label();
+            this.devWindowIcon = new System.Windows.Forms.Panel();
+            this.devWindowTitle = new System.Windows.Forms.Label();
+            this.devWindowOpen = new System.Windows.Forms.Button();
+            this.devWindowDllList = new System.Windows.Forms.ListBox();
+            this.devWindowDllLabel = new System.Windows.Forms.Label();
+            this.devWindowLevelLabel = new System.Windows.Forms.Label();
+            this.devWindowLevelList = new System.Windows.Forms.ListBox();
+            this.devWindowSkip = new System.Windows.Forms.Button();
             this.winMenuPanel.SuspendLayout();
             this.winTaskbar.SuspendLayout();
             this.winDesktop.SuspendLayout();
@@ -98,6 +109,8 @@ namespace LaptopSimulator2015
             this.optionsWindow.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.optionsWindowWam)).BeginInit();
             this.optionsWindowHeader.SuspendLayout();
+            this.devWindow.SuspendLayout();
+            this.devWindowHeader.SuspendLayout();
             this.SuspendLayout();
             // 
             // winKey
@@ -266,6 +279,7 @@ namespace LaptopSimulator2015
             this.levelWindowC1.Name = "levelWindowC1";
             this.levelWindowC1.Size = new System.Drawing.Size(75, 23);
             this.levelWindowC1.TabIndex = 2;
+            this.levelWindowC1.TabStop = false;
             this.levelWindowC1.Text = "Continue";
             this.levelWindowC1.UseVisualStyleBackColor = true;
             this.levelWindowC1.Click += new System.EventHandler(this.LevelWindowC1_Click);
@@ -326,6 +340,7 @@ namespace LaptopSimulator2015
             this.captchaBox.ReadOnly = true;
             this.captchaBox.Size = new System.Drawing.Size(276, 80);
             this.captchaBox.TabIndex = 2;
+            this.captchaBox.TabStop = false;
             this.captchaBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.CaptchaBox_KeyPress);
             // 
             // captchaPanel
@@ -409,6 +424,9 @@ namespace LaptopSimulator2015
             this.levelWindowIcon.Name = "levelWindowIcon";
             this.levelWindowIcon.Size = new System.Drawing.Size(20, 20);
             this.levelWindowIcon.TabIndex = 1;
+            this.levelWindowIcon.MouseDown += new System.Windows.Forms.MouseEventHandler(this.LevelWindowHeader_MouseDown);
+            this.levelWindowIcon.MouseMove += new System.Windows.Forms.MouseEventHandler(this.LevelWindowHeader_MouseMove);
+            this.levelWindowIcon.MouseUp += new System.Windows.Forms.MouseEventHandler(this.LevelWindowHeader_MouseUp);
             // 
             // levelWindowTitle
             // 
@@ -466,6 +484,7 @@ namespace LaptopSimulator2015
             // optionsWindow
             // 
             this.optionsWindow.BackColor = System.Drawing.SystemColors.Window;
+            this.optionsWindow.Controls.Add(this.devWindowOpen);
             this.optionsWindow.Controls.Add(this.optionsWindowReset);
             this.optionsWindow.Controls.Add(this.optionsWindowLang);
             this.optionsWindow.Controls.Add(this.optionsWindowSubs);
@@ -476,17 +495,18 @@ namespace LaptopSimulator2015
             this.optionsWindow.Controls.Add(this.optionsWindowHeader);
             this.optionsWindow.Location = new System.Drawing.Point(527, 26);
             this.optionsWindow.Name = "optionsWindow";
-            this.optionsWindow.Size = new System.Drawing.Size(502, 94);
+            this.optionsWindow.Size = new System.Drawing.Size(495, 91);
             this.optionsWindow.TabIndex = 6;
             this.optionsWindow.Visible = false;
             // 
             // optionsWindowReset
             // 
             this.optionsWindowReset.BackColor = System.Drawing.Color.Red;
-            this.optionsWindowReset.Location = new System.Drawing.Point(355, 64);
+            this.optionsWindowReset.Location = new System.Drawing.Point(355, 60);
             this.optionsWindowReset.Name = "optionsWindowReset";
             this.optionsWindowReset.Size = new System.Drawing.Size(93, 23);
             this.optionsWindowReset.TabIndex = 7;
+            this.optionsWindowReset.TabStop = false;
             this.optionsWindowReset.Text = "Reset";
             this.optionsWindowReset.UseVisualStyleBackColor = false;
             this.optionsWindowReset.Click += new System.EventHandler(this.OptionsWindowReset_Click);
@@ -499,8 +519,9 @@ namespace LaptopSimulator2015
             "en"});
             this.optionsWindowLang.Location = new System.Drawing.Point(180, 62);
             this.optionsWindowLang.Name = "optionsWindowLang";
-            this.optionsWindowLang.Size = new System.Drawing.Size(121, 21);
+            this.optionsWindowLang.Size = new System.Drawing.Size(169, 21);
             this.optionsWindowLang.TabIndex = 6;
+            this.optionsWindowLang.TabStop = false;
             // 
             // optionsWindowSubs
             // 
@@ -509,15 +530,17 @@ namespace LaptopSimulator2015
             this.optionsWindowSubs.Name = "optionsWindowSubs";
             this.optionsWindowSubs.Size = new System.Drawing.Size(66, 17);
             this.optionsWindowSubs.TabIndex = 5;
+            this.optionsWindowSubs.TabStop = false;
             this.optionsWindowSubs.Text = "Subtitles";
             this.optionsWindowSubs.UseVisualStyleBackColor = true;
             // 
             // optionsWindowExit
             // 
-            this.optionsWindowExit.Location = new System.Drawing.Point(454, 64);
+            this.optionsWindowExit.Location = new System.Drawing.Point(454, 60);
             this.optionsWindowExit.Name = "optionsWindowExit";
             this.optionsWindowExit.Size = new System.Drawing.Size(34, 23);
             this.optionsWindowExit.TabIndex = 4;
+            this.optionsWindowExit.TabStop = false;
             this.optionsWindowExit.Text = "OK";
             this.optionsWindowExit.UseVisualStyleBackColor = true;
             this.optionsWindowExit.Click += new System.EventHandler(this.OptionsWindowExit_Click);
@@ -531,6 +554,7 @@ namespace LaptopSimulator2015
             this.optionsWindowLSD.Name = "optionsWindowLSD";
             this.optionsWindowLSD.Size = new System.Drawing.Size(73, 18);
             this.optionsWindowLSD.TabIndex = 3;
+            this.optionsWindowLSD.TabStop = false;
             this.optionsWindowLSD.Text = "LSD Mode";
             this.optionsWindowLSD.UseVisualStyleBackColor = true;
             this.optionsWindowLSD.CheckedChanged += new System.EventHandler(this.OptionsWindowLSD_CheckedChanged);
@@ -550,6 +574,7 @@ namespace LaptopSimulator2015
             this.optionsWindowWam.Name = "optionsWindowWam";
             this.optionsWindowWam.Size = new System.Drawing.Size(380, 45);
             this.optionsWindowWam.TabIndex = 1;
+            this.optionsWindowWam.TabStop = false;
             this.optionsWindowWam.Scroll += new System.EventHandler(this.OptionsWindowWam_Scroll);
             // 
             // optionsWindowHeader
@@ -561,7 +586,7 @@ namespace LaptopSimulator2015
             this.optionsWindowHeader.Dock = System.Windows.Forms.DockStyle.Top;
             this.optionsWindowHeader.Location = new System.Drawing.Point(0, 0);
             this.optionsWindowHeader.Name = "optionsWindowHeader";
-            this.optionsWindowHeader.Size = new System.Drawing.Size(502, 20);
+            this.optionsWindowHeader.Size = new System.Drawing.Size(495, 20);
             this.optionsWindowHeader.TabIndex = 0;
             this.optionsWindowHeader.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OptionsWindowHeader_MouseDown);
             this.optionsWindowHeader.MouseMove += new System.Windows.Forms.MouseEventHandler(this.OptionsWindowHeader_MouseMove);
@@ -572,7 +597,7 @@ namespace LaptopSimulator2015
             this.optionsWindowHeaderExit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.optionsWindowHeaderExit.BackColor = System.Drawing.Color.Red;
             this.optionsWindowHeaderExit.Font = new System.Drawing.Font("Marlett", 12F);
-            this.optionsWindowHeaderExit.Location = new System.Drawing.Point(462, 0);
+            this.optionsWindowHeaderExit.Location = new System.Drawing.Point(455, 0);
             this.optionsWindowHeaderExit.Name = "optionsWindowHeaderExit";
             this.optionsWindowHeaderExit.Size = new System.Drawing.Size(40, 20);
             this.optionsWindowHeaderExit.TabIndex = 3;
@@ -588,6 +613,9 @@ namespace LaptopSimulator2015
             this.optionsWindowIcon.Name = "optionsWindowIcon";
             this.optionsWindowIcon.Size = new System.Drawing.Size(20, 20);
             this.optionsWindowIcon.TabIndex = 1;
+            this.optionsWindowIcon.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OptionsWindowHeader_MouseDown);
+            this.optionsWindowIcon.MouseMove += new System.Windows.Forms.MouseEventHandler(this.OptionsWindowHeader_MouseMove);
+            this.optionsWindowIcon.MouseUp += new System.Windows.Forms.MouseEventHandler(this.OptionsWindowHeader_MouseUp);
             // 
             // optionsWindowTitle
             // 
@@ -597,11 +625,142 @@ namespace LaptopSimulator2015
             this.optionsWindowTitle.Size = new System.Drawing.Size(80, 13);
             this.optionsWindowTitle.TabIndex = 0;
             this.optionsWindowTitle.Text = "PCOptimizerPro";
+            this.optionsWindowTitle.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OptionsWindowHeader_MouseDown);
+            this.optionsWindowTitle.MouseMove += new System.Windows.Forms.MouseEventHandler(this.OptionsWindowHeader_MouseMove);
+            this.optionsWindowTitle.MouseUp += new System.Windows.Forms.MouseEventHandler(this.OptionsWindowHeader_MouseUp);
             // 
             // lsdEffectT
             // 
             this.lsdEffectT.Enabled = true;
             this.lsdEffectT.Tick += new System.EventHandler(this.LsdTimer_Tick);
+            // 
+            // devWindow
+            // 
+            this.devWindow.BackColor = System.Drawing.SystemColors.Window;
+            this.devWindow.Controls.Add(this.devWindowSkip);
+            this.devWindow.Controls.Add(this.devWindowLevelList);
+            this.devWindow.Controls.Add(this.devWindowLevelLabel);
+            this.devWindow.Controls.Add(this.devWindowDllLabel);
+            this.devWindow.Controls.Add(this.devWindowDllList);
+            this.devWindow.Controls.Add(this.devWindowHeader);
+            this.devWindow.Location = new System.Drawing.Point(527, 149);
+            this.devWindow.Name = "devWindow";
+            this.devWindow.Size = new System.Drawing.Size(495, 258);
+            this.devWindow.TabIndex = 8;
+            this.devWindow.Visible = false;
+            // 
+            // devWindowHeader
+            // 
+            this.devWindowHeader.BackColor = System.Drawing.SystemColors.WindowFrame;
+            this.devWindowHeader.Controls.Add(this.devWindowHeaderExit);
+            this.devWindowHeader.Controls.Add(this.devWindowIcon);
+            this.devWindowHeader.Controls.Add(this.devWindowTitle);
+            this.devWindowHeader.Dock = System.Windows.Forms.DockStyle.Top;
+            this.devWindowHeader.Location = new System.Drawing.Point(0, 0);
+            this.devWindowHeader.Name = "devWindowHeader";
+            this.devWindowHeader.Size = new System.Drawing.Size(495, 20);
+            this.devWindowHeader.TabIndex = 0;
+            this.devWindowHeader.MouseDown += new System.Windows.Forms.MouseEventHandler(this.DevWindowHeader_MouseDown);
+            this.devWindowHeader.MouseMove += new System.Windows.Forms.MouseEventHandler(this.DevWindowHeader_MouseMove);
+            this.devWindowHeader.MouseUp += new System.Windows.Forms.MouseEventHandler(this.DevWindowHeader_MouseUp);
+            // 
+            // devWindowHeaderExit
+            // 
+            this.devWindowHeaderExit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.devWindowHeaderExit.BackColor = System.Drawing.Color.Red;
+            this.devWindowHeaderExit.Font = new System.Drawing.Font("Marlett", 12F);
+            this.devWindowHeaderExit.Location = new System.Drawing.Point(455, 0);
+            this.devWindowHeaderExit.Name = "devWindowHeaderExit";
+            this.devWindowHeaderExit.Size = new System.Drawing.Size(40, 20);
+            this.devWindowHeaderExit.TabIndex = 3;
+            this.devWindowHeaderExit.Text = "r";
+            this.devWindowHeaderExit.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.devWindowHeaderExit.Click += new System.EventHandler(this.DevWindowHeaderExit_Click);
+            // 
+            // devWindowIcon
+            // 
+            this.devWindowIcon.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("devWindowIcon.BackgroundImage")));
+            this.devWindowIcon.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.devWindowIcon.Location = new System.Drawing.Point(0, 0);
+            this.devWindowIcon.Name = "devWindowIcon";
+            this.devWindowIcon.Size = new System.Drawing.Size(20, 20);
+            this.devWindowIcon.TabIndex = 1;
+            this.devWindowIcon.MouseDown += new System.Windows.Forms.MouseEventHandler(this.DevWindowHeader_MouseDown);
+            this.devWindowIcon.MouseMove += new System.Windows.Forms.MouseEventHandler(this.DevWindowHeader_MouseMove);
+            this.devWindowIcon.MouseUp += new System.Windows.Forms.MouseEventHandler(this.DevWindowHeader_MouseUp);
+            // 
+            // devWindowTitle
+            // 
+            this.devWindowTitle.AutoSize = true;
+            this.devWindowTitle.Location = new System.Drawing.Point(19, 4);
+            this.devWindowTitle.Name = "devWindowTitle";
+            this.devWindowTitle.Size = new System.Drawing.Size(53, 13);
+            this.devWindowTitle.TabIndex = 0;
+            this.devWindowTitle.Text = "DevTools";
+            this.devWindowTitle.MouseDown += new System.Windows.Forms.MouseEventHandler(this.DevWindowHeader_MouseDown);
+            this.devWindowTitle.MouseMove += new System.Windows.Forms.MouseEventHandler(this.DevWindowHeader_MouseMove);
+            this.devWindowTitle.MouseUp += new System.Windows.Forms.MouseEventHandler(this.DevWindowHeader_MouseUp);
+            // 
+            // devWindowOpen
+            // 
+            this.devWindowOpen.Location = new System.Drawing.Point(274, 60);
+            this.devWindowOpen.Name = "devWindowOpen";
+            this.devWindowOpen.Size = new System.Drawing.Size(75, 23);
+            this.devWindowOpen.TabIndex = 8;
+            this.devWindowOpen.TabStop = false;
+            this.devWindowOpen.Text = "DevTools";
+            this.devWindowOpen.UseVisualStyleBackColor = true;
+            this.devWindowOpen.Visible = false;
+            this.devWindowOpen.Click += new System.EventHandler(this.DevWindowOpen_Click);
+            // 
+            // devWindowDllList
+            // 
+            this.devWindowDllList.FormattingEnabled = true;
+            this.devWindowDllList.Location = new System.Drawing.Point(51, 26);
+            this.devWindowDllList.Name = "devWindowDllList";
+            this.devWindowDllList.Size = new System.Drawing.Size(437, 95);
+            this.devWindowDllList.TabIndex = 1;
+            this.devWindowDllList.TabStop = false;
+            this.devWindowDllList.SelectedIndexChanged += new System.EventHandler(this.DevWindowDllList_SelectedIndexChanged);
+            // 
+            // devWindowDllLabel
+            // 
+            this.devWindowDllLabel.AutoSize = true;
+            this.devWindowDllLabel.Location = new System.Drawing.Point(10, 29);
+            this.devWindowDllLabel.Name = "devWindowDllLabel";
+            this.devWindowDllLabel.Size = new System.Drawing.Size(35, 13);
+            this.devWindowDllLabel.TabIndex = 2;
+            this.devWindowDllLabel.Text = "DLLs:";
+            // 
+            // devWindowLevelLabel
+            // 
+            this.devWindowLevelLabel.AutoSize = true;
+            this.devWindowLevelLabel.Location = new System.Drawing.Point(10, 131);
+            this.devWindowLevelLabel.Name = "devWindowLevelLabel";
+            this.devWindowLevelLabel.Size = new System.Drawing.Size(41, 13);
+            this.devWindowLevelLabel.TabIndex = 3;
+            this.devWindowLevelLabel.Text = "Levels:";
+            // 
+            // devWindowLevelList
+            // 
+            this.devWindowLevelList.FormattingEnabled = true;
+            this.devWindowLevelList.Location = new System.Drawing.Point(51, 127);
+            this.devWindowLevelList.Name = "devWindowLevelList";
+            this.devWindowLevelList.Size = new System.Drawing.Size(437, 95);
+            this.devWindowLevelList.TabIndex = 4;
+            this.devWindowLevelList.TabStop = false;
+            this.devWindowLevelList.SelectedIndexChanged += new System.EventHandler(this.DevWindowLevelList_SelectedIndexChanged);
+            // 
+            // devWindowSkip
+            // 
+            this.devWindowSkip.Location = new System.Drawing.Point(13, 227);
+            this.devWindowSkip.Name = "devWindowSkip";
+            this.devWindowSkip.Size = new System.Drawing.Size(75, 23);
+            this.devWindowSkip.TabIndex = 5;
+            this.devWindowSkip.TabStop = false;
+            this.devWindowSkip.Text = "Skip Step";
+            this.devWindowSkip.UseVisualStyleBackColor = true;
+            this.devWindowSkip.Click += new System.EventHandler(this.DevWindowSkip_Click);
             // 
             // FakeDesktop
             // 
@@ -610,6 +769,7 @@ namespace LaptopSimulator2015
             this.BackColor = System.Drawing.Color.Blue;
             this.ClientSize = new System.Drawing.Size(1387, 919);
             this.ControlBox = false;
+            this.Controls.Add(this.devWindow);
             this.Controls.Add(this.optionsWindow);
             this.Controls.Add(this.minigamePanel);
             this.Controls.Add(this.levelWindow);
@@ -644,6 +804,10 @@ namespace LaptopSimulator2015
             ((System.ComponentModel.ISupportInitialize)(this.optionsWindowWam)).EndInit();
             this.optionsWindowHeader.ResumeLayout(false);
             this.optionsWindowHeader.PerformLayout();
+            this.devWindow.ResumeLayout(false);
+            this.devWindow.PerformLayout();
+            this.devWindowHeader.ResumeLayout(false);
+            this.devWindowHeader.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -697,5 +861,16 @@ namespace LaptopSimulator2015
         private System.Windows.Forms.Button optionsWindowReset;
         private System.Windows.Forms.ToolTip toolTip;
         private System.Windows.Forms.Label minigameClose;
+        private System.Windows.Forms.Panel devWindow;
+        private System.Windows.Forms.Panel devWindowHeader;
+        private System.Windows.Forms.Label devWindowHeaderExit;
+        private System.Windows.Forms.Panel devWindowIcon;
+        private System.Windows.Forms.Label devWindowTitle;
+        private System.Windows.Forms.Button devWindowOpen;
+        private System.Windows.Forms.ListBox devWindowDllList;
+        private System.Windows.Forms.Label devWindowDllLabel;
+        private System.Windows.Forms.Label devWindowLevelLabel;
+        private System.Windows.Forms.ListBox devWindowLevelList;
+        private System.Windows.Forms.Button devWindowSkip;
     }
 }

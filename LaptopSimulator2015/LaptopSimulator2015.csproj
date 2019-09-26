@@ -132,16 +132,16 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>if not exist "$(TargetDir)Levels" mkdir "$(TargetDir)Levels"
-if exist "$(SolutionDir)tmp" copy $(SolutionDir)tmp\* "$(TargetDir)Levels"
+    <PostBuildEvent>if not exist "$(TargetDir)Content\Levels" mkdir "$(TargetDir)Content\Levels"
+if exist "$(SolutionDir)tmp" copy $(SolutionDir)tmp\* "$(TargetDir)Content\Levels"
 rmdir /s /q "$(SolutionDir)tmp"
 
-if not exist "$(TargetDir)Goals" mkdir "$(TargetDir)Goals"
-if exist "$(SolutionDir)tmp1" copy $(SolutionDir)tmp1\* "$(TargetDir)Goals"
+if not exist "$(TargetDir)Content\Goals" mkdir "$(TargetDir)Content\Goals"
+if exist "$(SolutionDir)tmp1" copy $(SolutionDir)tmp1\* "$(TargetDir)Content\Goals"
 rmdir /s /q "$(SolutionDir)tmp1"
 
-if not exist "$(TargetDir)Glitches" mkdir "$(TargetDir)Glitches"
-if exist "$(SolutionDir)tmp2" copy $(SolutionDir)tmp2\* "$(TargetDir)Glitches"
+if not exist "$(TargetDir)Content\Glitches" mkdir "$(TargetDir)Content\Glitches"
+if exist "$(SolutionDir)tmp2" copy $(SolutionDir)tmp2\* "$(TargetDir)Content\Glitches"
 rmdir /s /q "$(SolutionDir)tmp2"
 
 del /q "$(TargetDir)save.xml"</PostBuildEvent>

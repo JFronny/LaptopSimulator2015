@@ -11,7 +11,7 @@ namespace LaptopSimulator2015.Glitches
     {
         public double chance { get { if (currentLevel < 1) return 0; return Math.Min(currentLevel / 8d, 0.8); } }
         public int currentLevel { get; set; }
-        Random rnd = new Random();
-        public void apply(char inputChar, ref string inputString, char[] captchaChars) => inputString = string.Join("", inputString.ToCharArray().OrderBy(x => rnd.Next()));
+        public bool postGlitch => true;
+        public void apply(char inputChar, ref string inputString, char[] captchaChars, Random rnd) => inputString = string.Join("", inputString.ToCharArray().OrderBy(x => rnd.Next()));
     }
 }

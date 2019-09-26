@@ -17,11 +17,16 @@ namespace Base
         /// </summary>
         int currentLevel { get; set; }
         /// <summary>
+        /// If set to true this will always try to execute the glitch (check the chance)
+        /// </summary>
+        bool postGlitch { get; }
+        /// <summary>
         /// Called with the selected chance after the player inputs a char to the Captcha-box
         /// </summary>
         /// <param name="inputChar">The character the player typed</param>
         /// <param name="inputString">The string to be added to the Captcha-box, modified by previous CaptchaGlitch instances</param>
         /// <param name="captchaChars">The characters which can be added to the CaptchaBox</param>
-        void apply(char inputChar, ref string inputString, char[] captchaChars);
+        /// <param name="rnd">Random Number Generator shared between instances</param>
+        void apply(char inputChar, ref string inputString, char[] captchaChars, Random rnd);
     }
 }
