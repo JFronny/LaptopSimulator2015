@@ -1,1 +1,3 @@
-"Boss"-Level after level 3
+Centralize drawing, distance, screen/worldspace, central "Content"-Folder with depth, in-game level inspector
+https://devblogs.nvidia.com/hybridizer-csharp/ (?)
+OS Install as Tutoral
