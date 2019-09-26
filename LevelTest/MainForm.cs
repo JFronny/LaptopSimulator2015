@@ -17,14 +17,14 @@ namespace LevelTest
         Minigame level;
         public MainForm(Minigame game)
         {
+            Misc.closeGameWindow = () => { level.initGame(minigamePanel, minigameClockT); };
             level = game;
             InitializeComponent();
             minigameClockT.Interval = level.gameClock;
             Text = level.name;
-            level.initGame(minigamePanel, minigameClockT);
+            Misc.closeGameWindow.Invoke();
         }
 
-        private void CloseButton_Click(object sender, EventArgs e) => Application.Exit();
         uint minigameTime;
         uint minigamePrevTime;
         private void MinigameClockT_Tick(object sender, EventArgs e)
@@ -35,8 +35,9 @@ namespace LevelTest
 
         private void MinigamePanel_Paint(object sender, PaintEventArgs e)
         {
-            using (GraphicsWrapper w = new GraphicsWrapper(e.Graphics, new Rectangle(Point.Empty, minigamePanel.Size)))
+            using (GraphicsWrapper w = new GraphicsWrapper(e.Graphics, level.backColor, new Rectangle(Point.Empty, minigamePanel.Size)))
             {
+                w.Clear();
                 level.draw(w, minigamePanel, minigameClockT, minigameTime);
                 if (minigameTime != minigamePrevTime)
                 {

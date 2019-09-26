@@ -31,7 +31,6 @@
             this.components = new System.ComponentModel.Container();
             this.minigamePanel = new System.Windows.Forms.Panel();
             this.minigameClockT = new System.Windows.Forms.Timer(this.components);
-            this.closeButton = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // minigamePanel
@@ -50,28 +49,19 @@
             this.minigameClockT.Interval = 17;
             this.minigameClockT.Tick += new System.EventHandler(this.MinigameClockT_Tick);
             // 
-            // closeButton
-            // 
-            this.closeButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.closeButton.BackColor = System.Drawing.Color.Red;
-            this.closeButton.Location = new System.Drawing.Point(776, 2);
-            this.closeButton.Name = "closeButton";
-            this.closeButton.Size = new System.Drawing.Size(23, 23);
-            this.closeButton.TabIndex = 0;
-            this.closeButton.Text = "X";
-            this.closeButton.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.closeButton.Click += new System.EventHandler(this.CloseButton_Click);
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Controls.Add(this.closeButton);
             this.Controls.Add(this.minigamePanel);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "MainForm";
+            this.ShowIcon = false;
             this.Text = "Form1";
+            this.TopMost = true;
             this.ResumeLayout(false);
 
         }
@@ -79,7 +69,6 @@
         #endregion
         private System.Windows.Forms.Panel minigamePanel;
         private System.Windows.Forms.Timer minigameClockT;
-        private System.Windows.Forms.Label closeButton;
     }
 }
 

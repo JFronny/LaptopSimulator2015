@@ -54,13 +54,10 @@ namespace LaptopSimulator2015.Levels
         }
 
         public int availableAfter => 1;
-
         public int gameClock => 17;
-
         public Panel desktopIcon { get; set; }
-
         public int installerProgressSteps => 500;
-
+        public Color backColor => Color.Black;
         List<Vector2> enemies;
         List<Vector2> bullets;
         Vector2 player;
@@ -90,7 +87,7 @@ namespace LaptopSimulator2015.Levels
                     bullets[i].X += 4;
                     for (int j = 0; j < enemies.Count; j++)
                     {
-                        if (bullets[i].distanceFromSquared(enemies[j] + new Vector2(2.5f, 2.5f)) < 56.25f)
+                        if (bullets[i].distanceFromSquared(enemies[j]) < 56.25f)
                         {
                             enemiesToRemove.Add(enemies[j]);
                             bulletsToRemove.Add(bullets[i]);
@@ -104,16 +101,16 @@ namespace LaptopSimulator2015.Levels
                 speedMod += 0.1;
                 speedMod = Math.Max(Math.Min(speedMod, 5), 1);
                 if (Input.Up)
-                    player.Y -= speedMod;
+                    player.Y += speedMod;
                 if (Input.Left)
                     player.X -= speedMod;
                 if (Input.Down)
-                    player.Y += speedMod;
+                    player.Y -= speedMod;
                 if (Input.Right)
                     player.X += speedMod;
                 if (Input.Action & enemiesCanShoot)
                 {
-                    bullets.Add(new Vector2(0, 2.5) + player);
+                    bullets.Add(new Vector2(player));
                     enemiesCanShoot = false;
                     speedMod--;
                 }
@@ -129,21 +126,16 @@ namespace LaptopSimulator2015.Levels
             enemiesCanShoot = true;
             player = new Vector2(minigamePanel.Width / 4, minigamePanel.Height / 2);
             player.bounds_wrap = true;
-            player.bounds = new Rectangle(-10, -10, minigamePanel.Width + 10, minigamePanel.Height + 10);
+            player.bounds = new Rectangle(-5, -5, minigamePanel.Width + 10, minigamePanel.Height + 10);
         }
 
         public void draw(GraphicsWrapper g, Panel minigamePanel, Timer minigameTimer, uint minigameTime)
         {
-            g.g.Clear(Color.Black);
             for (int i = 0; i < enemies.Count; i++)
-            {
-                g.g.FillRectangle(new SolidBrush(Color.Red), new Rectangle(enemies[i].toPoint(), new Size(10, 10)));
-            }
+                g.DrawRectangle(new RectangleF(enemies[i].toPointF(), new SizeF(10, 10)), Color.Red);
             for (int i = 0; i < bullets.Count; i++)
-            {
-                g.g.FillRectangle(new SolidBrush(Color.White), new Rectangle(bullets[i].toPoint(), new Size(5, 5)));
-            }
-            g.g.FillRectangle(new SolidBrush(Color.Green), new Rectangle(player.toPoint(), new Size(10, 10)));
+                g.DrawRectangle(new RectangleF(bullets[i].toPointF(), new SizeF(5, 5)), Color.White);
+            g.DrawRectangle(new RectangleF(player.toPointF(), new SizeF(10, 10)), Color.Green);
         }
     }
 }

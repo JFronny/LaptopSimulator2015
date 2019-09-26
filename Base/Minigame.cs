@@ -54,6 +54,10 @@ namespace LaptopSimulator2015
         /// <param name="minigameTimer">The timer used for scheduling frames</param>
         /// <param name="minigameTime">The amount of total displayed frames</param>
         void draw(GraphicsWrapper g, Panel minigamePanel, Timer minigameTimer, uint minigameTime);
+        /// <summary>
+        /// Color to be painted to the Background before calling the draw method
+        /// </summary>
+        Color backColor { get; }
     }
     public interface Level : Minigame
     {

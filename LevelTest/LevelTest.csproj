@@ -95,4 +95,8 @@
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>if not exist "$(SolutionDir)tmp3" mkdir "$(SolutionDir)tmp3"
+copy "$(TargetPath)" "$(SolutionDir)tmp3"</PostBuildEvent>
+  </PropertyGroup>
 </Project>

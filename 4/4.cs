@@ -55,6 +55,7 @@ namespace LaptopSimulator2015.Levels
         public int gameClock => 17;
         public Panel desktopIcon { get; set; }
         public int installerProgressSteps => 500;
+        public Color backColor => Color.Black;
 
         Random rnd;
         Vector2 player;
@@ -74,7 +75,7 @@ namespace LaptopSimulator2015.Levels
                 lazorTime -= Math.Min(minigameTime / 800, 2.5) + 0.5;
                 if (lazorTime <= 0)
                 {
-                    g.g.FillRectangle(new SolidBrush(Color.Red), new RectangleF((float)lazor - 5, 0, 10, minigamePanel.Height));
+                    g.DrawRectangle(new RectangleF((float)lazor, minigamePanel.Height / 2, 10, minigamePanel.Height), Color.Red);
                     if (lazorTime <= -2)
                     {
                         lazorTime = 100;
@@ -86,13 +87,13 @@ namespace LaptopSimulator2015.Levels
                             throw new Exception("The VM was shut down to prevent damage to your Machine.", new Exception("0717750f-3508-4bc2-841e-f3b077c676fe"));
                     }
                 }
-                player.Y += speed;
+                player.Y -= speed;
                 for (int i = 0; i < platforms.Count; i++)
                 {
-                    platforms[i].Y += speed;
-                    if (platforms[i].Y > minigamePanel.Height)
+                    platforms[i].Y -= speed;
+                    if (platforms[i].Y < 0)
                     {
-                        platforms[i].Y = 0;
+                        platforms[i].Y = minigamePanel.Height;
                         platforms[i].X = rnd.Next(minigamePanel.Width);
                     }
                 }
@@ -101,19 +102,19 @@ namespace LaptopSimulator2015.Levels
                 {
                     movementFactor = 2;
                     playerV.X *= 0.7;
-                    playerV.Y = Math.Min(playerV.Y, 0);
+                    playerV.Y = Math.Max(playerV.Y, 0);
                 }
                 else
                 {
                     movementFactor = 5;
                     playerV.X *= 0.9;
-                    playerV.Y += 1;
+                    playerV.Y -= 1;
                 }
                 if (Input.Up)
                 {
                     if (wasOnPlatform || jmpj > 0)
                     {
-                        playerV.Y -= jmpj / 6d + 1.5;
+                        playerV.Y += jmpj / 6d + 1.5;
                         jmpj--;
                     }
                 }
@@ -130,16 +131,16 @@ namespace LaptopSimulator2015.Levels
                 if (Input.Right)
                     playerV.X += movementFactor;
                 player.X += playerV.X;
-                if (playerV.Y < 0)
+                if (playerV.Y > 0)
                     player.Y += playerV.Y;
                 else
-                    for (int i = 0; i < playerV.Y / 2; i++)
+                    for (int i = 0; i < (-playerV.Y) / 2; i++)
                     {
                         if (onPlatform)
                             break;
-                        player.Y += 2;
+                        player.Y -= 2;
                     }
-                if (player.Y > minigamePanel.Height)
+                if (player.Y < 0)
                     throw new Exception("The VM was shut down to prevent damage to your Machine.", new Exception("0717750f-3508-4bc2-841e-f3b077c676fe"));
                 wasOnPlatform = onPlatform;
             }
@@ -158,7 +159,7 @@ namespace LaptopSimulator2015.Levels
                 {
                     platforms.Add(new Vector2(rnd.Next(minigamePanel.Width - 100) + 50, i * (minigamePanel.Height / 5)));
                 }
-            player = new Vector2(platforms[platforms.Count / 2].X, -10);
+            player = new Vector2(platforms[platforms.Count / 2].X, minigamePanel.Height + 10);
             player.bounds = new Rectangle(-5, 0, minigamePanel.Width + 10, 0);
             player.bounds_wrap = true;
             lazor = player.X;
@@ -200,7 +201,7 @@ namespace LaptopSimulator2015.Levels
                         else
                             platforms[i].Tag = 0d;
                     }
-                    if (((double)platforms[i].Tag) <= 20 && RectangleF.Intersect(player2rect(), rect) != RectangleF.Empty && player.Y < platforms[i].Y - 8)
+                    if (((double)platforms[i].Tag) <= 20 && RectangleF.Intersect(player2rect(), rect) != RectangleF.Empty && player.Y > platforms[i].Y + 8)
                         return true;
                 }
                 return false;
@@ -211,15 +212,15 @@ namespace LaptopSimulator2015.Levels
 
         public void draw(GraphicsWrapper g, Panel minigamePanel, Timer minigameTimer, uint minigameTime)
         {
-            g.g.Clear(Color.Black);
-            g.g.FillRectangle(new SolidBrush(Color.Green), player2rect());
+            g.DrawRectangle(new RectangleF(player.toPointF(), new SizeF(10, 10)), Color.Green);
             if (lazorTime >= 0 && lazorTime <= 80)
             {
-                g.g.FillRectangle(new SolidBrush(Color.DarkGray), new RectangleF((float)lazor - 1, 0, 2, minigamePanel.Height));
-                g.g.FillRectangle(new SolidBrush(Color.Red), new RectangleF((float)lazor - 1, 0, 2, minigamePanel.Height - (float)Misc.map(0, 80, 0, minigamePanel.Height, lazorTime)));
+                g.DrawRectangle(new RectangleF((float)lazor, minigamePanel.Height / 2, 2, minigamePanel.Height), Color.DarkGray);
+                float m = (float)Misc.map(0, 80, 0, minigamePanel.Height, lazorTime);
+                g.DrawRectangle(new RectangleF((float)lazor, minigamePanel.Height - m / 2, 2, m), Color.Red);
             }
             for (int i = 0; i < platforms.Count; i++)
-                g.g.FillRectangle(new SolidBrush(Color.White), plat2rect(i));
+                g.DrawRectangle(new RectangleF(platforms[i].toPointF(), new SizeF(100, 10)), Color.White);
         }
     }
 }

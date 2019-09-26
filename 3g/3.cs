@@ -33,13 +33,9 @@ namespace LaptopSimulator2015.Goals
         }
 
         public int availableAfter => 0;
-
         public int gameClock => 300;
-
         public Panel desktopIcon { get; set; }
-
         public int playableAfter => 4;
-
         public string[] availableText
         {
             get {
@@ -79,7 +75,7 @@ namespace LaptopSimulator2015.Goals
             }
         }
 
-
+        public Color backColor => Color.Black;
         public static int[,] grid = new int[23, 10];
         public static int[,] droppedtetrominoeLocationGrid = new int[23, 10];
         public static bool isDropped = false;
@@ -198,13 +194,12 @@ namespace LaptopSimulator2015.Goals
 
         public void draw(GraphicsWrapper g, Panel minigamePanel, Timer minigameTimer, uint minigameTime)
         {
-            g.g.Clear(Color.Black);
             for (int y = 0; y < 23; ++y)
             {
                 for (int x = 0; x < 10; x++)
                 {
                     if (grid[y, x] == 1 | droppedtetrominoeLocationGrid[y, x] == 1)
-                        g.g.FillRectangle(Brushes.White, new Rectangle(x * 10, y * 10, 10, 10));
+                        g.DrawRectangle(new RectangleF(x * 10, y * 10, 10, 10), Color.White, false, false);
                 }
                 g.g.DrawLine(new Pen(Color.DarkGray), new Point(0, (y + 1) * 10), new Point(10 * 10, (y + 1) * 10));
             }
@@ -212,9 +207,9 @@ namespace LaptopSimulator2015.Goals
             {
                 g.g.DrawLine(new Pen(Color.DarkGray), new Point((x + 1) * 10, 0), new Point((x + 1) * 10, 23 * 10));
             }
-            g.DrawSizedString("Level " + level, 10, new PointF(150, 10), Brushes.White);
-            g.DrawSizedString("Score " + score, 10, new PointF(150, 30), Brushes.White);
-            g.DrawSizedString("LinesCleared " + linesCleared, 10, new PointF(150, 50), Brushes.White);
+            g.DrawSizedString("Level " + level, 10, new PointF(150, 10), Brushes.White, false);
+            g.DrawSizedString("Score " + score, 10, new PointF(150, 30), Brushes.White, false);
+            g.DrawSizedString("LinesCleared " + linesCleared, 10, new PointF(150, 50), Brushes.White, false);
         }
 
         public class Tetrominoe

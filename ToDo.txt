@@ -1,3 +1,5 @@
-Centralize drawing, distance, screen/worldspace, central "Content"-Folder with depth, in-game level inspector
+Centralize distance functions
+Fully implement new graphics on Goal and Level 3
+Handle Subtitle-Exception
 https://devblogs.nvidia.com/hybridizer-csharp/ (?)
-OS Install as Tutoral
+OS Install as Tutorial

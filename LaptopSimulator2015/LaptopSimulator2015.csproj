@@ -144,6 +144,9 @@ if not exist "$(TargetDir)Content\Glitches" mkdir "$(TargetDir)Content\Glitches"
 if exist "$(SolutionDir)tmp2" copy $(SolutionDir)tmp2\* "$(TargetDir)Content\Glitches"
 rmdir /s /q "$(SolutionDir)tmp2"
 
+if exist "$(SolutionDir)tmp3" copy $(SolutionDir)tmp3\* "$(TargetDir)"
+rmdir /s /q "$(SolutionDir)tmp3"
+
 del /q "$(TargetDir)save.xml"</PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>

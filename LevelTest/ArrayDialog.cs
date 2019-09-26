@@ -13,10 +13,11 @@ namespace LevelTest
     public partial class ArrayDialog : Form
     {
         public int returnIndex;
-        public ArrayDialog(string[] items)
+        public ArrayDialog(string[] items, string title = "")
         {
             InitializeComponent();
             listBox1.Items.AddRange(items);
+            Text = title;
         }
 
         private void ListBox1_SelectedIndexChanged(object sender, EventArgs e)

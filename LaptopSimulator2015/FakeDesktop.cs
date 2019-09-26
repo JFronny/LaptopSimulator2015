@@ -475,8 +475,9 @@ namespace LaptopSimulator2015
         uint minigamePrevTime = 0;
         private void InvadersPanel_Paint(object sender, PaintEventArgs e)
         {
-            using (GraphicsWrapper w = new GraphicsWrapper(e.Graphics, new Rectangle(Point.Empty, minigamePanel.Size)))
+            using (GraphicsWrapper w = new GraphicsWrapper(e.Graphics, levels[levelInd].backColor, new Rectangle(Point.Empty, minigamePanel.Size)))
             {
+                w.Clear();
                 levels[levelInd].draw(w, minigamePanel, minigameClockT, minigameTime);
                 if (minigameTime != minigamePrevTime)
                 {

@@ -61,12 +61,12 @@ namespace LaptopSimulator2015.Levels
         public Panel desktopIcon { get; set; }
 
         public int installerProgressSteps => 500;
+        public Color backColor => Color.Black;
 
         Vector2 center;
         Vector2 cannon;
         Vector2 targ;
         List<Vector2> targets;
-        Rectangle player => new Rectangle(center.toPoint().X - 5, center.toPoint().Y - 5, 10, 10);
         double playerRot;
         double cannonL;
         double power;
@@ -146,8 +146,8 @@ namespace LaptopSimulator2015.Levels
 
         public void draw(GraphicsWrapper g, Panel minigamePanel, Timer minigameTimer, uint minigameTime)
         {
-            g.g.Clear(Color.Black);
-            g.g.FillRectangle(new SolidBrush(Color.Green), player);
+            //g.g.FillRectangle(new SolidBrush(Color.Green), player);
+            g.DrawRectangle(new RectangleF(center.toPointF(), new SizeF(10, 10)), Color.Green, transform:false);
             g.g.DrawLine(new Pen(new SolidBrush(Color.Green), 5), center.toPoint(), cannon.toPoint());
             for (int i = 0; i < targets.Count; i++)
             {
@@ -159,13 +159,15 @@ namespace LaptopSimulator2015.Levels
             }
             if (firing)
             {
-                g.g.DrawRectangle(new Pen(new SolidBrush(Color.Green), 1), new Rectangle(Misc.d2i(targ.X - power / 2), Misc.d2i(targ.Y - power / 2), Misc.d2i(power), Misc.d2i(power)));
+                //g.g.DrawRectangle(new Pen(new SolidBrush(Color.Green), 1), new Rectangle(Misc.d2i(targ.X - power / 2), Misc.d2i(targ.Y - power / 2), Misc.d2i(power), Misc.d2i(power)));
+                g.DrawRectangle(new RectangleF(targ.toPointF(), new SizeF(Misc.d2f(power), Misc.d2f(power))), Color.Green, filled: false, transform: false);
                 g.g.DrawLine(new Pen(new SolidBrush(Color.Green), 1), new PointF(Misc.d2i(targ.X), Misc.d2i(targ.Y - power / 2)), new PointF(Misc.d2i(targ.X), Misc.d2i(targ.Y + power / 2)));
                 g.g.DrawLine(new Pen(new SolidBrush(Color.Green), 1), new PointF(Misc.d2i(targ.X - power / 2), Misc.d2i(targ.Y)), new PointF(Misc.d2i(targ.X + power / 2), Misc.d2i(targ.Y)));
             }
             else
             {
-                g.g.FillRectangle(new SolidBrush(Color.Green), new RectangleF(Misc.d2f(targ.X - 2.5f), Misc.d2f(targ.Y - 2.5f), 5, 5));
+                //g.g.FillRectangle(new SolidBrush(Color.Green), new RectangleF(Misc.d2f(targ.X - 2.5f), Misc.d2f(targ.Y - 2.5f), 5, 5));
+                g.DrawRectangle(new RectangleF(targ.toPointF(), new SizeF(5, 5)), Color.Green, transform: false);
             }
         }
     }

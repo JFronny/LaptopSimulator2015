@@ -55,13 +55,10 @@ namespace LaptopSimulator2015.Levels
         }
 
         public int availableAfter => 2;
-
         public int gameClock => 17;
-
         public Panel desktopIcon { get; set; }
-
         public int installerProgressSteps => 500;
-
+        public Color backColor => Color.Black;
         List<Vector2> enemies;
         Vector2 player;
         int lives;
@@ -84,11 +81,11 @@ namespace LaptopSimulator2015.Levels
                         enemies.Add(new Vector2(0, tst - minigamePanel.Width * 2 - minigamePanel.Height + 10));
                 }
                 if (Input.Up)
-                    player.Y -= 5;
+                    player.Y += 5;
                 if (Input.Left)
                     player.X -= 5;
                 if (Input.Down)
-                    player.Y += 5;
+                    player.Y -= 5;
                 if (Input.Right)
                     player.X += 5;
                 List<Vector2> enemiesToRemove = new List<Vector2>();
@@ -118,16 +115,18 @@ namespace LaptopSimulator2015.Levels
             enemies = new List<Vector2>();
             player = new Vector2(minigamePanel.Width / 2, minigamePanel.Height / 2);
             player.bounds_wrap = true;
-            player.bounds = new Rectangle(-10, -10, minigamePanel.Width + 10, minigamePanel.Height + 10);
+            player.bounds = new Rectangle(-5, -5, minigamePanel.Width + 10, minigamePanel.Height + 10);
             lives = 3;
         }
 
         public void draw(GraphicsWrapper g, Panel minigamePanel, Timer minigameTimer, uint minigameTime)
         {
             for (int i = 0; i < enemies.Count; i++)
-                g.g.FillRectangle(new SolidBrush(Color.Red), new Rectangle(enemies[i].toPoint(), new Size(10, 10)));
-            g.g.FillRectangle(new SolidBrush(Color.Green), new Rectangle(player.toPoint(), new Size(10, 10)));
-            g.DrawSizedString(lives.ToString(), 7, (player + new PointF(5, 5)).toPointF(), Brushes.White, true);
+                //g.g.FillRectangle(new SolidBrush(Color.Red), new Rectangle(enemies[i].toPoint(), new Size(10, 10)));
+                g.DrawRectangle(new RectangleF(enemies[i].toPointF(), new SizeF(10, 10)), Color.Red);
+            //g.g.FillRectangle(new SolidBrush(Color.Green), new Rectangle(player.toPoint(), new Size(10, 10)));
+            g.DrawRectangle(new RectangleF(player.toPointF(), new SizeF(10, 10)), Color.Green);
+            g.DrawSizedString(lives.ToString(), 7, player.toPointF(), Brushes.White, true, true);
         }
     }
 }
