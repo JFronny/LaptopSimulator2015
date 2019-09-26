@@ -1,4 +1,4 @@
-﻿namespace lv2_t
+﻿namespace LevelTest
 {
     partial class MainForm
     {
@@ -29,33 +29,14 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            this.minigameClockT = new System.Windows.Forms.Timer(this.components);
-            this.button1 = new System.Windows.Forms.Button();
             this.minigamePanel = new System.Windows.Forms.Panel();
-            this.minigamePanel.SuspendLayout();
+            this.minigameClockT = new System.Windows.Forms.Timer(this.components);
+            this.closeButton = new System.Windows.Forms.Label();
             this.SuspendLayout();
-            // 
-            // minigameClockT
-            // 
-            this.minigameClockT.Enabled = true;
-            this.minigameClockT.Interval = 17;
-            this.minigameClockT.Tick += new System.EventHandler(this.MinigameClockT_Tick);
-            // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(777, 0);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(23, 23);
-            this.button1.TabIndex = 0;
-            this.button1.TabStop = false;
-            this.button1.Text = "X";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.Button1_Click);
             // 
             // minigamePanel
             // 
             this.minigamePanel.BackColor = System.Drawing.Color.Black;
-            this.minigamePanel.Controls.Add(this.button1);
             this.minigamePanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.minigamePanel.Location = new System.Drawing.Point(0, 0);
             this.minigamePanel.Name = "minigamePanel";
@@ -63,31 +44,42 @@
             this.minigamePanel.TabIndex = 1;
             this.minigamePanel.Paint += new System.Windows.Forms.PaintEventHandler(this.MinigamePanel_Paint);
             // 
+            // minigameClockT
+            // 
+            this.minigameClockT.Enabled = true;
+            this.minigameClockT.Interval = 17;
+            this.minigameClockT.Tick += new System.EventHandler(this.MinigameClockT_Tick);
+            // 
+            // closeButton
+            // 
+            this.closeButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.closeButton.BackColor = System.Drawing.Color.Red;
+            this.closeButton.Location = new System.Drawing.Point(776, 2);
+            this.closeButton.Name = "closeButton";
+            this.closeButton.Size = new System.Drawing.Size(23, 23);
+            this.closeButton.TabIndex = 0;
+            this.closeButton.Text = "X";
+            this.closeButton.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.closeButton.Click += new System.EventHandler(this.CloseButton_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
-            this.ControlBox = false;
+            this.Controls.Add(this.closeButton);
             this.Controls.Add(this.minigamePanel);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
-            this.MaximizeBox = false;
-            this.MinimizeBox = false;
             this.Name = "MainForm";
-            this.ShowIcon = false;
-            this.ShowInTaskbar = false;
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "MainForm";
-            this.minigamePanel.ResumeLayout(false);
+            this.Text = "Form1";
             this.ResumeLayout(false);
 
         }
 
         #endregion
-
-        private System.Windows.Forms.Timer minigameClockT;
-        private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Panel minigamePanel;
+        private System.Windows.Forms.Timer minigameClockT;
+        private System.Windows.Forms.Label closeButton;
     }
 }
 

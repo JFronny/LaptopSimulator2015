@@ -107,8 +107,7 @@ namespace LaptopSimulator2015
             IEnumerable<Type> tmp_types = tmpdirs.Select(s => Assembly.LoadFrom(s)).SelectMany(s => s.GetTypes()).Distinct();
             levels = tmp_types.Where(p => typeof(Minigame).IsAssignableFrom(p)).Distinct().Except(new Type[] { typeof(Minigame), typeof(Level), typeof(Goal) })
                 .Select(s => (Minigame)Activator.CreateInstance(s)).OrderBy(lv => lv.availableAfter).ToList();
-#if true || DEBUG
-            //tmpdirs.Select(s => devWindowDllList.Items.Add(s));
+#if DEBUG
             devWindowDllList.Items.AddRange(tmpdirs.ToArray());
             devWindowLevelList.Items.AddRange(levels.Select(s => s.availableAfter.ToString() + " - " + s.name + (typeof(Goal).IsAssignableFrom(s.GetType()) ? (" - " + ((Goal)s).playableAfter.ToString() + " (Goal)") : " (Level)")).ToArray());
 #endif
@@ -166,13 +165,11 @@ namespace LaptopSimulator2015
                         Goal goal = ((Goal)levels[levelInd]);
                         if (goal.playableAfter <= Settings.level)
                         {
-                            Graphics g = minigamePanel.CreateGraphics();
-                            levels[levelInd].initGame(g, minigamePanel, minigameClockT);
+                            levels[levelInd].initGame(minigamePanel, minigameClockT);
                             minigamePanel.Visible = true;
                             minigamePanel.Enabled = true;
                             minigameClockT.Enabled = true;
                             minigameClose.Visible = true;
-                            g.Flush();
                             Misc.closeGameWindow = new Action(() => {
                                 base.BackColor = Color.FromArgb(100, 0, 255);
                                 minigamePanel.Visible = false;
@@ -235,7 +232,6 @@ namespace LaptopSimulator2015
             }
 #if DEBUG
             devWindowLevelList.SelectedIndex = levels.FindIndex(s => s.availableAfter == Settings.level);
-            //Settings.level = levels[devWindowLevelList.SelectedIndex].availableAfter;
 #endif
         }
 
@@ -372,7 +368,7 @@ namespace LaptopSimulator2015
                         levelWindowProgressT.Enabled = true;
                         minigameTime = 0;
                         Graphics g = minigamePanel.CreateGraphics();
-                        levels[levelInd].initGame(g, minigamePanel, minigameClockT);
+                        levels[levelInd].initGame(minigamePanel, minigameClockT);
                         minigamePanel.Visible = true;
                         minigamePanel.Enabled = true;
                         minigameClockT.Enabled = true;
@@ -476,7 +472,19 @@ namespace LaptopSimulator2015
 
         #region Minigame
         uint minigameTime = 0;
-        private void InvadersPanel_Paint(object sender, PaintEventArgs e) => levels[levelInd].gameTick(e.Graphics, minigamePanel, minigameClockT, minigameTime);
+        uint minigamePrevTime = 0;
+        private void InvadersPanel_Paint(object sender, PaintEventArgs e)
+        {
+            using (GraphicsWrapper w = new GraphicsWrapper(e.Graphics, new Rectangle(Point.Empty, minigamePanel.Size)))
+            {
+                levels[levelInd].draw(w, minigamePanel, minigameClockT, minigameTime);
+                if (minigameTime != minigamePrevTime)
+                {
+                    levels[levelInd].gameTick(w, minigamePanel, minigameClockT, minigameTime);
+                    minigamePrevTime = minigameTime;
+                }
+            }
+        }
 
         private void InvadersTimer_Tick(object sender, EventArgs e)
         {

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Base;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -36,15 +37,23 @@ namespace LaptopSimulator2015
         /// <param name="g">A temporary Graphics object, should not be used</param>
         /// <param name="minigamePanel">The panel on which the minigame is displayed</param>
         /// <param name="minigameTimer">The timer used for scheduling frames</param>
-        void initGame(Graphics g, Panel minigamePanel, Timer minigameTimer);
+        void initGame(Panel minigamePanel, Timer minigameTimer);
         /// <summary>
-        /// Called each frame
+        /// Called physics frame
         /// </summary>
         /// <param name="g">Graphics object, to be used for drawing the scene</param>
         /// <param name="minigamePanel">The panel on which the minigame is displayed</param>
         /// <param name="minigameTimer">The timer used for scheduling frames</param>
         /// <param name="minigameTime">The amount of total displayed frames</param>
-        void gameTick(Graphics g, Panel minigamePanel, Timer minigameTimer, uint minigameTime);
+        void gameTick(GraphicsWrapper g, Panel minigamePanel, Timer minigameTimer, uint minigameTime);
+        /// <summary>
+        /// Called graphics frame
+        /// </summary>
+        /// <param name="g">Graphics object, to be used for drawing the scene</param>
+        /// <param name="minigamePanel">The panel on which the minigame is displayed</param>
+        /// <param name="minigameTimer">The timer used for scheduling frames</param>
+        /// <param name="minigameTime">The amount of total displayed frames</param>
+        void draw(GraphicsWrapper g, Panel minigamePanel, Timer minigameTimer, uint minigameTime);
     }
     public interface Level : Minigame
     {

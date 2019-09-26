@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace SIT.Properties
+namespace LevelTest.Properties
 {
 
 

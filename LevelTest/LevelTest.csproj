@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{52CE6BEB-EC81-4A14-85DD-3F8DB8E33202}</ProjectGuid>
+    <ProjectGuid>{DFD89655-00A7-4DF8-8B2E-17F5BEFE5090}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>lv_tst_base</RootNamespace>
-    <AssemblyName>lv_tst_base</AssemblyName>
+    <RootNamespace>LevelTest</RootNamespace>
+    <AssemblyName>LevelTest</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -46,6 +46,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ArrayDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ArrayDialog.Designer.cs">
+      <DependentUpon>ArrayDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -54,6 +60,9 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="ArrayDialog.resx">
+      <DependentUpon>ArrayDialog.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>

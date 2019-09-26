@@ -60,7 +60,6 @@ namespace LaptopSimulator2015.Levels
         public Panel desktopIcon { get; set; }
 
         public int installerProgressSteps => 500;
-        uint minigamePrevTime = 0;
 
         List<Vector2> enemies;
         List<Vector2> bullets;
@@ -68,79 +67,61 @@ namespace LaptopSimulator2015.Levels
         double speedMod;
         bool enemiesCanShoot;
 
-        public void gameTick(Graphics e, Panel minigamePanel, Timer minigameTimer, uint minigameTime)
+        public void gameTick(GraphicsWrapper g, Panel minigamePanel, Timer minigameTimer, uint minigameTime)
         {
-            BufferedGraphics buffer = BufferedGraphicsManager.Current.Allocate(e, new Rectangle(0, 0, minigamePanel.Width, minigamePanel.Height));
-            Graphics g = buffer.Graphics;
             try
             {
-                g.Clear(Color.Black);
+                Random random = new Random();
+                if (random.Next(0, 100000) < minigameTime + 1300)
+                    enemies.Add(new Vector2(minigamePanel.Width, random.Next(minigamePanel.Height - 10)));
                 for (int i = 0; i < enemies.Count; i++)
                 {
-                    g.FillRectangle(new SolidBrush(Color.Red), new Rectangle(enemies[i].toPoint(), new Size(10, 10)));
+                    enemies[i].X -= 1.2;
+                    if (player.distanceFromSquared(enemies[i]) < 100 | enemies[i].X < 0)
+                    {
+                        throw new Exception("The VM was shut down to prevent damage to your Machine.", new Exception("0717750f-3508-4bc2-841e-f3b077c676fe"));
+                    }
                 }
+                enemiesCanShoot = enemiesCanShoot | !Input.Action;
+                List<Vector2> enemiesToRemove = new List<Vector2>();
+                List<Vector2> bulletsToRemove = new List<Vector2>();
                 for (int i = 0; i < bullets.Count; i++)
                 {
-                    g.FillRectangle(new SolidBrush(Color.White), new Rectangle(bullets[i].toPoint(), new Size(5, 5)));
-                }
-                g.FillRectangle(new SolidBrush(Color.Green), new Rectangle(player.toPoint(), new Size(10, 10)));
-                Random random = new Random();
-                if (minigameTime != minigamePrevTime)
-                {
-                    minigamePrevTime = minigameTime;
-                    if (random.Next(0, 100000) < minigameTime + 1300)
-                        enemies.Add(new Vector2(minigamePanel.Width, random.Next(minigamePanel.Height - 10)));
-                    for (int i = 0; i < enemies.Count; i++)
+                    bullets[i].X += 4;
+                    for (int j = 0; j < enemies.Count; j++)
                     {
-                        enemies[i].X -= 1.2;
-                        if (player.distanceFromSquared(enemies[i]) < 100 | enemies[i].X < 0)
+                        if (bullets[i].distanceFromSquared(enemies[j] + new Vector2(2.5f, 2.5f)) < 56.25f)
                         {
-                            throw new Exception("The VM was shut down to prevent damage to your Machine.", new Exception("0717750f-3508-4bc2-841e-f3b077c676fe"));
-                        }
-                    }
-                    enemiesCanShoot = enemiesCanShoot | !Input.Action;
-                    List<Vector2> enemiesToRemove = new List<Vector2>();
-                    List<Vector2> bulletsToRemove = new List<Vector2>();
-                    for (int i = 0; i < bullets.Count; i++)
-                    {
-                        bullets[i].X += 4;
-                        for (int j = 0; j < enemies.Count; j++)
-                        {
-                            if (bullets[i].distanceFromSquared(enemies[j] + new Vector2(2.5f, 2.5f)) < 56.25f)
-                            {
-                                enemiesToRemove.Add(enemies[j]);
-                                bulletsToRemove.Add(bullets[i]);
-                            }
-                        }
-                        if (bullets[i].X > minigamePanel.Width)
+                            enemiesToRemove.Add(enemies[j]);
                             bulletsToRemove.Add(bullets[i]);
+                        }
                     }
-                    enemies = enemies.Except(enemiesToRemove.Distinct()).Distinct().ToList();
-                    bullets = bullets.Except(bulletsToRemove.Distinct()).Distinct().ToList();
-                    speedMod += 0.1;
-                    speedMod = Math.Max(Math.Min(speedMod, 5), 1);
-                    if (Input.Up)
-                        player.Y -= speedMod;
-                    if (Input.Left)
-                        player.X -= speedMod;
-                    if (Input.Down)
-                        player.Y += speedMod;
-                    if (Input.Right)
-                        player.X += speedMod;
-                    if (Input.Action & enemiesCanShoot)
-                    {
-                        bullets.Add(new Vector2(0, 2.5) + player);
-                        enemiesCanShoot = false;
-                        speedMod--;
-                    }
+                    if (bullets[i].X > minigamePanel.Width)
+                        bulletsToRemove.Add(bullets[i]);
                 }
-                buffer.Render();
-                buffer.Dispose();
+                enemies = enemies.Except(enemiesToRemove.Distinct()).Distinct().ToList();
+                bullets = bullets.Except(bulletsToRemove.Distinct()).Distinct().ToList();
+                speedMod += 0.1;
+                speedMod = Math.Max(Math.Min(speedMod, 5), 1);
+                if (Input.Up)
+                    player.Y -= speedMod;
+                if (Input.Left)
+                    player.X -= speedMod;
+                if (Input.Down)
+                    player.Y += speedMod;
+                if (Input.Right)
+                    player.X += speedMod;
+                if (Input.Action & enemiesCanShoot)
+                {
+                    bullets.Add(new Vector2(0, 2.5) + player);
+                    enemiesCanShoot = false;
+                    speedMod--;
+                }
             }
             catch (Exception ex) { if (ex.InnerException?.Message == "0717750f-3508-4bc2-841e-f3b077c676fe") Misc.closeGameWindow.Invoke(); else Console.WriteLine(ex.ToString()); }
         }
 
-        public void initGame(Graphics g, Panel minigamePanel, Timer minigameTimer)
+        public void initGame(Panel minigamePanel, Timer minigameTimer)
         {
             enemies = new List<Vector2>();
             bullets = new List<Vector2>();
@@ -149,6 +130,20 @@ namespace LaptopSimulator2015.Levels
             player = new Vector2(minigamePanel.Width / 4, minigamePanel.Height / 2);
             player.bounds_wrap = true;
             player.bounds = new Rectangle(-10, -10, minigamePanel.Width + 10, minigamePanel.Height + 10);
+        }
+
+        public void draw(GraphicsWrapper g, Panel minigamePanel, Timer minigameTimer, uint minigameTime)
+        {
+            g.g.Clear(Color.Black);
+            for (int i = 0; i < enemies.Count; i++)
+            {
+                g.g.FillRectangle(new SolidBrush(Color.Red), new Rectangle(enemies[i].toPoint(), new Size(10, 10)));
+            }
+            for (int i = 0; i < bullets.Count; i++)
+            {
+                g.g.FillRectangle(new SolidBrush(Color.White), new Rectangle(bullets[i].toPoint(), new Size(5, 5)));
+            }
+            g.g.FillRectangle(new SolidBrush(Color.Green), new Rectangle(player.toPoint(), new Size(10, 10)));
         }
     }
 }

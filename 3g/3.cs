@@ -79,8 +79,7 @@ namespace LaptopSimulator2015.Goals
             }
         }
 
-        public static uint minigamePrevTime;
-        
+
         public static int[,] grid = new int[23, 10];
         public static int[,] droppedtetrominoeLocationGrid = new int[23, 10];
         public static bool isDropped = false;
@@ -88,57 +87,32 @@ namespace LaptopSimulator2015.Goals
         static Tetrominoe nexttet;
         public static int linesCleared = 0, score = 0, level = 1;
         public static Random rnd;
-        public void gameTick(Graphics e, Panel minigamePanel, Timer minigameTimer, uint minigameTime)
+        public void gameTick(GraphicsWrapper g, Panel minigamePanel, Timer minigameTimer, uint minigameTime)
         {
-            BufferedGraphics buffer = BufferedGraphicsManager.Current.Allocate(e, new Rectangle(0, 0, minigamePanel.Width, minigamePanel.Height));
-            Graphics g = buffer.Graphics;
             try
             {
-                g.Clear(Color.Black);
-                for (int y = 0; y < 23; ++y)
-                {
-                    for (int x = 0; x < 10; x++)
-                    {
-                        if (grid[y, x] == 1 | droppedtetrominoeLocationGrid[y, x] == 1)
-                            g.FillRectangle(Brushes.White, new Rectangle(x * 10, y * 10, 10, 10));
-                    }
-                    g.DrawLine(new Pen(Color.DarkGray), new Point(0, (y + 1) * 10), new Point(10 * 10, (y + 1) * 10));
-                }
-                for (int x = 0; x < 10; x++)
-                {
-                    g.DrawLine(new Pen(Color.DarkGray), new Point((x + 1) * 10, 0), new Point((x + 1) * 10, 23 * 10));
-                }
-                Drawing.DrawSizedString(g, "Level " + level, 10, new PointF(150, 10), Brushes.White);
-                Drawing.DrawSizedString(g, "Score " + score, 10, new PointF(150, 30), Brushes.White);
-                Drawing.DrawSizedString(g, "LinesCleared " + linesCleared, 10, new PointF(150, 50), Brushes.White);
                 Random random = new Random();
-                if (minigameTime != minigamePrevTime)
+                tet.Drop();
+                if (isDropped == true)
                 {
-                    minigamePrevTime = minigameTime;
-                    tet.Drop();
-                    if (isDropped == true)
-                    {
-                        tet = nexttet;
-                        nexttet = new Tetrominoe();
-                        tet.Spawn();
-                        isDropped = false;
-                        score += 10;
-                    }
-                    int j; for (j = 0; j < 10; j++)
-                    {
-                        if (droppedtetrominoeLocationGrid[0, j] == 1)
-                            Misc.closeGameWindow.Invoke();
-                    }
-                    Input();
-                    ClearBlock();
+                    tet = nexttet;
+                    nexttet = new Tetrominoe();
+                    tet.Spawn();
+                    isDropped = false;
+                    score += 10;
                 }
-                buffer.Render();
-                buffer.Dispose();
+                int j; for (j = 0; j < 10; j++)
+                {
+                    if (droppedtetrominoeLocationGrid[0, j] == 1)
+                        Misc.closeGameWindow.Invoke();
+                }
+                Input();
+                ClearBlock();
             }
             catch (Exception ex) { if (ex.InnerException?.Message == "0717750f-3508-4bc2-841e-f3b077c676fe") Misc.closeGameWindow.Invoke(); else Console.WriteLine(ex.ToString()); }
         }
 
-        public void initGame(Graphics g, Panel minigamePanel, Timer minigameTimer)
+        public void initGame(Panel minigamePanel, Timer minigameTimer)
         {
             rnd = new Random();
             grid = new int[23, 10];
@@ -220,6 +194,27 @@ namespace LaptopSimulator2015.Goals
                 tet.Rotate();
                 tet.Update();
             }
+        }
+
+        public void draw(GraphicsWrapper g, Panel minigamePanel, Timer minigameTimer, uint minigameTime)
+        {
+            g.g.Clear(Color.Black);
+            for (int y = 0; y < 23; ++y)
+            {
+                for (int x = 0; x < 10; x++)
+                {
+                    if (grid[y, x] == 1 | droppedtetrominoeLocationGrid[y, x] == 1)
+                        g.g.FillRectangle(Brushes.White, new Rectangle(x * 10, y * 10, 10, 10));
+                }
+                g.g.DrawLine(new Pen(Color.DarkGray), new Point(0, (y + 1) * 10), new Point(10 * 10, (y + 1) * 10));
+            }
+            for (int x = 0; x < 10; x++)
+            {
+                g.g.DrawLine(new Pen(Color.DarkGray), new Point((x + 1) * 10, 0), new Point((x + 1) * 10, 23 * 10));
+            }
+            g.DrawSizedString("Level " + level, 10, new PointF(150, 10), Brushes.White);
+            g.DrawSizedString("Score " + score, 10, new PointF(150, 30), Brushes.White);
+            g.DrawSizedString("LinesCleared " + linesCleared, 10, new PointF(150, 50), Brushes.White);
         }
 
         public class Tetrominoe

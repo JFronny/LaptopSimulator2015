@@ -61,78 +61,73 @@ namespace LaptopSimulator2015.Levels
         public Panel desktopIcon { get; set; }
 
         public int installerProgressSteps => 500;
-        uint minigamePrevTime = 0;
 
         List<Vector2> enemies;
         Vector2 player;
         int lives;
 
-        public void gameTick(Graphics e, Panel minigamePanel, Timer minigameTimer, uint minigameTime)
+        public void gameTick(GraphicsWrapper g, Panel minigamePanel, Timer minigameTimer, uint minigameTime)
         {
-            BufferedGraphics buffer = BufferedGraphicsManager.Current.Allocate(e, new Rectangle(0, 0, minigamePanel.Width, minigamePanel.Height));
-            Graphics g = buffer.Graphics;
             try
             {
-                for (int i = 0; i < enemies.Count; i++)
-                    g.FillRectangle(new SolidBrush(Color.Red), new Rectangle(enemies[i].toPoint(), new Size(10, 10)));
-                g.FillRectangle(new SolidBrush(Color.Green), new Rectangle(player.toPoint(), new Size(10, 10)));
-                Drawing.DrawSizedString(g, lives.ToString(), 7, (player + new PointF(5, 5)).toPointF(), Brushes.White, true);
                 Random random = new Random();
-                if (minigameTime != minigamePrevTime)
+                if (random.Next(0, 100000) < minigameTime + 1300)
                 {
-                    minigamePrevTime = minigameTime;
-                    if (random.Next(0, 100000) < minigameTime + 1300)
-                    {
-                        int tst = random.Next(minigamePanel.Width * 2 + (minigamePanel.Height - 10) * 2);
-                        if (tst <= minigamePanel.Width)
-                            enemies.Add(new Vector2(tst, 0));
-                        else if (tst <= minigamePanel.Width * 2)
-                            enemies.Add(new Vector2(tst - minigamePanel.Width, minigamePanel.Height - 10));
-                        else if (tst <= minigamePanel.Width * 2 + minigamePanel.Height - 10)
-                            enemies.Add(new Vector2(0, tst - minigamePanel.Width * 2));
-                        else
-                            enemies.Add(new Vector2(0, tst - minigamePanel.Width * 2 - minigamePanel.Height + 10));
-                    }
-                    if (Input.Up)
-                        player.Y -= 5;
-                    if (Input.Left)
-                        player.X -= 5;
-                    if (Input.Down)
-                        player.Y += 5;
-                    if (Input.Right)
-                        player.X += 5;
-                    List<Vector2> enemiesToRemove = new List<Vector2>();
-                    for (int i = 0; i < enemies.Count; i++)
-                    {
-                        enemies[i].moveTowards(player, Math.Max(6, Math.Sqrt(minigameTime / 100 + 1)));
-                        for (int j = 0; j < enemies.Count; j++)
-                        {
-                            if (i != j && enemies[i].distanceFromSquared(enemies[j]) < 25 && !enemiesToRemove.Contains(enemies[j]))
-                                enemiesToRemove.Add(enemies[i]);
-                        }
-                        if (player.distanceFromSquared(enemies[i]) < 100 && !enemiesToRemove.Contains(enemies[i]))
-                        {
-                            lives--;
-                            enemiesToRemove.Add(enemies[i]);
-                            if (lives <= 0)
-                                throw new Exception("The VM was shut down to prevent damage to your Machine.", new Exception("0717750f-3508-4bc2-841e-f3b077c676fe"));
-                        }
-                    }
-                    enemies = enemies.Except(enemiesToRemove.Distinct()).Distinct().ToList();
+                    int tst = random.Next(minigamePanel.Width * 2 + (minigamePanel.Height - 10) * 2);
+                    if (tst <= minigamePanel.Width)
+                        enemies.Add(new Vector2(tst, 0));
+                    else if (tst <= minigamePanel.Width * 2)
+                        enemies.Add(new Vector2(tst - minigamePanel.Width, minigamePanel.Height - 10));
+                    else if (tst <= minigamePanel.Width * 2 + minigamePanel.Height - 10)
+                        enemies.Add(new Vector2(0, tst - minigamePanel.Width * 2));
+                    else
+                        enemies.Add(new Vector2(0, tst - minigamePanel.Width * 2 - minigamePanel.Height + 10));
                 }
-                buffer.Render();
-                buffer.Dispose();
+                if (Input.Up)
+                    player.Y -= 5;
+                if (Input.Left)
+                    player.X -= 5;
+                if (Input.Down)
+                    player.Y += 5;
+                if (Input.Right)
+                    player.X += 5;
+                List<Vector2> enemiesToRemove = new List<Vector2>();
+                for (int i = 0; i < enemies.Count; i++)
+                {
+                    enemies[i].moveTowards(player, Math.Max(6, Math.Sqrt(minigameTime / 100 + 1)));
+                    for (int j = 0; j < enemies.Count; j++)
+                    {
+                        if (i != j && enemies[i].distanceFromSquared(enemies[j]) < 25 && !enemiesToRemove.Contains(enemies[j]))
+                            enemiesToRemove.Add(enemies[i]);
+                    }
+                    if (player.distanceFromSquared(enemies[i]) < 100 && !enemiesToRemove.Contains(enemies[i]))
+                    {
+                        lives--;
+                        enemiesToRemove.Add(enemies[i]);
+                        if (lives <= 0)
+                            throw new Exception("The VM was shut down to prevent damage to your Machine.", new Exception("0717750f-3508-4bc2-841e-f3b077c676fe"));
+                    }
+                }
+                enemies = enemies.Except(enemiesToRemove.Distinct()).Distinct().ToList();
             }
             catch (Exception ex) { if (ex.InnerException?.Message == "0717750f-3508-4bc2-841e-f3b077c676fe") Misc.closeGameWindow.Invoke(); else Console.WriteLine(ex.ToString()); }
         }
 
-        public void initGame(Graphics g, Panel minigamePanel, Timer minigameTimer)
+        public void initGame(Panel minigamePanel, Timer minigameTimer)
         {
             enemies = new List<Vector2>();
             player = new Vector2(minigamePanel.Width / 2, minigamePanel.Height / 2);
             player.bounds_wrap = true;
             player.bounds = new Rectangle(-10, -10, minigamePanel.Width + 10, minigamePanel.Height + 10);
             lives = 3;
+        }
+
+        public void draw(GraphicsWrapper g, Panel minigamePanel, Timer minigameTimer, uint minigameTime)
+        {
+            for (int i = 0; i < enemies.Count; i++)
+                g.g.FillRectangle(new SolidBrush(Color.Red), new Rectangle(enemies[i].toPoint(), new Size(10, 10)));
+            g.g.FillRectangle(new SolidBrush(Color.Green), new Rectangle(player.toPoint(), new Size(10, 10)));
+            g.DrawSizedString(lives.ToString(), 7, (player + new PointF(5, 5)).toPointF(), Brushes.White, true);
         }
     }
 }
