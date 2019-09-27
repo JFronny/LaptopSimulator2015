@@ -79,6 +79,15 @@ namespace Base
                 g.DrawRectangle(new Pen(b, unfilledLineSize), new Rectangle(Misc.f2i(r.X), Misc.f2i(r.Y), Misc.f2i(r.Width), Misc.f2i(r.Height)));
         }
 
+        /// <summary>
+        /// Draws a rectangle
+        /// </summary>
+        /// <param name="rectangle">The rectangle to be drawn</param>
+        /// <param name="color">The color of the rectangle</param>
+        /// <param name="filled">Whether the rectangle should be filled</param>
+        /// <param name="unfilledLineSize">The size of the lines used when not filling</param>
+        public void DrawRectangle(Rect rectangle, Color color, bool filled = true, int unfilledLineSize = 1) => DrawRectangle(rectangle.toRectangleF(), color, false, true, filled, unfilledLineSize);
+
         public void Clear() => g.Clear(backColor);
 
         public void Dispose()

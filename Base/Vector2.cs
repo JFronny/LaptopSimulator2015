@@ -129,6 +129,26 @@ namespace Base
         }
 
         /// <summary>
+        /// Create a new Vector
+        /// </summary>
+        /// <param name="from">Size to copy data from</param>
+        public Vector2(Size from)
+        {
+            X = from.Width;
+            Y = from.Height;
+        }
+
+        /// <summary>
+        /// Create a new Vector
+        /// </summary>
+        /// <param name="from">Size to copy data from</param>
+        public Vector2(SizeF from)
+        {
+            X = from.Width;
+            Y = from.Height;
+        }
+
+        /// <summary>
         /// Copy data from the Vector to a new one
         /// </summary>
         /// <param name="from">Vector to copy data from</param>
@@ -167,6 +187,37 @@ namespace Base
         /// <param name="other">The other Vector</param>
         /// <returns>Distance</returns>
         public double distanceFrom(Vector2 other) => Math.Sqrt(distanceFromSquared(other));
+        public double distanceToRectSquared(Rect rect)
+        {
+            if (X < rect.X)
+            {
+                if (Y < rect.Bottom)
+                    return distanceFromSquared(rect.bottomLeftPoint);
+                else if (Y > rect.Top)
+                    return distanceFromSquared(rect.topLeftPoint);
+                else
+                    return Math.Pow(rect.Left - X, 2);
+            }
+            else if (X > rect.X + rect.Width)
+            {
+                if (Y < rect.Bottom)
+                    return distanceFromSquared(rect.bottomRightPoint);
+                else if (Y > rect.Top)
+                    return distanceFromSquared(rect.topRightPoint);
+                else
+                    return Math.Pow(X - rect.Right, 2);
+            }
+            else
+            {
+                if (Y < rect.Bottom)
+                    return Math.Pow(rect.Bottom - Y, 2);
+                else if (Y > rect.Top)
+                    return Y - rect.Top;
+                else
+                    return 0d;
+            }
+        }
+        public double distanceToRect(Rect rect) => Math.Sqrt(distanceToRectSquared(rect));
         /// <summary>
         /// Provided for compatibility with some methods for other Vector implementations
         /// </summary>
@@ -229,12 +280,14 @@ namespace Base
         public static Vector2 operator -(Vector2 left, Vector2 right) => new Vector2(left.X - right.X, left.Y - right.Y).addData(left.Tag, left.bounds, left.bounds_wrap);
         public static Vector2 operator -(Vector2 left, Point right) => new Vector2(left.X - right.X, left.Y - right.Y).addData(left.Tag, left.bounds, left.bounds_wrap);
         public static Vector2 operator -(Vector2 left, PointF right) => new Vector2(left.X - right.X, left.Y - right.Y).addData(left.Tag, left.bounds, left.bounds_wrap);
+        public static Vector2 operator *(Vector2 left, double right) => new Vector2(left * new Vector2(right, right)).addData(left.Tag, left.bounds, left.bounds_wrap);
         public static Vector2 operator *(Vector2 left, Vector2 right) => new Vector2(left.X * right.X, left.Y * right.Y).addData(left.Tag, left.bounds, left.bounds_wrap);
-        public static Vector2 operator *(Vector2 left, Point right) => new Vector2(left.X * right.X, left.Y * right.Y);
-        public static Vector2 operator *(Vector2 left, PointF right) => new Vector2(left.X * right.X, left.Y * right.Y);
-        public static Vector2 operator /(Vector2 left, Vector2 right) => new Vector2(left.X / right.X, left.Y / right.Y);
-        public static Vector2 operator /(Vector2 left, Point right) => new Vector2(left.X / right.X, left.Y / right.Y);
-        public static Vector2 operator /(Vector2 left, PointF right) => new Vector2(left.X / right.X, left.Y / right.Y);
-        public static Vector2 operator ^(Vector2 left, double right) => new Vector2(Math.Pow(left.X, right), Math.Pow(left.Y, right));
+        public static Vector2 operator *(Vector2 left, Point right) => new Vector2(left.X * right.X, left.Y * right.Y).addData(left.Tag, left.bounds, left.bounds_wrap);
+        public static Vector2 operator *(Vector2 left, PointF right) => new Vector2(left.X * right.X, left.Y * right.Y).addData(left.Tag, left.bounds, left.bounds_wrap);
+        public static Vector2 operator /(Vector2 left, double right) => new Vector2(left / new Vector2(right, right)).addData(left.Tag, left.bounds, left.bounds_wrap);
+        public static Vector2 operator /(Vector2 left, Vector2 right) => new Vector2(left.X / right.X, left.Y / right.Y).addData(left.Tag, left.bounds, left.bounds_wrap);
+        public static Vector2 operator /(Vector2 left, Point right) => new Vector2(left.X / right.X, left.Y / right.Y).addData(left.Tag, left.bounds, left.bounds_wrap);
+        public static Vector2 operator /(Vector2 left, PointF right) => new Vector2(left.X / right.X, left.Y / right.Y).addData(left.Tag, left.bounds, left.bounds_wrap);
+        public static Vector2 operator ^(Vector2 left, double right) => new Vector2(Math.Pow(left.X, right), Math.Pow(left.Y, right)).addData(left.Tag, left.bounds, left.bounds_wrap);
     }
 }

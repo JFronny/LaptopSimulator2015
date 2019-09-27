@@ -173,46 +173,17 @@ namespace LaptopSimulator2015.Levels
             get {
                 for (int i = 0; i < platforms.Count; i++)
                 {
-                    RectangleF rect = plat2rect(i);
-                    if (player.X < rect.X)
-                    {
-                        if (player.Y < rect.Y)
-                            platforms[i].Tag = (player - new PointF(rect.X, rect.Y)).magnitude;
-                        else if (player.Y > rect.Y + rect.Height)
-                            platforms[i].Tag = (player - new PointF(rect.X, rect.Y + rect.Height)).magnitude;
-                        else
-                            platforms[i].Tag = rect.X - player.X;
-                    }
-                    else if (player.X > rect.X + rect.Width)
-                    {
-                        if (player.Y < rect.Y)
-                            platforms[i].Tag = (player - new PointF(rect.X + rect.Width, rect.Y)).magnitude;
-                        else if (player.Y > rect.Y + rect.Height)
-                            platforms[i].Tag = (player - new PointF(rect.X + rect.Width, rect.Y + rect.Height)).magnitude;
-                        else
-                            platforms[i].Tag = player.X - rect.X + rect.Width;
-                    }
-                    else
-                    {
-                        if (player.Y < rect.Y)
-                            platforms[i].Tag = rect.Y - player.Y;
-                        else if (player.Y > rect.Y + rect.Height)
-                            platforms[i].Tag = player.Y - (rect.Y + rect.Height);
-                        else
-                            platforms[i].Tag = 0d;
-                    }
-                    if (((double)platforms[i].Tag) <= 20 && RectangleF.Intersect(player2rect(), rect) != RectangleF.Empty && player.Y > platforms[i].Y + 8)
+                    Rect rect = new Rect(platforms[i], new Vector2(100, 10), true);
+                    if (player.distanceToRectSquared(rect) <= 20 && rect.doOverlap(new Rect(player, new Vector2(10, 10), true)) && platforms[i].Y + 11 > player.Y && player.Y > platforms[i].Y + 9)
                         return true;
                 }
                 return false;
             }
         }
-        RectangleF plat2rect(int platform) => new RectangleF((platforms[platform] - new Vector2(50, 5)).toPointF(), new SizeF(100, 10));
-        RectangleF player2rect() => new RectangleF((player - new Vector2(5, 5)).toPointF(), new SizeF(10, 10));
 
         public void draw(GraphicsWrapper g, Panel minigamePanel, Timer minigameTimer, uint minigameTime)
         {
-            g.DrawRectangle(new RectangleF(player.toPointF(), new SizeF(10, 10)), Color.Green);
+            g.DrawRectangle(new Rect(player, new Vector2(10, 10), true), Color.Green);
             if (lazorTime >= 0 && lazorTime <= 80)
             {
                 g.DrawRectangle(new RectangleF((float)lazor, minigamePanel.Height / 2, 2, minigamePanel.Height), Color.DarkGray);
@@ -220,7 +191,7 @@ namespace LaptopSimulator2015.Levels
                 g.DrawRectangle(new RectangleF((float)lazor, minigamePanel.Height - m / 2, 2, m), Color.Red);
             }
             for (int i = 0; i < platforms.Count; i++)
-                g.DrawRectangle(new RectangleF(platforms[i].toPointF(), new SizeF(100, 10)), Color.White);
+                g.DrawRectangle(new Rect(platforms[i], new Vector2(100, 10), true), Color.White);
         }
     }
 }
