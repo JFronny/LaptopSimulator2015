@@ -34,6 +34,8 @@ namespace LaptopSimulator2015
             Console.ForegroundColor = ConsoleColor.Green;
             Console.Clear();
             Console.WriteLine(strings.consoleStarting);
+            while (Settings.level == -1)
+                Application.Run(new Tutorial());
             Application.Run(new FakeDesktop());
             Console.WriteLine(strings.consoleQuit);
             Thread.Sleep(1000);

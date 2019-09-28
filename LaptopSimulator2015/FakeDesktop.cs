@@ -368,6 +368,7 @@ namespace LaptopSimulator2015
                 case 0:
                     CaptchaPanel_Click(sender, e);
                     levelWindowContents.SelectedIndex = 1;
+                    captchaBox.Select();
                     break;
                 case 1:
                     if (captchaBox.Text == (string)captchaBox.Tag)
