@@ -415,7 +415,7 @@ namespace LaptopSimulator2015
             this.levelWindowHeaderExit.TabIndex = 2;
             this.levelWindowHeaderExit.Text = "r";
             this.levelWindowHeaderExit.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.levelWindowHeaderExit.Click += new System.EventHandler(this.LevelWindowHeaderExit_Click);
+            this.levelWindowHeaderExit.Click += new System.EventHandler(this.CloseMinigame);
             // 
             // levelWindowIcon
             // 
@@ -474,7 +474,7 @@ namespace LaptopSimulator2015
             this.minigameClose.Text = "r";
             this.minigameClose.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.minigameClose.Visible = false;
-            this.minigameClose.Click += new System.EventHandler(this.MinigameClose_Click);
+            this.minigameClose.Click += new System.EventHandler(this.CloseMinigame);
             // 
             // minigameClockT
             // 

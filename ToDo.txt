@@ -1,5 +1,2 @@
-Centralize distance functions
 Fully implement new graphics on Goal and Level 3
-Handle Subtitle-Exception
-https://devblogs.nvidia.com/hybridizer-csharp/ (?)
 OS Install as Tutorial

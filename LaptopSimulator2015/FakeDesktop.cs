@@ -219,13 +219,17 @@ namespace LaptopSimulator2015
                     string[] at = ((Goal)levels[i]).availableText;
                     new Thread(() =>
                     {
-                        Invoke((MethodInvoker)delegate () { winDesktop.Enabled = false; });
-                        playDialog(at).Join();
-                        Invoke((MethodInvoker)delegate ()
+                        try
                         {
-                            winDesktop.Enabled = true;
-                            updateIconVisibility(true);
-                        });
+                            Invoke((MethodInvoker)delegate () { winDesktop.Enabled = false; });
+                            playDialog(at).Join();
+                            Invoke((MethodInvoker)delegate ()
+                            {
+                                winDesktop.Enabled = true;
+                                updateIconVisibility(true);
+                            });
+                        }
+                        catch (InvalidOperationException) { }
                     }).Start();
                 }
                 levels[i].desktopIcon.Visible = levels[i].availableAfter <= Settings.level;
@@ -239,12 +243,16 @@ namespace LaptopSimulator2015
         {
             var tmp = new Thread(() =>
             {
-                for (int i = 0; i < lines.Length; i++)
+                try
                 {
-                    Invoke((MethodInvoker)delegate () { subsLabel.Text = lines[i]; });
-                    Thread.Sleep(2000);
+                    for (int i = 0; i < lines.Length; i++)
+                    {
+                        Invoke((MethodInvoker)delegate () { subsLabel.Text = lines[i]; });
+                        Thread.Sleep(2000);
+                    }
+                    Invoke((MethodInvoker)delegate () { subsLabel.Text = ""; });
                 }
-                Invoke((MethodInvoker)delegate () { subsLabel.Text = ""; });
+                catch (InvalidOperationException) { }
             });
             tmp.Start();
             return tmp;
@@ -302,7 +310,7 @@ namespace LaptopSimulator2015
                 else
                 {
                     if (levelWindow.Visible)
-                        LevelWindowHeaderExit_Click(sender, new EventArgs());
+                        Misc.closeGameWindow.Invoke();
                 }
             }
         }
@@ -386,7 +394,7 @@ namespace LaptopSimulator2015
                     }
                     break;
                 case 2:
-                    LevelWindowHeaderExit_Click(sender, e);
+                    Misc.closeGameWindow.Invoke();
                     if (levels[levelInd].availableAfter >= Settings.level)
                     {
                         incrementLevel();
@@ -467,8 +475,7 @@ namespace LaptopSimulator2015
             }
         }
 
-        private void LevelWindowHeaderExit_Click(object sender, EventArgs e) => Misc.closeGameWindow.Invoke();
-        private void MinigameClose_Click(object sender, EventArgs e) => Misc.closeGameWindow.Invoke();
+        private void CloseMinigame(object sender, EventArgs e) => Misc.closeGameWindow.Invoke();
 
         #region Minigame
         uint minigameTime = 0;
