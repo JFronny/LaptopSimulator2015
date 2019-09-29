@@ -117,6 +117,9 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="cancel" xml:space="preserve">
+    <value>Abbrechen</value>
+  </data>
   <data name="captchaLetters" xml:space="preserve">
     <value>ABCDEFGHIJKLMNPQRSTUVWXYZ123456789</value>
   </data>
@@ -127,22 +130,31 @@
     <value>Drücken Sie eine beliebige Taste.</value>
   </data>
   <data name="consoleQuit" xml:space="preserve">
-    <value>B E E N D E T . . .</value>
+    <value>VM wird heruntergefahren...</value>
   </data>
   <data name="consoleStarting" xml:space="preserve">
-    <value>S T A R T E T . . .</value>
+    <value>VM wird gestartet...</value>
   </data>
   <data name="continue" xml:space="preserve">
     <value>Fortfahren</value>
   </data>
-  <data name="fakeDesktopTitle1" xml:space="preserve">
+  <data name="exit" xml:space="preserve">
+    <value>Beenden</value>
+  </data>
+  <data name="fakeDesktopTitle" xml:space="preserve">
     <value>Falscher Desktop</value>
+  </data>
+  <data name="install" xml:space="preserve">
+    <value>Installieren</value>
   </data>
   <data name="langWarning" xml:space="preserve">
     <value>WARNUNG: Wir empfehlen, das Spiel nach der Änderung neu zu starten. Neu starten?</value>
   </data>
   <data name="lvPref" xml:space="preserve">
     <value>Level</value>
+  </data>
+  <data name="optionsWindowCredits" xml:space="preserve">
+    <value>Credits</value>
   </data>
   <data name="optionsWindowLSD" xml:space="preserve">
     <value>LSD-Modus</value>
@@ -174,14 +186,17 @@
   <data name="resetWarning2" xml:space="preserve">
     <value>Bist du dir wirklich sicher, dass du deinen Fortschritt zurücksetzten möchtest? Dies ist deine letzte Möglichkeit, dies abzubrechen!</value>
   </data>
-  <data name="winMenuExit1" xml:space="preserve">
-    <value>Beenden</value>
+  <data name="skip" xml:space="preserve">
+    <value>Skip</value>
+  </data>
+  <data name="start" xml:space="preserve">
+    <value>Start</value>
+  </data>
+  <data name="tutorialFinish" xml:space="preserve">
+    <value>Vielen Dank, dass sie unser OS installiert haben. Bitte starten sie ihren Rechner neu, um die Installation fertigzustellen</value>
   </data>
   <data name="winMenuExit2" xml:space="preserve">
     <value>Bist du sicher?</value>
-  </data>
-  <data name="winMenuStart" xml:space="preserve">
-    <value>Start</value>
   </data>
   <data name="winMenuText" xml:space="preserve">
     <value>Hallo und Willkommen in diesem Spiel. Mein Name ist CreepyCrafter24. (Im Übrigen: Dieses Spiel entstand ursprünglich aus einer Unterhaltung mit einem Klassenkameraden. Lustig, oder?)</value>

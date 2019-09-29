@@ -70,6 +70,15 @@ namespace LaptopSimulator2015 {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cancel.
+        /// </summary>
+        internal static string cancel {
+            get {
+                return ResourceManager.GetString("cancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to ABCDEFGHIJKLMNPQRSTUVWXYZ123456789.
         /// </summary>
         internal static string captchaLetters {
@@ -97,7 +106,7 @@ namespace LaptopSimulator2015 {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to E X I T E D ..
+        ///   Looks up a localized string similar to Shutting down VM....
         /// </summary>
         internal static string consoleQuit {
             get {
@@ -106,11 +115,20 @@ namespace LaptopSimulator2015 {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to S T A R T I N G . . ..
+        ///   Looks up a localized string similar to Starting up VM....
         /// </summary>
         internal static string consoleStarting {
             get {
                 return ResourceManager.GetString("consoleStarting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Exit.
+        /// </summary>
+        internal static string exit {
+            get {
+                return ResourceManager.GetString("exit", resourceCulture);
             }
         }
         
@@ -120,6 +138,15 @@ namespace LaptopSimulator2015 {
         internal static string fakeDesktopTitle {
             get {
                 return ResourceManager.GetString("fakeDesktopTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Install.
+        /// </summary>
+        internal static string install {
+            get {
+                return ResourceManager.GetString("install", resourceCulture);
             }
         }
         
@@ -138,6 +165,15 @@ namespace LaptopSimulator2015 {
         internal static string lvPref {
             get {
                 return ResourceManager.GetString("lvPref", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Credits.
+        /// </summary>
+        internal static string optionsWindowCredits {
+            get {
+                return ResourceManager.GetString("optionsWindowCredits", resourceCulture);
             }
         }
         
@@ -232,11 +268,29 @@ namespace LaptopSimulator2015 {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Exit.
+        ///   Looks up a localized string similar to Skip.
         /// </summary>
-        internal static string winMenuExit1 {
+        internal static string skip {
             get {
-                return ResourceManager.GetString("winMenuExit1", resourceCulture);
+                return ResourceManager.GetString("skip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Start.
+        /// </summary>
+        internal static string start {
+            get {
+                return ResourceManager.GetString("start", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Thank you for installing our OS. Please reboot your system to complete the installation!.
+        /// </summary>
+        internal static string tutorialFinish {
+            get {
+                return ResourceManager.GetString("tutorialFinish", resourceCulture);
             }
         }
         
@@ -246,15 +300,6 @@ namespace LaptopSimulator2015 {
         internal static string winMenuExit2 {
             get {
                 return ResourceManager.GetString("winMenuExit2", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Start.
-        /// </summary>
-        internal static string winMenuStart {
-            get {
-                return ResourceManager.GetString("winMenuStart", resourceCulture);
             }
         }
         

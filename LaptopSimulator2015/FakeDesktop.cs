@@ -35,7 +35,7 @@ namespace LaptopSimulator2015
                 _mode = value;
                 winMenuStart.Enabled = _mode == Mode.mainMenu;
                 winMenuStart.Visible = _mode == Mode.mainMenu;
-                winMenuExit.Text = strings.winMenuExit1;
+                winMenuExit.Text = strings.exit;
                 winMenuPanel.Visible = false | _mode == Mode.mainMenu;
                 winDesktop.Enabled = _mode == Mode.game;
                 levelWindowText1.Text = "";
@@ -80,11 +80,9 @@ namespace LaptopSimulator2015
             toolTip.SetToolTip(options_2, strings.optionsWindowTitle);
 #if DEBUG
             devWindowOpen.Visible = true;
-            optionsWindowLang.Size = new Size(88, 21);
+            optionsWindowLang.Size = new Size(93, 21);
 #endif
-            levelWindowContents.ItemSize = new Size(0, 1);
             optionsWindowLang.Text = Settings.lang.Name;
-            Thread.CurrentThread.CurrentUICulture = Settings.lang;
             optionsWindowWam.Value = Settings.wam;
             int NewVolume = ((ushort.MaxValue / 10) * Settings.wam);
             uint NewVolumeAllChannels = ((uint)NewVolume & 0x0000ffff) | ((uint)NewVolume << 16);
@@ -93,8 +91,8 @@ namespace LaptopSimulator2015
             optionsWindowLSD.Checked = Settings.lsd;
             optionsWindowSubs.Checked = Settings.subs;
             Text = strings.fakeDesktopTitle;
-            winMenuExit.Text = strings.winMenuExit1;
-            winMenuStart.Text = strings.winMenuStart;
+            winMenuExit.Text = strings.exit;
+            winMenuStart.Text = strings.start;
             winMenuText.Text = strings.winMenuText;
             levelWindowTitle.Text = "";
             winTimeLabel.Text = DateTime.Now.ToString("hh:mm:ss", Settings.lang);
@@ -200,15 +198,16 @@ namespace LaptopSimulator2015
                 levels[i].desktopIcon.Controls.Add(tmp1);
                 winDesktop.Controls.Add(levels[i].desktopIcon);
             }
+            GC.Collect();
         }
 
         private void FakeDesktop_Load(object sender, EventArgs e)
         {
             mode = Mode.mainMenu;
-            Program.splash.Close();
-            GC.Collect();
             tmp__mode_uiv = true;
         }
+
+        private void FakeDesktop_Shown(object sender, EventArgs e) => Program.splash?.Hide();
 
         void updateIconVisibility(bool ignoreSub = false)
         {
@@ -320,7 +319,7 @@ namespace LaptopSimulator2015
         private void WinKey_Click(object sender, EventArgs e)
         {
             winMenuPanel.Visible = mode == Mode.mainMenu | !winMenuPanel.Visible;
-            winMenuExit.Text = strings.winMenuExit1;
+            winMenuExit.Text = strings.exit;
         }
 
         private void WinMenuExit_Click(object sender, EventArgs e)
@@ -657,6 +656,15 @@ namespace LaptopSimulator2015
             }
         }
 
+        private void optionsWindowCredit_Click(object sender, EventArgs e)
+        {
+            string tmp = Path.GetTempFileName();
+            File.Move(tmp, Path.ChangeExtension(tmp, "txt"));
+            tmp = Path.ChangeExtension(tmp, "txt");
+            File.WriteAllLines(tmp, levels.SelectMany(s => s.credits).ToArray());
+            Process.Start(tmp).Exited += (object sender1, EventArgs e1) => { File.Delete(tmp); };
+        }
+
         bool devWindowMoving = false;
         Point devWindowDiff = Point.Empty;
 
@@ -693,14 +701,17 @@ namespace LaptopSimulator2015
             }
         }
 
-        private void optionsWindowCredit_Click(object sender, EventArgs e)
-        {
-            string tmp = Path.GetTempFileName();
-            File.Move(tmp, Path.ChangeExtension(tmp, "txt"));
-            tmp = Path.ChangeExtension(tmp, "txt");
-            File.WriteAllLines(tmp, levels.SelectMany(s => s.credits).ToArray());
-            Process.Start(tmp).Exited += (object sender1, EventArgs e1) => { File.Delete(tmp); };
-        }
+        private void devWindowOverlay_Click(object sender, EventArgs e) => _ = SetWindowPos(GetConsoleWindow(), HWND_TOPMOST, 0, 0, 0, 0, TOPMOST_FLAGS);
+
+        [DllImport("kernel32.dll")]
+        static extern IntPtr GetConsoleWindow();
+        static readonly IntPtr HWND_TOPMOST = new IntPtr(-1);
+        const UInt32 SWP_NOSIZE = 0x0001;
+        const UInt32 SWP_NOMOVE = 0x0002;
+        const UInt32 TOPMOST_FLAGS = SWP_NOMOVE | SWP_NOSIZE;
+        [DllImport("user32.dll")]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        static extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int X, int Y, int cx, int cy, uint uFlags);
         #endregion
     }
 }

@@ -117,6 +117,9 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
   <data name="captchaLetters" xml:space="preserve">
     <value>ABCDEFGHIJKLMNPQRSTUVWXYZ123456789</value>
   </data>
@@ -127,22 +130,31 @@
     <value>Press any Key to quit.</value>
   </data>
   <data name="consoleQuit" xml:space="preserve">
-    <value>E X I T E D .</value>
+    <value>Shutting down VM...</value>
   </data>
   <data name="consoleStarting" xml:space="preserve">
-    <value>S T A R T I N G . . .</value>
+    <value>Starting up VM...</value>
   </data>
   <data name="continue" xml:space="preserve">
     <value>Continue</value>
   </data>
+  <data name="exit" xml:space="preserve">
+    <value>Exit</value>
+  </data>
   <data name="fakeDesktopTitle" xml:space="preserve">
     <value>Fake Desktop</value>
+  </data>
+  <data name="install" xml:space="preserve">
+    <value>Install</value>
   </data>
   <data name="langWarning" xml:space="preserve">
     <value>WARNING: We recommend you restart your game to apply these changes. Restart?</value>
   </data>
   <data name="lvPref" xml:space="preserve">
     <value>Level</value>
+  </data>
+  <data name="optionsWindowCredits" xml:space="preserve">
+    <value>Credits</value>
   </data>
   <data name="optionsWindowLSD" xml:space="preserve">
     <value>LSD Mode</value>
@@ -174,14 +186,17 @@
   <data name="resetWarning2" xml:space="preserve">
     <value>Are you absolutly sure you want to reset you progress? This is your last chance to turn back!</value>
   </data>
-  <data name="winMenuExit1" xml:space="preserve">
-    <value>Exit</value>
+  <data name="skip" xml:space="preserve">
+    <value>Skip</value>
+  </data>
+  <data name="start" xml:space="preserve">
+    <value>Start</value>
+  </data>
+  <data name="tutorialFinish" xml:space="preserve">
+    <value>Thank you for installing our OS. Please reboot your system to complete the installation!</value>
   </data>
   <data name="winMenuExit2" xml:space="preserve">
     <value>Are you sure?</value>
-  </data>
-  <data name="winMenuStart" xml:space="preserve">
-    <value>Start</value>
   </data>
   <data name="winMenuText" xml:space="preserve">
     <value>Hello and welcome to my game, I hope you'll like it. My name is CreepyCrafter24, btw. (FunFact: This game was originally created as the result of a conversation with a classmate)</value>

@@ -1,4 +1,5 @@
-﻿using LaptopSimulator2015.Properties;
+﻿using CC_Functions.W32;
+using LaptopSimulator2015.Properties;
 using System;
 using System.Drawing;
 using System.IO;
@@ -19,9 +20,11 @@ namespace LaptopSimulator2015
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Settings.Load();
+            Thread.CurrentThread.CurrentUICulture = Settings.lang;
             Console.Title = "LaptopSimulator2015";
             splash = new Splash();
             splash.Show();
+            Wnd32.fromForm(splash).MakeOverlay();
             Thread.Sleep(2000);
 #if !DEBUG
             FileStream filestream = new FileStream(".log", FileMode.Create);
@@ -34,8 +37,9 @@ namespace LaptopSimulator2015
             Console.ForegroundColor = ConsoleColor.Green;
             Console.Clear();
             Console.WriteLine(strings.consoleStarting);
-            while (Settings.level == -1)
-                Application.Run(new Tutorial());
+            if (Settings.level == -1)
+                while (Settings.level == -1)
+                    Application.Run(new Tutorial());
             Application.Run(new FakeDesktop());
             Console.WriteLine(strings.consoleQuit);
             Thread.Sleep(1000);

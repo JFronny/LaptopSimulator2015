@@ -86,6 +86,9 @@
     <Compile Include="Tutorial.Designer.cs">
       <DependentUpon>Tutorial.cs</DependentUpon>
     </Compile>
+    <Compile Include="WizardTab.cs">
+      <SubType>Component</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -120,6 +123,10 @@
     <None Include="Resources\pcoptimizerpro.jpeg" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\CC-Functions\W32\W32.csproj">
+      <Project>{23de4ae0-5075-4ccc-8440-4d131ca0fbba}</Project>
+      <Name>W32</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Base\Base.csproj">
       <Project>{9a9561a7-dd5f-43a5-a3f5-a95f35da204d}</Project>
       <Name>Base</Name>
