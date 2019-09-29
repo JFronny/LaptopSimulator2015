@@ -62,6 +62,7 @@ namespace LaptopSimulator2015.Levels
 
         public int installerProgressSteps => 500;
         public Color backColor => Color.Black;
+        public string[] credits => new string[] { "Level3 Icon made by NVidia" };
 
         Vector2 center;
         Vector2 cannon;

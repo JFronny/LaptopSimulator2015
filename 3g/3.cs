@@ -76,6 +76,8 @@ namespace LaptopSimulator2015.Goals
         }
 
         public Color backColor => Color.Black;
+        public string[] credits => new string[]{ "Testexetrisathlon Icon made by Freepik from www.flaticon.com" };
+
         public static int[,] grid = new int[23, 10];
         public static int[,] droppedtetrominoeLocationGrid = new int[23, 10];
         public static bool isDropped = false;

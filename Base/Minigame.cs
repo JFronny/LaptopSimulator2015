@@ -20,6 +20,10 @@ namespace LaptopSimulator2015
         /// </summary>
         Image icon { get; }
         /// <summary>
+        /// Added to credits, to be used for crediting authours of used icons etc
+        /// </summary>
+        string[] credits { get; }
+        /// <summary>
         /// Level on which the Minigame becomes visible
         /// </summary>
         int availableAfter { get; }

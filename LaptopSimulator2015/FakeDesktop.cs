@@ -676,8 +676,7 @@ namespace LaptopSimulator2015
         private void DevWindowHeaderExit_Click(object sender, EventArgs e) => devWindow.Visible = false;
         private void DevWindowOpen_Click(object sender, EventArgs e) => devWindow.Visible = true;
         private void DevWindowDllList_SelectedIndexChanged(object sender, EventArgs e) => _ = Process.Start("explorer", "/select," + (((string)devWindowDllList.SelectedItem).Contains(" ") ? "\"" + (string)devWindowDllList.SelectedItem + "\"" : (string)devWindowDllList.SelectedItem));
-        #endregion
-
+        
         private void DevWindowLevelList_SelectedIndexChanged(object sender, EventArgs e)
         {
             Settings.level = levels[devWindowLevelList.SelectedIndex].availableAfter;
@@ -693,5 +692,15 @@ namespace LaptopSimulator2015
                 LevelWindowC1_Click(sender, e);
             }
         }
+
+        private void optionsWindowCredit_Click(object sender, EventArgs e)
+        {
+            string tmp = Path.GetTempFileName();
+            File.Move(tmp, Path.ChangeExtension(tmp, "txt"));
+            tmp = Path.ChangeExtension(tmp, "txt");
+            File.WriteAllLines(tmp, levels.SelectMany(s => s.credits).ToArray());
+            Process.Start(tmp).Exited += (object sender1, EventArgs e1) => { File.Delete(tmp); };
+        }
+        #endregion
     }
 }
