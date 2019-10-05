@@ -78,3 +78,4 @@ if %full%==11 (
 :exit
 echo Done
 timeout /t 2 /nobreak >nul
+exit
