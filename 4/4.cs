@@ -56,6 +56,7 @@ namespace LaptopSimulator2015.Levels
         public Panel desktopIcon { get; set; }
         public int installerProgressSteps => 500;
         public Color backColor => Color.Black;
+        public bool isLowQuality => false;
         public string[] credits => new string[] { "Level4 Icon made by Microsoft" };
 
         Random rnd;

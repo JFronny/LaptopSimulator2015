@@ -60,6 +60,8 @@ namespace LaptopSimulator2015.Levels
         public int installerProgressSteps => 500;
         public Color backColor => Color.Black;
         public string[] credits => new string[] { "Level2 Icon made by Intel" };
+        public bool isLowQuality => false;
+
         List<Vector2> enemies;
         Vector2 player;
         int lives;

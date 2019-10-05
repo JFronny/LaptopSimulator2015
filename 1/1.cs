@@ -59,6 +59,7 @@ namespace LaptopSimulator2015.Levels
         public int installerProgressSteps => 500;
         public Color backColor => Color.Black;
         public string[] credits => new string[] { "Level1 Icon made by Oliver Scholtz from www.iconfinder.com" };
+        public bool isLowQuality => false;
 
         List<Vector2> enemies;
         List<Vector2> bullets;

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Base
 {
-    public class GraphicsWrapper : IDisposable
+    public sealed class GraphicsWrapper : IDisposable
     {
         BufferedGraphics _g;
         Color backColor;
@@ -127,7 +127,7 @@ namespace Base
         /// <summary>
         /// Render and dispose
         /// </summary>
-        public virtual void Dispose()
+        public void Dispose()
         {
             g.Flush();
             _g.Render();

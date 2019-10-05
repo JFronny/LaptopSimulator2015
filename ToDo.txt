@@ -1,1 +1,2 @@
-Fully implement new graphics on Goal and Level 3
+Implement drawing ellipses (Level 3)
+Fix Physics weirdness in Level 3

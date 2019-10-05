@@ -15,6 +15,7 @@ namespace LaptopSimulator2015
     class Program
     {
         public static Splash splash;
+        [STAThread]
         static void Main(string[] args)
         {
             Application.EnableVisualStyles();

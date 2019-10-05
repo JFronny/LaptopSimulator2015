@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CC_Functions.W32;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -9,10 +10,8 @@ using System.Windows.Input;
 
 namespace Base
 {
-    public class Input
+    public static class Input
     {
-        [DllImport("user32.dll", CharSet = CharSet.Auto, ExactSpelling = true)]
-        private static extern short GetKeyState(int keyCode);
         /// <summary>
         /// Check whether the Key is pressed
         /// </summary>
@@ -22,17 +21,11 @@ namespace Base
         {
             try
             {
-                int state = 0;
-                short retVal = GetKeyState((int)key);
-                if ((retVal & 0x8000) == 0x8000)
-                    state |= 1;
-                if ((retVal & 1) == 1)
-                    state |= 2;
-                return 1 == (state & 1);
+                return KeyboardReader.IsKeyDown(key);
             }
-            catch (Exception e1)
+            catch (Exception e)
             {
-                Console.WriteLine("Invader: IsKeyDown failed:\r\n" + e1.ToString());
+                Console.WriteLine("Invader: IsKeyDown failed:\r\n" + e.ToString());
                 return false;
             }
         }

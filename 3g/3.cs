@@ -77,6 +77,7 @@ namespace LaptopSimulator2015.Goals
 
         public Color backColor => Color.Black;
         public string[] credits => new string[]{ "Testexetrisathlon Icon made by Freepik from www.flaticon.com" };
+        public bool isLowQuality => true;
 
         public static int[,] grid = new int[23, 10];
         public static int[,] droppedtetrominoeLocationGrid = new int[23, 10];
@@ -203,11 +204,11 @@ namespace LaptopSimulator2015.Goals
                     if (grid[y, x] == 1 | droppedtetrominoeLocationGrid[y, x] == 1)
                         g.DrawRectangle(new RectangleF(x * 10, y * 10, 10, 10), Color.White, false, false);
                 }
-                g.g.DrawLine(new Pen(Color.DarkGray), new Point(0, (y + 1) * 10), new Point(10 * 10, (y + 1) * 10));
+                g.DrawLine(new Point(0, (y + 1) * 10), new Point(10 * 10, (y + 1) * 10), Color.DarkGray, 1, false);
             }
             for (int x = 0; x < 10; x++)
             {
-                g.g.DrawLine(new Pen(Color.DarkGray), new Point((x + 1) * 10, 0), new Point((x + 1) * 10, 23 * 10));
+                g.DrawLine(new Point((x + 1) * 10, 0), new Point((x + 1) * 10, 23 * 10), Color.DarkGray, 1, false);
             }
             g.DrawSizedString("Level " + level, 10, new PointF(150, 10), Brushes.White, false);
             g.DrawSizedString("Score " + score, 10, new PointF(150, 30), Brushes.White, false);

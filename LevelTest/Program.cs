@@ -32,7 +32,7 @@ namespace LevelTest
                 }
                 else
                 {
-                    string[] tmp = Directory.EnumerateFiles(Directory.GetCurrentDirectory(), "*.dll", SearchOption.AllDirectories).Where(s => Path.GetFileName(s) != "Base.dll").ToArray();
+                    string[] tmp = Directory.EnumerateFiles(Directory.GetCurrentDirectory(), "*.dll", SearchOption.AllDirectories).Where(s => Path.GetFileName(s) != "Base.dll" && Path.GetFileName(s) != "CC-Functions.W32.dll").ToArray();
                     if (tmp.Length == 0)
                         using (FolderBrowserDialog openFileDialog = new FolderBrowserDialog())
                         {
@@ -42,7 +42,7 @@ namespace LevelTest
                                 throw new Exception("Please select a folder");
                         }
                 }
-                Minigame[] levels = Directory.EnumerateFiles(Directory.GetCurrentDirectory(), "*.dll", SearchOption.AllDirectories).Where(s => Path.GetFileName(s) != "Base.dll")
+                Minigame[] levels = Directory.EnumerateFiles(Directory.GetCurrentDirectory(), "*.dll", SearchOption.AllDirectories).Where(s => Path.GetFileName(s) != "Base.dll" && Path.GetFileName(s) != "CC-Functions.W32.dll")
                     .Select(s => Assembly.LoadFrom(s)).SelectMany(s => s.GetTypes()).Distinct()
                     .Where(p => typeof(Minigame).IsAssignableFrom(p)).Distinct().Except(new Type[] { typeof(Minigame), typeof(Level), typeof(Goal) })
                     .Select(s => (Minigame)Activator.CreateInstance(s)).OrderBy(lv => lv.availableAfter).ToArray();

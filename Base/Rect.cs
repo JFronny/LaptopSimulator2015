@@ -12,16 +12,10 @@ namespace Base
         /// <summary>
         /// Create a rect from the provided data
         /// </summary>
-        /// <param name="Location">Bottom-left point</param>
-        /// <param name="Size">Amount to extend top-right</param>
-        public Rect(Vector2 Location, Vector2 Size, bool centered = false)
-        {
-            this.Location = Location ?? throw new ArgumentNullException(nameof(Location));
-            this.Size = Size ?? throw new ArgumentNullException(nameof(Size));
-            this.centered = centered;
-            if (this.centered)
-                this.Location -= this.Size / 2;
-        }
+        /// <param name="Location">Position</param>
+        /// <param name="Size">Rect's size</param>
+        /// <param name="centered">Whether the Rect should be created top-right or around the Location</param>
+        public Rect(Vector2 Location, Vector2 Size, bool centered = false) : this(Location.X, Location.Y, Size.X, Size.Y, centered) { }
 
         /// <summary>
         /// Create a rect from the provided data
@@ -30,13 +24,18 @@ namespace Base
         /// <param name="Y">Y in world-coordinates</param>
         /// <param name="Width">Width</param>
         /// <param name="Height">Height</param>
+        /// <param name="centered">Whether the Rect should be created top-right or around the Location</param>
         public Rect(double X, double Y, double Width, double Height, bool centered = false)
         {
             Location = new Vector2(X, Y);
             Size = new Vector2(Width, Height);
             this.centered = centered;
             if (this.centered)
-                Location -= Size / 2;
+            {
+                //Location -= Size / 2;
+                Location.X -= Size.X / 2;
+                Location.Y += Size.Y / 2;
+            }
         }
 
         /// <summary>
@@ -47,17 +46,18 @@ namespace Base
         {
             Location = rect.Location;
             Size = rect.Size;
+            centered = rect.centered;
         }
-        public Rect(Rectangle rect)
-        {
-            Location = new Vector2(rect.Location);
-            Size = new Vector2(rect.Size);
-        }
-        public Rect(RectangleF rect)
-        {
-            Location = new Vector2(rect.Location);
-            Size = new Vector2(rect.Size);
-        }
+        /// <summary>
+        /// Copies the Rect's data
+        /// </summary>
+        /// <param name="rect"></param>
+        public Rect(Rectangle rect) : this(rect.X, rect.Y, rect.Width, rect.Height, false) { }
+        /// <summary>
+        /// Copies the Rect's data
+        /// </summary>
+        /// <param name="rect"></param>
+        public Rect(RectangleF rect) : this(rect.X, rect.Y, rect.Width, rect.Height, false) { }
 
         public double X
         {

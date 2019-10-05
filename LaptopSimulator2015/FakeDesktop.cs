@@ -66,10 +66,10 @@ namespace LaptopSimulator2015
         bool tmp__mode_uiv = false;
 
         [DllImport("winmm.dll")]
-        public static extern int waveOutGetVolume(IntPtr hwo, out uint dwVolume);
+        static extern int waveOutGetVolume(IntPtr hwo, out uint dwVolume);
 
         [DllImport("winmm.dll")]
-        public static extern int waveOutSetVolume(IntPtr hwo, uint dwVolume);
+        static extern int waveOutSetVolume(IntPtr hwo, uint dwVolume);
 
         public FakeDesktop()
         {
@@ -482,7 +482,7 @@ namespace LaptopSimulator2015
         uint minigamePrevTime = 0;
         private void InvadersPanel_Paint(object sender, PaintEventArgs e)
         {
-            using (GraphicsWrapper w = new GraphicsWrapper(e.Graphics, levels[levelInd].backColor, new Rectangle(Point.Empty, minigamePanel.Size)))
+            using (GraphicsWrapper w = new GraphicsWrapper(e.Graphics, levels[levelInd].backColor, new Rectangle(Point.Empty, minigamePanel.Size), levels[levelInd].isLowQuality))
             {
                 w.Clear();
                 levels[levelInd].draw(w, minigamePanel, minigameClockT, minigameTime);
@@ -658,11 +658,14 @@ namespace LaptopSimulator2015
 
         private void optionsWindowCredit_Click(object sender, EventArgs e)
         {
-            string tmp = Path.GetTempFileName();
-            File.Move(tmp, Path.ChangeExtension(tmp, "txt"));
-            tmp = Path.ChangeExtension(tmp, "txt");
-            File.WriteAllLines(tmp, levels.SelectMany(s => s.credits).ToArray());
-            Process.Start(tmp).Exited += (object sender1, EventArgs e1) => { File.Delete(tmp); };
+            new Thread(() => {
+                string tmp = Path.GetTempFileName();
+                File.Move(tmp, Path.ChangeExtension(tmp, "txt"));
+                tmp = Path.ChangeExtension(tmp, "txt");
+                File.WriteAllLines(tmp, levels.SelectMany(s => s.credits).ToArray());
+                Process.Start(tmp).WaitForExit();
+                File.Delete(tmp);
+            }).Start();
         }
 
         bool devWindowMoving = false;
@@ -706,9 +709,9 @@ namespace LaptopSimulator2015
         [DllImport("kernel32.dll")]
         static extern IntPtr GetConsoleWindow();
         static readonly IntPtr HWND_TOPMOST = new IntPtr(-1);
-        const UInt32 SWP_NOSIZE = 0x0001;
-        const UInt32 SWP_NOMOVE = 0x0002;
-        const UInt32 TOPMOST_FLAGS = SWP_NOMOVE | SWP_NOSIZE;
+        const uint SWP_NOSIZE = 0x0001;
+        const uint SWP_NOMOVE = 0x0002;
+        const uint TOPMOST_FLAGS = SWP_NOMOVE | SWP_NOSIZE;
         [DllImport("user32.dll")]
         [return: MarshalAs(UnmanagedType.Bool)]
         static extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int X, int Y, int cx, int cy, uint uFlags);

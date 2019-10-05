@@ -63,6 +63,7 @@ namespace LaptopSimulator2015.Levels
         public int installerProgressSteps => 500;
         public Color backColor => Color.Black;
         public string[] credits => new string[] { "Level3 Icon made by NVidia" };
+        public bool isLowQuality => false;
 
         Vector2 center;
         Vector2 cannon;
@@ -97,13 +98,14 @@ namespace LaptopSimulator2015.Levels
                 {
                     firing = false;
                     List<Vector2> targetsToRemove = new List<Vector2>();
+                    Rect tr = new Rect(targ, new Vector2(power, power), true);
                     for (int i = 0; i < targets.Count; i++)
                     {
-                        if (targets[i].distanceFromSquared(targ) <= Math.Pow(power + 10, 2))
+                        if (targets[i].distanceToRectSquared(tr) <= 400)
                             targetsToRemove.Add(targets[i]);
                     }
                     targets = targets.Except(targetsToRemove.Distinct()).Distinct().ToList();
-                    g.g.FillRectangle(new SolidBrush(Color.White), new Rectangle(Misc.d2i(targ.X - power / 2), Misc.d2i(targ.Y - power / 2), Misc.d2i(power), Misc.d2i(power)));
+                    g.DrawRectangle(tr, Color.White);
                     power = 10;
                 }
                 targ = new Vector2(center);
@@ -113,9 +115,9 @@ namespace LaptopSimulator2015.Levels
                 if (Input.Down)
                     cannonL -= 100 / power;
                 if (Input.Right)
-                    playerRot += 80 / power;
-                if (Input.Left)
                     playerRot -= 80 / power;
+                if (Input.Left)
+                    playerRot += 80 / power;
                 while (playerRot > 360)
                     playerRot -= 360;
                 while (playerRot < 0)
@@ -147,28 +149,28 @@ namespace LaptopSimulator2015.Levels
 
         public void draw(GraphicsWrapper g, Panel minigamePanel, Timer minigameTimer, uint minigameTime)
         {
-            //g.g.FillRectangle(new SolidBrush(Color.Green), player);
-            g.DrawRectangle(new RectangleF(center.toPointF(), new SizeF(10, 10)), Color.Green, transform:false);
-            g.g.DrawLine(new Pen(new SolidBrush(Color.Green), 5), center.toPoint(), cannon.toPoint());
+            g.DrawRectangle(new RectangleF(center.toPointF(), new SizeF(10, 10)), Color.Green);
+            g.DrawLine(center, cannon, Color.Green, 5);
             for (int i = 0; i < targets.Count; i++)
             {
-                g.g.DrawEllipse(new Pen(new SolidBrush(Color.Red), 6), new RectangleF(Misc.d2f(targets[i].X - 10), Misc.d2f(targets[i].Y - 10), 20, 20));
-                g.g.DrawEllipse(new Pen(new SolidBrush(Color.White), 6), new RectangleF(Misc.d2f(targets[i].X - 7), Misc.d2f(targets[i].Y - 7), 14, 14));
-                g.g.FillEllipse(new SolidBrush(Color.Red), new RectangleF(Misc.d2f(targets[i].X - 3), Misc.d2f(targets[i].Y - 3), 6, 6));
-                g.g.DrawLine(new Pen(new SolidBrush(Color.Gray), 3), Misc.d2f(targets[i].X - 13), Misc.d2f(targets[i].Y - 15), Misc.d2f(targets[i].X + 13), Misc.d2f(targets[i].Y - 15));
-                g.g.DrawLine(new Pen(new SolidBrush(Color.Red), 3), Misc.d2f(targets[i].X - 13), Misc.d2f(targets[i].Y - 15), Misc.d2f(targets[i].X + ((((double)targets[i].Tag) * 0.2) - 12.9) + 0.1), Misc.d2f(targets[i].Y - 15));
+                g.DrawRectangle(new Rect(targets[i], new Vector2(20, 20), true), Color.AliceBlue);
+
+                g.g.DrawEllipse(new Pen(new SolidBrush(Color.Red), 6), new RectangleF(Misc.d2f(targets[i].X - 10), Misc.d2f(minigamePanel.Height - 10 - targets[i].Y), 20, 20));
+                g.g.DrawEllipse(new Pen(new SolidBrush(Color.White), 6), new RectangleF(Misc.d2f(targets[i].X - 7), Misc.d2f(minigamePanel.Height - 7 - targets[i].Y), 14, 14));
+                g.g.FillEllipse(new SolidBrush(Color.Red), new RectangleF(Misc.d2f(targets[i].X - 3), Misc.d2f(minigamePanel.Height - 3 - targets[i].Y), 6, 6));
+
+                g.DrawLine(new Vector2(targets[i].X - 13, targets[i].Y + 15), new Vector2(targets[i].X + 13, targets[i].Y + 15), Color.Gray, 3);
+                g.DrawLine(new Vector2(targets[i].X - 13, targets[i].Y + 15), new Vector2(targets[i].X + ((((double)targets[i].Tag) * 0.2) - 12.9) + 0.1, targets[i].Y + 15), Color.Red, 3);
             }
             if (firing)
             {
-                //g.g.DrawRectangle(new Pen(new SolidBrush(Color.Green), 1), new Rectangle(Misc.d2i(targ.X - power / 2), Misc.d2i(targ.Y - power / 2), Misc.d2i(power), Misc.d2i(power)));
-                g.DrawRectangle(new RectangleF(targ.toPointF(), new SizeF(Misc.d2f(power), Misc.d2f(power))), Color.Green, filled: false, transform: false);
-                g.g.DrawLine(new Pen(new SolidBrush(Color.Green), 1), new PointF(Misc.d2i(targ.X), Misc.d2i(targ.Y - power / 2)), new PointF(Misc.d2i(targ.X), Misc.d2i(targ.Y + power / 2)));
-                g.g.DrawLine(new Pen(new SolidBrush(Color.Green), 1), new PointF(Misc.d2i(targ.X - power / 2), Misc.d2i(targ.Y)), new PointF(Misc.d2i(targ.X + power / 2), Misc.d2i(targ.Y)));
+                g.DrawRectangle(new Rect(targ, new Vector2(power, power), true), Color.Green, filled: false);
+                g.DrawLine(targ + new Vector2(-power / 2, 0), targ + new Vector2(power / 2, 0), Color.Green, 1);
+                g.DrawLine(targ + new Vector2(0, -power / 2), targ + new Vector2(0, power / 2), Color.Green, 1);
             }
             else
             {
-                //g.g.FillRectangle(new SolidBrush(Color.Green), new RectangleF(Misc.d2f(targ.X - 2.5f), Misc.d2f(targ.Y - 2.5f), 5, 5));
-                g.DrawRectangle(new RectangleF(targ.toPointF(), new SizeF(5, 5)), Color.Green, transform: false);
+                g.DrawRectangle(new RectangleF(targ.toPointF(), new SizeF(5, 5)), Color.Green);
             }
         }
     }
