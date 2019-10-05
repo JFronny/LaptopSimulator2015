@@ -1,2 +1,1 @@
 Fully implement new graphics on Goal and Level 3
-OS Install as Tutorial

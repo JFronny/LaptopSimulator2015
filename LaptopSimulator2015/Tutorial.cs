@@ -9,6 +9,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Globalization;
+using System.Drawing.Drawing2D;
+using Base;
 
 namespace LaptopSimulator2015
 {
@@ -71,10 +73,12 @@ namespace LaptopSimulator2015
             {
                 progressBar.Value = 50 + timertime;
                 timertime++;
+                tutorialPanel.Invalidate();
             }
             else
             {
                 tabs.SelectedIndex = 4;
+                progressTimer.Enabled = false;
             }
         }
 
@@ -84,6 +88,17 @@ namespace LaptopSimulator2015
             Settings.Save();
             Program.splash.Show();
             Close();
+        }
+
+        private void tutorialPanel_Paint(object sender, PaintEventArgs e)
+        {
+            using (GraphicsWrapper g = new GraphicsWrapper(e.Graphics, Color.Red, new Rectangle(Point.Empty, tutorialPanel.Size), true))
+            {
+                for (int i = 0; i < 40; i++)
+                    for (int j = 0; j < 40; j++)
+                        g.DrawLine(new PointF(tutorialPanel.Width / 2, tutorialPanel.Height / 2), new PointF(i * 10 + 5, j * 10 + 5), Color.DarkGray, 1, false);
+                g.DrawSizedString("This is " + ((timertime < 17) ? "bad" : (timertime <= 33) ? "neutral" : "you"), 10, new PointF(tutorialPanel.Width / 2, tutorialPanel.Height / 2), new SolidBrush((timertime < 17) ? Color.Red : (timertime <= 33) ? Color.White : Color.Green), true, true);
+            }
         }
     }
 }

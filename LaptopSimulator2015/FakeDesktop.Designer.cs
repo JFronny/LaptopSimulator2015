@@ -288,23 +288,27 @@ namespace LaptopSimulator2015
             // 
             // levelWindowContents
             // 
+            this.levelWindowContents.Appearance = System.Windows.Forms.TabAppearance.Buttons;
             this.levelWindowContents.Controls.Add(this.levelWindow1);
             this.levelWindowContents.Controls.Add(this.levelWindow2);
             this.levelWindowContents.Controls.Add(this.levelWindow3);
             this.levelWindowContents.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.levelWindowContents.ItemSize = new System.Drawing.Size(10, 10);
             this.levelWindowContents.Location = new System.Drawing.Point(0, 20);
             this.levelWindowContents.Name = "levelWindowContents";
             this.levelWindowContents.SelectedIndex = 0;
             this.levelWindowContents.Size = new System.Drawing.Size(502, 248);
+            this.levelWindowContents.SizeMode = System.Windows.Forms.TabSizeMode.Fixed;
             this.levelWindowContents.TabIndex = 2;
+            this.levelWindowContents.TabStop = false;
             // 
             // levelWindow1
             // 
             this.levelWindow1.Controls.Add(this.levelWindowText1);
-            this.levelWindow1.Location = new System.Drawing.Point(4, 19);
+            this.levelWindow1.Location = new System.Drawing.Point(4, 14);
             this.levelWindow1.Name = "levelWindow1";
             this.levelWindow1.Padding = new System.Windows.Forms.Padding(3);
-            this.levelWindow1.Size = new System.Drawing.Size(494, 225);
+            this.levelWindow1.Size = new System.Drawing.Size(494, 230);
             this.levelWindow1.TabIndex = 0;
             this.levelWindow1.UseVisualStyleBackColor = true;
             // 
@@ -323,10 +327,10 @@ namespace LaptopSimulator2015
             this.levelWindow2.Controls.Add(this.captchaBox);
             this.levelWindow2.Controls.Add(this.captchaPanel);
             this.levelWindow2.Controls.Add(this.levelWindowText2);
-            this.levelWindow2.Location = new System.Drawing.Point(4, 19);
+            this.levelWindow2.Location = new System.Drawing.Point(4, 25);
             this.levelWindow2.Name = "levelWindow2";
             this.levelWindow2.Padding = new System.Windows.Forms.Padding(3);
-            this.levelWindow2.Size = new System.Drawing.Size(494, 225);
+            this.levelWindow2.Size = new System.Drawing.Size(494, 219);
             this.levelWindow2.TabIndex = 1;
             this.levelWindow2.UseVisualStyleBackColor = true;
             // 
@@ -364,9 +368,9 @@ namespace LaptopSimulator2015
             // 
             this.levelWindow3.Controls.Add(this.levelWindowProgress);
             this.levelWindow3.Controls.Add(this.levelWindowText3);
-            this.levelWindow3.Location = new System.Drawing.Point(4, 19);
+            this.levelWindow3.Location = new System.Drawing.Point(4, 25);
             this.levelWindow3.Name = "levelWindow3";
-            this.levelWindow3.Size = new System.Drawing.Size(494, 225);
+            this.levelWindow3.Size = new System.Drawing.Size(494, 219);
             this.levelWindow3.TabIndex = 2;
             this.levelWindow3.UseVisualStyleBackColor = true;
             // 

@@ -123,9 +123,7 @@ namespace LaptopSimulator2015.Levels
         public void draw(GraphicsWrapper g, Panel minigamePanel, Timer minigameTimer, uint minigameTime)
         {
             for (int i = 0; i < enemies.Count; i++)
-                //g.g.FillRectangle(new SolidBrush(Color.Red), new Rectangle(enemies[i].toPoint(), new Size(10, 10)));
                 g.DrawRectangle(new RectangleF(enemies[i].toPointF(), new SizeF(10, 10)), Color.Red);
-            //g.g.FillRectangle(new SolidBrush(Color.Green), new Rectangle(player.toPoint(), new Size(10, 10)));
             g.DrawRectangle(new RectangleF(player.toPointF(), new SizeF(10, 10)), Color.Green);
             g.DrawSizedString(lives.ToString(), 7, player.toPointF(), Brushes.White, true, true);
         }

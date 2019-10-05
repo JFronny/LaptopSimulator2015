@@ -43,23 +43,25 @@
             this.p2privacyLabel = new System.Windows.Forms.Label();
             this.p3 = new System.Windows.Forms.TabPage();
             this.p3spacingPanel1 = new System.Windows.Forms.Panel();
-            this.p3spacingPanel2 = new System.Windows.Forms.Panel();
             this.p3continue = new System.Windows.Forms.Button();
-            this.progressBar = new System.Windows.Forms.ProgressBar();
-            this.cancelButton = new System.Windows.Forms.Button();
-            this.progressTimer = new System.Windows.Forms.Timer(this.components);
+            this.p3spacingPanel2 = new System.Windows.Forms.Panel();
             this.p4 = new System.Windows.Forms.TabPage();
+            this.tutorialPanel = new System.Windows.Forms.Panel();
             this.p5 = new System.Windows.Forms.TabPage();
             this.p5completeLabel = new System.Windows.Forms.Label();
             this.p5controlPanel = new System.Windows.Forms.Panel();
             this.p5reboot = new System.Windows.Forms.Button();
             this.p5title = new System.Windows.Forms.Label();
+            this.progressBar = new System.Windows.Forms.ProgressBar();
+            this.cancelButton = new System.Windows.Forms.Button();
+            this.progressTimer = new System.Windows.Forms.Timer(this.components);
             this.dialog.SuspendLayout();
             this.tabs.SuspendLayout();
             this.p1.SuspendLayout();
             this.p1controlPanel.SuspendLayout();
             this.p2.SuspendLayout();
             this.p3.SuspendLayout();
+            this.p4.SuspendLayout();
             this.p5.SuspendLayout();
             this.p5controlPanel.SuspendLayout();
             this.SuspendLayout();
@@ -106,6 +108,7 @@
             // 
             // p1
             // 
+            this.p1.BackColor = System.Drawing.Color.White;
             this.p1.Controls.Add(this.p1descLabel);
             this.p1.Controls.Add(this.p1controlPanel);
             this.p1.Controls.Add(this.p1titleLabel);
@@ -114,7 +117,6 @@
             this.p1.Padding = new System.Windows.Forms.Padding(3);
             this.p1.Size = new System.Drawing.Size(392, 371);
             this.p1.TabIndex = 0;
-            this.p1.UseVisualStyleBackColor = true;
             // 
             // p1descLabel
             // 
@@ -128,6 +130,7 @@
             // 
             // p1controlPanel
             // 
+            this.p1controlPanel.BackColor = System.Drawing.Color.Silver;
             this.p1controlPanel.Controls.Add(this.p1continue);
             this.p1controlPanel.Controls.Add(this.p1lang);
             this.p1controlPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
@@ -181,10 +184,10 @@
             this.p2.Padding = new System.Windows.Forms.Padding(3);
             this.p2.Size = new System.Drawing.Size(392, 371);
             this.p2.TabIndex = 1;
-            this.p2.UseVisualStyleBackColor = true;
             // 
             // p2continue
             // 
+            this.p2continue.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.p2continue.Location = new System.Drawing.Point(311, 345);
             this.p2continue.Name = "p2continue";
             this.p2continue.Size = new System.Drawing.Size(75, 23);
@@ -204,6 +207,7 @@
             // 
             // p3
             // 
+            this.p3.BackColor = System.Drawing.Color.White;
             this.p3.Controls.Add(this.p3spacingPanel1);
             this.p3.Controls.Add(this.p3continue);
             this.p3.Controls.Add(this.p3spacingPanel2);
@@ -211,7 +215,6 @@
             this.p3.Name = "p3";
             this.p3.Size = new System.Drawing.Size(392, 371);
             this.p3.TabIndex = 2;
-            this.p3.UseVisualStyleBackColor = true;
             // 
             // p3spacingPanel1
             // 
@@ -220,14 +223,6 @@
             this.p3spacingPanel1.Name = "p3spacingPanel1";
             this.p3spacingPanel1.Size = new System.Drawing.Size(392, 100);
             this.p3spacingPanel1.TabIndex = 2;
-            // 
-            // p3spacingPanel2
-            // 
-            this.p3spacingPanel2.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.p3spacingPanel2.Location = new System.Drawing.Point(0, 271);
-            this.p3spacingPanel2.Name = "p3spacingPanel2";
-            this.p3spacingPanel2.Size = new System.Drawing.Size(392, 100);
-            this.p3spacingPanel2.TabIndex = 1;
             // 
             // p3continue
             // 
@@ -241,39 +236,35 @@
             this.p3continue.UseVisualStyleBackColor = true;
             this.p3continue.Click += new System.EventHandler(this.continue3_Click);
             // 
-            // progressBar
+            // p3spacingPanel2
             // 
-            this.progressBar.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.progressBar.Location = new System.Drawing.Point(0, 677);
-            this.progressBar.Name = "progressBar";
-            this.progressBar.Size = new System.Drawing.Size(1300, 23);
-            this.progressBar.Step = 1;
-            this.progressBar.TabIndex = 2;
-            // 
-            // cancelButton
-            // 
-            this.cancelButton.Location = new System.Drawing.Point(0, 0);
-            this.cancelButton.Name = "cancelButton";
-            this.cancelButton.Size = new System.Drawing.Size(80, 23);
-            this.cancelButton.TabIndex = 3;
-            this.cancelButton.Text = "Cancel";
-            this.cancelButton.UseVisualStyleBackColor = true;
-            this.cancelButton.Click += new System.EventHandler(this.cancelButton_Click);
-            // 
-            // progressTimer
-            // 
-            this.progressTimer.Tick += new System.EventHandler(this.timer1_Tick);
+            this.p3spacingPanel2.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.p3spacingPanel2.Location = new System.Drawing.Point(0, 271);
+            this.p3spacingPanel2.Name = "p3spacingPanel2";
+            this.p3spacingPanel2.Size = new System.Drawing.Size(392, 100);
+            this.p3spacingPanel2.TabIndex = 1;
             // 
             // p4
             // 
+            this.p4.BackColor = System.Drawing.Color.White;
+            this.p4.Controls.Add(this.tutorialPanel);
             this.p4.Location = new System.Drawing.Point(4, 25);
             this.p4.Name = "p4";
             this.p4.Size = new System.Drawing.Size(392, 371);
             this.p4.TabIndex = 3;
-            this.p4.UseVisualStyleBackColor = true;
+            // 
+            // tutorialPanel
+            // 
+            this.tutorialPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tutorialPanel.Location = new System.Drawing.Point(0, 0);
+            this.tutorialPanel.Name = "tutorialPanel";
+            this.tutorialPanel.Size = new System.Drawing.Size(392, 371);
+            this.tutorialPanel.TabIndex = 0;
+            this.tutorialPanel.Paint += new System.Windows.Forms.PaintEventHandler(this.tutorialPanel_Paint);
             // 
             // p5
             // 
+            this.p5.BackColor = System.Drawing.Color.White;
             this.p5.Controls.Add(this.p5completeLabel);
             this.p5.Controls.Add(this.p5controlPanel);
             this.p5.Controls.Add(this.p5title);
@@ -281,7 +272,6 @@
             this.p5.Name = "p5";
             this.p5.Size = new System.Drawing.Size(392, 371);
             this.p5.TabIndex = 4;
-            this.p5.UseVisualStyleBackColor = true;
             // 
             // p5completeLabel
             // 
@@ -324,6 +314,30 @@
             this.p5title.Text = "LaptopSimulator2015";
             this.p5title.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
+            // progressBar
+            // 
+            this.progressBar.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.progressBar.Location = new System.Drawing.Point(0, 677);
+            this.progressBar.Name = "progressBar";
+            this.progressBar.Size = new System.Drawing.Size(1300, 23);
+            this.progressBar.Step = 1;
+            this.progressBar.TabIndex = 2;
+            // 
+            // cancelButton
+            // 
+            this.cancelButton.Location = new System.Drawing.Point(0, 0);
+            this.cancelButton.Name = "cancelButton";
+            this.cancelButton.Size = new System.Drawing.Size(80, 23);
+            this.cancelButton.TabIndex = 3;
+            this.cancelButton.Text = "Cancel";
+            this.cancelButton.UseVisualStyleBackColor = true;
+            this.cancelButton.Click += new System.EventHandler(this.cancelButton_Click);
+            // 
+            // progressTimer
+            // 
+            this.progressTimer.Interval = 120;
+            this.progressTimer.Tick += new System.EventHandler(this.timer1_Tick);
+            // 
             // Tutorial
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -347,6 +361,7 @@
             this.p2.ResumeLayout(false);
             this.p2.PerformLayout();
             this.p3.ResumeLayout(false);
+            this.p4.ResumeLayout(false);
             this.p5.ResumeLayout(false);
             this.p5controlPanel.ResumeLayout(false);
             this.ResumeLayout(false);
@@ -380,5 +395,6 @@
         private System.Windows.Forms.Panel p5controlPanel;
         private System.Windows.Forms.Button p5reboot;
         private System.Windows.Forms.Label p5title;
+        private System.Windows.Forms.Panel tutorialPanel;
     }
 }
