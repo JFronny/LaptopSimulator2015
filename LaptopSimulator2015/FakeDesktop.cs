@@ -47,6 +47,12 @@ namespace LaptopSimulator2015
                 optionsWindowWamLabel.Text = strings.optionsWindowWam;
                 optionsWindowReset.Text = strings.optionsWindowReset;
                 optionsWindowSubs.Text = strings.optionsWindowSubs;
+                optionsWindowQualityBox.Items[0] = strings.optionsWindowQuality1;
+                optionsWindowQualityBox.Items[1] = strings.optionsWindowQuality2;
+                optionsWindowQualityBox.Items[2] = strings.optionsWindowQuality3;
+                Text = strings.fakeDesktopTitle;
+                winMenuStart.Text = strings.start;
+                winMenuText.Text = strings.winMenuText;
                 levelWindow.Visible = false;
                 minigamePanel.Visible = false;
                 optionsWindow.Visible = false;
@@ -90,10 +96,7 @@ namespace LaptopSimulator2015
             tmpoptionslsdcanchange = Settings.lsd;
             optionsWindowLSD.Checked = Settings.lsd;
             optionsWindowSubs.Checked = Settings.subs;
-            Text = strings.fakeDesktopTitle;
-            winMenuExit.Text = strings.exit;
-            winMenuStart.Text = strings.start;
-            winMenuText.Text = strings.winMenuText;
+            optionsWindowQualityBox.SelectedIndex = Settings.quality;
             levelWindowTitle.Text = "";
             winTimeLabel.Text = DateTime.Now.ToString("hh:mm:ss", Settings.lang);
             fans = new SoundPlayer(Resources.fans);
@@ -538,6 +541,7 @@ namespace LaptopSimulator2015
             Settings.wam = optionsWindowWam.Value;
             Settings.lsd = optionsWindowLSD.Checked;
             Settings.subs = optionsWindowSubs.Checked;
+            Settings.quality = optionsWindowQualityBox.SelectedIndex;
             int NewVolume = ((ushort.MaxValue / 10) * Settings.wam);
             uint NewVolumeAllChannels = ((uint)NewVolume & 0x0000ffff) | ((uint)NewVolume << 16);
             waveOutSetVolume(IntPtr.Zero, NewVolumeAllChannels);

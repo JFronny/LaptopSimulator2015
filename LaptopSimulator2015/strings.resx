@@ -162,6 +162,15 @@
   <data name="optionsWindowLSDWarning" xml:space="preserve">
     <value>Are you SURE?\r\n(This will break EVERYTHING!)</value>
   </data>
+  <data name="optionsWindowQuality1" xml:space="preserve">
+    <value>Sh*t</value>
+  </data>
+  <data name="optionsWindowQuality2" xml:space="preserve">
+    <value>Default</value>
+  </data>
+  <data name="optionsWindowQuality3" xml:space="preserve">
+    <value>Good</value>
+  </data>
   <data name="optionsWindowReset" xml:space="preserve">
     <value>Reset</value>
   </data>

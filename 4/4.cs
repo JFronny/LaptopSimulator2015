@@ -188,9 +188,12 @@ namespace LaptopSimulator2015.Levels
             g.DrawRectangle(new Rect(player, new Vector2(10, 10), true), Color.Green);
             if (lazorTime >= 0 && lazorTime <= 80)
             {
-                g.DrawRectangle(new RectangleF((float)lazor, minigamePanel.Height / 2, 2, minigamePanel.Height), Color.DarkGray);
                 float m = (float)Misc.map(0, 80, 0, minigamePanel.Height, lazorTime);
-                g.DrawRectangle(new RectangleF((float)lazor, minigamePanel.Height - m / 2, 2, m), Color.Red);
+                Vector2 mp = new Vector2(lazor, m);
+                g.DrawLine(mp, new Vector2(lazor, 0), Color.DarkGray, 2);
+                g.DrawLine(new Vector2(lazor, minigamePanel.Height), mp, Color.Red, 2);
+                //g.DrawRectangle(new RectangleF((float)lazor, minigamePanel.Height / 2, 2, minigamePanel.Height), Color.DarkGray);
+                //g.DrawRectangle(new RectangleF((float)lazor, minigamePanel.Height - m / 2, 2, m), Color.Red);
             }
             for (int i = 0; i < platforms.Count; i++)
                 g.DrawRectangle(new Rect(platforms[i], new Vector2(100, 10), true), Color.White);

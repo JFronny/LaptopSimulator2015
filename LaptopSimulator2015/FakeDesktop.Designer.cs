@@ -97,6 +97,8 @@ namespace LaptopSimulator2015
             this.devWindowHeaderExit = new System.Windows.Forms.Label();
             this.devWindowIcon = new System.Windows.Forms.Panel();
             this.devWindowTitle = new System.Windows.Forms.Label();
+            this.optionsWindowQualityLabel = new System.Windows.Forms.Label();
+            this.optionsWindowQualityBox = new System.Windows.Forms.ComboBox();
             this.winMenuPanel.SuspendLayout();
             this.winTaskbar.SuspendLayout();
             this.winDesktop.SuspendLayout();
@@ -327,10 +329,10 @@ namespace LaptopSimulator2015
             this.levelWindow2.Controls.Add(this.captchaBox);
             this.levelWindow2.Controls.Add(this.captchaPanel);
             this.levelWindow2.Controls.Add(this.levelWindowText2);
-            this.levelWindow2.Location = new System.Drawing.Point(4, 25);
+            this.levelWindow2.Location = new System.Drawing.Point(4, 14);
             this.levelWindow2.Name = "levelWindow2";
             this.levelWindow2.Padding = new System.Windows.Forms.Padding(3);
-            this.levelWindow2.Size = new System.Drawing.Size(494, 219);
+            this.levelWindow2.Size = new System.Drawing.Size(494, 230);
             this.levelWindow2.TabIndex = 1;
             this.levelWindow2.UseVisualStyleBackColor = true;
             // 
@@ -368,9 +370,9 @@ namespace LaptopSimulator2015
             // 
             this.levelWindow3.Controls.Add(this.levelWindowProgress);
             this.levelWindow3.Controls.Add(this.levelWindowText3);
-            this.levelWindow3.Location = new System.Drawing.Point(4, 25);
+            this.levelWindow3.Location = new System.Drawing.Point(4, 14);
             this.levelWindow3.Name = "levelWindow3";
-            this.levelWindow3.Size = new System.Drawing.Size(494, 219);
+            this.levelWindow3.Size = new System.Drawing.Size(494, 230);
             this.levelWindow3.TabIndex = 2;
             this.levelWindow3.UseVisualStyleBackColor = true;
             // 
@@ -486,6 +488,8 @@ namespace LaptopSimulator2015
             // optionsWindow
             // 
             this.optionsWindow.BackColor = System.Drawing.SystemColors.Window;
+            this.optionsWindow.Controls.Add(this.optionsWindowQualityBox);
+            this.optionsWindow.Controls.Add(this.optionsWindowQualityLabel);
             this.optionsWindow.Controls.Add(this.optionsWindowCredit);
             this.optionsWindow.Controls.Add(this.devWindowOpen);
             this.optionsWindow.Controls.Add(this.optionsWindowReset);
@@ -597,7 +601,7 @@ namespace LaptopSimulator2015
             // 
             this.optionsWindowWam.Location = new System.Drawing.Point(108, 26);
             this.optionsWindowWam.Name = "optionsWindowWam";
-            this.optionsWindowWam.Size = new System.Drawing.Size(380, 45);
+            this.optionsWindowWam.Size = new System.Drawing.Size(271, 45);
             this.optionsWindowWam.TabIndex = 1;
             this.optionsWindowWam.TabStop = false;
             this.optionsWindowWam.Scroll += new System.EventHandler(this.OptionsWindowWam_Scroll);
@@ -792,6 +796,30 @@ namespace LaptopSimulator2015
             this.devWindowTitle.MouseMove += new System.Windows.Forms.MouseEventHandler(this.DevWindowHeader_MouseMove);
             this.devWindowTitle.MouseUp += new System.Windows.Forms.MouseEventHandler(this.DevWindowHeader_MouseUp);
             // 
+            // optionsWindowQualityLabel
+            // 
+            this.optionsWindowQualityLabel.AutoSize = true;
+            this.optionsWindowQualityLabel.Location = new System.Drawing.Point(385, 23);
+            this.optionsWindowQualityLabel.Name = "optionsWindowQualityLabel";
+            this.optionsWindowQualityLabel.Size = new System.Drawing.Size(42, 13);
+            this.optionsWindowQualityLabel.TabIndex = 10;
+            this.optionsWindowQualityLabel.Text = "Quality:";
+            // 
+            // optionsWindowQualityBox
+            // 
+            this.optionsWindowQualityBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.optionsWindowQualityBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.optionsWindowQualityBox.FormattingEnabled = true;
+            this.optionsWindowQualityBox.Items.AddRange(new object[] {
+            "Sh*t",
+            "Default",
+            "Good"});
+            this.optionsWindowQualityBox.Location = new System.Drawing.Point(385, 36);
+            this.optionsWindowQualityBox.Name = "optionsWindowQualityBox";
+            this.optionsWindowQualityBox.Size = new System.Drawing.Size(103, 21);
+            this.optionsWindowQualityBox.TabIndex = 11;
+            this.optionsWindowQualityBox.TabStop = false;
+            // 
             // FakeDesktop
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -905,5 +933,7 @@ namespace LaptopSimulator2015
         private System.Windows.Forms.Button devWindowSkip;
         private System.Windows.Forms.Button optionsWindowCredit;
         private System.Windows.Forms.Button devWindowOverlay;
+        private System.Windows.Forms.Label optionsWindowQualityLabel;
+        private System.Windows.Forms.ComboBox optionsWindowQualityBox;
     }
 }

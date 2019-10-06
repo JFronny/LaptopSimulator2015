@@ -196,6 +196,33 @@ namespace LaptopSimulator2015 {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Sh*t.
+        /// </summary>
+        internal static string optionsWindowQuality1 {
+            get {
+                return ResourceManager.GetString("optionsWindowQuality1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Default.
+        /// </summary>
+        internal static string optionsWindowQuality2 {
+            get {
+                return ResourceManager.GetString("optionsWindowQuality2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Good.
+        /// </summary>
+        internal static string optionsWindowQuality3 {
+            get {
+                return ResourceManager.GetString("optionsWindowQuality3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Reset.
         /// </summary>
         internal static string optionsWindowReset {

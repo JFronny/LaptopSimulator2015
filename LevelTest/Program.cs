@@ -42,26 +42,30 @@ namespace LevelTest
                                 throw new Exception("Please select a folder");
                         }
                 }
-                Minigame[] levels = Directory.EnumerateFiles(Directory.GetCurrentDirectory(), "*.dll", SearchOption.AllDirectories).Where(s => Path.GetFileName(s) != "Base.dll" && Path.GetFileName(s) != "CC-Functions.W32.dll")
-                    .Select(s => Assembly.LoadFrom(s)).SelectMany(s => s.GetTypes()).Distinct()
-                    .Where(p => typeof(Minigame).IsAssignableFrom(p)).Distinct().Except(new Type[] { typeof(Minigame), typeof(Level), typeof(Goal) })
-                    .Select(s => (Minigame)Activator.CreateInstance(s)).OrderBy(lv => lv.availableAfter).ToArray();
-                Minigame level;
-                if (levels.Length == 0)
-                    throw new Exception("No Levels found!");
-                else if (levels.Length == 1)
-                    level = levels[0];
-                else
+                Minigame[] levels = Directory.EnumerateFiles(Directory.GetCurrentDirectory(), "*.dll", SearchOption.AllDirectories)
+                    .Where(s => Path.GetFileName(s) != "Base.dll" && Path.GetFileName(s) != "CC-Functions.W32.dll").Select(s => File.ReadAllBytes(s))
+                    .Distinct().Select(s => Assembly.Load(s)).Distinct().SelectMany(s => s.GetTypes()).Distinct().Where(p => typeof(Minigame).IsAssignableFrom(p))
+                    .Distinct().Except(new Type[] { typeof(Minigame), typeof(Level), typeof(Goal) }).Select(s => (Minigame)Activator.CreateInstance(s))
+                    .Distinct(new comp()).OrderBy(lv => lv.availableAfter).ToArray();
+                while (true)
                 {
-                    using (ArrayDialog dialog = new ArrayDialog(levels.Select(s => s.name).ToArray(), "Select a Minigame"))
+                    Minigame level;
+                    if (levels.Length == 0)
+                        throw new Exception("No Levels found!");
+                    else if (levels.Length == 1)
+                        level = levels[0];
+                    else
                     {
-                        if (dialog.ShowDialog() == DialogResult.OK)
-                            level = levels[dialog.returnIndex];
-                        else
-                            throw new Exception("Please select a folder");
+                        using (ArrayDialog dialog = new ArrayDialog(levels.Select(s => s.name).ToArray(), "Select a Minigame"))
+                        {
+                            if (dialog.ShowDialog() == DialogResult.OK)
+                                level = levels[dialog.returnIndex];
+                            else
+                                throw new Exception("Please select a folder");
+                        }
                     }
+                    Application.Run(new MainForm(level));
                 }
-                Application.Run(new MainForm(level));
             }
             catch (Exception e)
             {
@@ -69,4 +73,13 @@ namespace LevelTest
             }
         }
     }
+
+    class comp : IEqualityComparer<Minigame>
+    {
+        public bool Equals(Minigame x, Minigame y) => x.name == y.name;
+
+        public int GetHashCode(Minigame x) => x.name.GetHashCode();
+
+    }
 }
+    

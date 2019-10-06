@@ -46,5 +46,21 @@ namespace LevelTest
                 }
             }
         }
+
+        bool isFClose = true;
+        private void MainForm_Resize(object sender, EventArgs e)
+        {
+            if (WindowState == FormWindowState.Minimized)
+            {
+                isFClose = false;
+                Close();
+            }
+        }
+
+        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (isFClose)
+                Environment.Exit(0);
+        }
     }
 }

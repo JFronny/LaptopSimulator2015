@@ -1,2 +1,14 @@
-Implement drawing ellipses (Level 3)
 Fix Physics weirdness in Level 3
+Fix Physics weirdness in Level 4 (dropping through ground)
+
+Ideas for content:
+- Goals:
+  - MS Word = Sentenz
+  - Powerpoint = WeakClic
+  - Minecraft = InfiniMined
+  - The "you win"-button
+- Minigames:
+  - Bullet-Hell
+  - Mouse-based games?
+- Other:
+  - Possibly secrets and alternate paths?

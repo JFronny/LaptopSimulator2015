@@ -77,7 +77,7 @@ namespace Base
         /// <param name="centered">Whether the rectangle should be drawn centered rather than down-left</param>
         /// <param name="filled">Whether the rectangle should be filled</param>
         /// <param name="unfilledLineSize">The size of the lines used when not filling</param>
-        public void DrawRectangle(RectangleF rectangle, Color color, bool centered = true, bool transform = true, bool filled = true, int unfilledLineSize = 1)
+        public void DrawRectangle(RectangleF rectangle, Color color, bool centered = true, bool transform = true, bool filled = true, float unfilledLineSize = 1)
         {
             RectangleF r = rectangle;
             if (transform)
@@ -100,7 +100,40 @@ namespace Base
         /// <param name="color">The color of the rectangle</param>
         /// <param name="filled">Whether the rectangle should be filled</param>
         /// <param name="unfilledLineSize">The size of the lines used when not filling</param>
-        public void DrawRectangle(Rect rectangle, Color color, bool filled = true, int unfilledLineSize = 1) => DrawRectangle(rectangle.toRectangleF(), color, false, true, filled, unfilledLineSize);
+        public void DrawRectangle(Rect rectangle, Color color, bool filled = true, float unfilledLineSize = 1) => DrawRectangle(rectangle.toRectangleF(), color, false, true, filled, unfilledLineSize);
+
+        /// <summary>
+        /// Draws an ellipse
+        /// </summary>
+        /// <param name="rectangle">Use the PointF/SizeF Constructor as it is much more logical</param>
+        /// <param name="color">The color of the ellipse</param>
+        /// <param name="centered">Whether the ellipse should be drawn centered rather than down-left</param>
+        /// <param name="filled">Whether the ellipse should be filled</param>
+        /// <param name="unfilledLineSize">The size of the lines used when not filling</param>
+        public void DrawEllipse(RectangleF rectangle, Color color, bool centered = true, bool transform = true, bool filled = true, float unfilledLineSize = 1)
+        {
+            RectangleF r = rectangle;
+            if (transform)
+                r = w2s(r);
+            Brush b = new SolidBrush(color);
+            if (centered)
+            {
+                r = new RectangleF(new PointF(r.X - r.Width / 2, r.Y - r.Height / 2), r.Size);
+            }
+            if (filled)
+                g.FillEllipse(b, r);
+            else
+                g.DrawEllipse(new Pen(b, unfilledLineSize), new Rectangle(Misc.f2i(r.X), Misc.f2i(r.Y), Misc.f2i(r.Width), Misc.f2i(r.Height)));
+        }
+
+        /// <summary>
+        /// Draws a ellipse
+        /// </summary>
+        /// <param name="rectangle">The rectangle to draw the ellipse in</param>
+        /// <param name="color">The color of the ellipse</param>
+        /// <param name="filled">Whether the ellipse should be filled</param>
+        /// <param name="unfilledLineSize">The size of the lines used when not filling</param>
+        public void DrawEllipse(Rect rectangle, Color color, bool filled = true, float unfilledLineSize = 1) => DrawEllipse(rectangle.toRectangleF(), color, false, true, filled, unfilledLineSize);
 
         /// <summary>
         /// Draw a line connecting the vectors

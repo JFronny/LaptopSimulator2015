@@ -101,11 +101,17 @@ namespace LaptopSimulator2015.Levels
                     Rect tr = new Rect(targ, new Vector2(power, power), true);
                     for (int i = 0; i < targets.Count; i++)
                     {
-                        if (targets[i].distanceToRectSquared(tr) <= 400)
+                        if (targets[i].distanceToRectSquared(tr) <= 676)
                             targetsToRemove.Add(targets[i]);
                     }
-                    targets = targets.Except(targetsToRemove.Distinct()).Distinct().ToList();
+                      targets = targets.Except(targetsToRemove.Distinct()).Distinct().ToList();
                     g.DrawRectangle(tr, Color.White);
+
+                    g.DrawSizedString("TL", 10, tr.topLeftPoint.toPointF(), Brushes.Yellow);
+                    g.DrawSizedString("TR", 10, tr.topRightPoint.toPointF(), Brushes.Yellow);
+                    g.DrawSizedString("BL", 10, tr.bottomLeftPoint.toPointF(), Brushes.Yellow);
+                    g.DrawSizedString("BR", 10, tr.bottomRightPoint.toPointF(), Brushes.Yellow);
+                    g.DrawSizedString("CT", 10, tr.Location.toPointF(), Brushes.Blue);
                     power = 10;
                 }
                 targ = new Vector2(center);
@@ -153,14 +159,11 @@ namespace LaptopSimulator2015.Levels
             g.DrawLine(center, cannon, Color.Green, 5);
             for (int i = 0; i < targets.Count; i++)
             {
-                g.DrawRectangle(new Rect(targets[i], new Vector2(20, 20), true), Color.AliceBlue);
-
-                g.g.DrawEllipse(new Pen(new SolidBrush(Color.Red), 6), new RectangleF(Misc.d2f(targets[i].X - 10), Misc.d2f(minigamePanel.Height - 10 - targets[i].Y), 20, 20));
-                g.g.DrawEllipse(new Pen(new SolidBrush(Color.White), 6), new RectangleF(Misc.d2f(targets[i].X - 7), Misc.d2f(minigamePanel.Height - 7 - targets[i].Y), 14, 14));
-                g.g.FillEllipse(new SolidBrush(Color.Red), new RectangleF(Misc.d2f(targets[i].X - 3), Misc.d2f(minigamePanel.Height - 3 - targets[i].Y), 6, 6));
-
-                g.DrawLine(new Vector2(targets[i].X - 13, targets[i].Y + 15), new Vector2(targets[i].X + 13, targets[i].Y + 15), Color.Gray, 3);
-                g.DrawLine(new Vector2(targets[i].X - 13, targets[i].Y + 15), new Vector2(targets[i].X + ((((double)targets[i].Tag) * 0.2) - 12.9) + 0.1, targets[i].Y + 15), Color.Red, 3);
+                g.DrawEllipse(new Rect(targets[i], new Vector2(26, 26), true), Color.Red);
+                g.DrawEllipse(new Rect(targets[i], new Vector2(13, 13), true), Color.White, false, 4.333f);
+                Vector2 mp = new Vector2(targets[i].X + ((((double)targets[i].Tag) * 0.2) - 12.9) + 0.1, targets[i].Y + 15);
+                g.DrawLine(mp, new Vector2(targets[i].X + 13, targets[i].Y + 15), Color.Gray, 3);
+                g.DrawLine(new Vector2(targets[i].X - 13, targets[i].Y + 15), mp, Color.Red, 3);
             }
             if (firing)
             {

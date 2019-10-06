@@ -162,6 +162,15 @@
   <data name="optionsWindowLSDWarning" xml:space="preserve">
     <value>Bist du dir sicher? (ALLES wird verbuggt werden!)</value>
   </data>
+  <data name="optionsWindowQuality1" xml:space="preserve">
+    <value>Müll</value>
+  </data>
+  <data name="optionsWindowQuality2" xml:space="preserve">
+    <value>Standard</value>
+  </data>
+  <data name="optionsWindowQuality3" xml:space="preserve">
+    <value>Supremo</value>
+  </data>
   <data name="optionsWindowReset" xml:space="preserve">
     <value>Zurücksetzen</value>
   </data>
