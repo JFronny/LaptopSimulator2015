@@ -25,7 +25,7 @@ echo Please wait a bit.
 :clean
 echo Cleaning...
 set tmp=%cd%
-if exist ".NETFramework,Version=v4.7.2.AssemblyAttributes.cs" del ".NETFramework,Version=v4.7.2.AssemblyAttributes.cs"
+if exist ".NETFramework,Version=v4.8.AssemblyAttributes.cs" del ".NETFramework,Version=v4.8.AssemblyAttributes.cs"
 if exist "vs.mcj719337969" rmdir /s /q "vs.mcj719337969"
 if exist "tmp" rmdir /s /q "tmp"
 if not %full%==4 if exist "BUILD" rmdir /s /q "BUILD"
