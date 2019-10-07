@@ -37,12 +37,12 @@ namespace Base
         /// <summary>
         /// Draw a string with the given size
         /// </summary>
-        /// <param name="s">The string to draw</param>
+        /// <param name="text">The string to draw</param>
         /// <param name="size">The font size of the string</param>
         /// <param name="location">The location to draw the string at</param>
         /// <param name="brush">The brush to draw the string with</param>
-        /// <param name="isLocationCentered">Set to true if you want to draw the string around instead of left-down from the location</param>
-        public void DrawSizedString(string s, int size, PointF location, Brush brush, bool transform = true, bool isLocationCentered = false)
+        /// <param name="centered">Set to true if you want to draw the string around instead of left-down from the location</param>
+        public void DrawSizedString(string text, int size, PointF location, Brush brush, bool transform = true, bool centered = false)
         {
             SmoothingMode tmpS = g.SmoothingMode;
             InterpolationMode tmpI = g.InterpolationMode;
@@ -55,13 +55,11 @@ namespace Base
             g.CompositingQuality = CompositingQuality.HighQuality;
             g.PixelOffsetMode = PixelOffsetMode.HighQuality;
             Font f = new Font("Tahoma", size);
-            SizeF sLen = g.MeasureString(s, f);
-            RectangleF rectf = new RectangleF(location, sLen);
+            SizeF s = g.MeasureString(text, f);
+            RectangleF r = new RectangleF(centered ? new PointF(location.X - s.Width / 2, location.Y - s.Height / 2) : location, s);
             if (transform)
-                rectf = w2s(rectf);
-            if (isLocationCentered)
-                rectf = new RectangleF(rectf.X - rectf.Width / 2, rectf.Y - rectf.Height / 2, rectf.Width, rectf.Height);
-            g.DrawString(s, f, brush, rectf);
+                r = w2s(r);
+            g.DrawString(text, f, brush, r);
             g.PixelOffsetMode = tmpP;
             g.CompositingQuality = tmpQ;
             g.CompositingMode = tmpM;
@@ -79,14 +77,12 @@ namespace Base
         /// <param name="unfilledLineSize">The size of the lines used when not filling</param>
         public void DrawRectangle(RectangleF rectangle, Color color, bool centered = true, bool transform = true, bool filled = true, float unfilledLineSize = 1)
         {
-            RectangleF r = rectangle;
+            SizeF s = rectangle.Size;
+            PointF location = rectangle.Location;
+            RectangleF r = new RectangleF(centered ? new PointF(location.X - s.Width / 2, location.Y - s.Height / 2) : location, s);
             if (transform)
                 r = w2s(r);
             Brush b = new SolidBrush(color);
-            if (centered)
-            {
-                r = new RectangleF(new PointF(r.X - r.Width / 2, r.Y - r.Height / 2), r.Size);
-            }
             if (filled)
                 g.FillRectangle(b, r);
             else
@@ -168,7 +164,7 @@ namespace Base
             _g.Dispose();
         }
 
-        public RectangleF w2s(RectangleF from) => new RectangleF(w2s(from.Location), from.Size);
+        public RectangleF w2s(RectangleF from) => new RectangleF(w2s(new PointF(from.Left, from.Bottom)), from.Size);
         public PointF w2s(PointF from) => new PointF(from.X, targetSize.Height - from.Y);
     }
 }

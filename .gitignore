@@ -1,3 +1,7 @@
+tmp/*
+tmp1/*
+tmp2/*
+tmp3/*
 
 # Created by https://www.gitignore.io/api/csharp,visualstudio
 # Edit at https://www.gitignore.io/?templates=csharp,visualstudio

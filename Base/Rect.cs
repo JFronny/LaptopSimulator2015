@@ -30,7 +30,7 @@ namespace Base
             if (centered)
             {
                 this.X -= Width / 2;
-                this.Y += Height / 2;
+                this.Y -= Height / 2;
             }
         }
 

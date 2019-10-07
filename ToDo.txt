@@ -1,6 +1,3 @@
-Fix Physics weirdness in Level 3
-Fix Physics weirdness in Level 4 (dropping through ground)
-
 Ideas for content:
 - Goals:
   - MS Word = Sentenz

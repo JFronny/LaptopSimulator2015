@@ -176,7 +176,7 @@ namespace LaptopSimulator2015.Levels
                 for (int i = 0; i < platforms.Count; i++)
                 {
                     Rect rect = new Rect(platforms[i], new Vector2(100, 10), true);
-                    if (player.distanceToRectSquared(rect) <= 20 && rect.doOverlap(new Rect(player, new Vector2(10, 10), true)) && platforms[i].Y + 11 > player.Y && player.Y > platforms[i].Y + 9)
+                    if (rect.doOverlap(new Rect(player, new Vector2(10, 10), true)) && platforms[i].Y + 11 > player.Y && player.Y > platforms[i].Y + 9)
                         return true;
                 }
                 return false;
@@ -192,8 +192,6 @@ namespace LaptopSimulator2015.Levels
                 Vector2 mp = new Vector2(lazor, m);
                 g.DrawLine(mp, new Vector2(lazor, 0), Color.DarkGray, 2);
                 g.DrawLine(new Vector2(lazor, minigamePanel.Height), mp, Color.Red, 2);
-                //g.DrawRectangle(new RectangleF((float)lazor, minigamePanel.Height / 2, 2, minigamePanel.Height), Color.DarkGray);
-                //g.DrawRectangle(new RectangleF((float)lazor, minigamePanel.Height - m / 2, 2, m), Color.Red);
             }
             for (int i = 0; i < platforms.Count; i++)
                 g.DrawRectangle(new Rect(platforms[i], new Vector2(100, 10), true), Color.White);

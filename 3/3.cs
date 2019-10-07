@@ -101,17 +101,11 @@ namespace LaptopSimulator2015.Levels
                     Rect tr = new Rect(targ, new Vector2(power, power), true);
                     for (int i = 0; i < targets.Count; i++)
                     {
-                        if (targets[i].distanceToRectSquared(tr) <= 676)
+                        if (targets[i].distanceToRectSquared(tr) <= 400)
                             targetsToRemove.Add(targets[i]);
                     }
                       targets = targets.Except(targetsToRemove.Distinct()).Distinct().ToList();
                     g.DrawRectangle(tr, Color.White);
-
-                    g.DrawSizedString("TL", 10, tr.topLeftPoint.toPointF(), Brushes.Yellow);
-                    g.DrawSizedString("TR", 10, tr.topRightPoint.toPointF(), Brushes.Yellow);
-                    g.DrawSizedString("BL", 10, tr.bottomLeftPoint.toPointF(), Brushes.Yellow);
-                    g.DrawSizedString("BR", 10, tr.bottomRightPoint.toPointF(), Brushes.Yellow);
-                    g.DrawSizedString("CT", 10, tr.Location.toPointF(), Brushes.Blue);
                     power = 10;
                 }
                 targ = new Vector2(center);
