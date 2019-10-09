@@ -51,7 +51,7 @@ namespace LaptopSimulator2015
             this.options_2 = new System.Windows.Forms.Panel();
             this.levelWindow = new System.Windows.Forms.Panel();
             this.levelWindowC1 = new System.Windows.Forms.Button();
-            this.levelWindowContents = new LaptopSimulator2015.WizardTab();
+            this.levelWindowContents = new WizardTab();
             this.levelWindow1 = new System.Windows.Forms.TabPage();
             this.levelWindowText1 = new System.Windows.Forms.Label();
             this.levelWindow2 = new System.Windows.Forms.TabPage();

@@ -1,3 +1,5 @@
+Maybe Linux builds? (P/Invoke would need to be interchangable, needs to be researched)
+
 Ideas for content:
 - Goals:
   - MS Word = Sentenz
