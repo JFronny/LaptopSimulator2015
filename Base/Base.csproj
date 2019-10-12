@@ -53,12 +53,6 @@
     <Compile Include="Rect.cs" />
     <Compile Include="Vector2.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\CC-Functions\W32\W32.csproj">
-      <Project>{23DE4AE0-5075-4CCC-8440-4D131CA0FBBA}</Project>
-      <Name>W32</Name>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>

@@ -1,5 +1,4 @@
-﻿using CC_Functions.W32;
-using LaptopSimulator2015.Properties;
+﻿using LaptopSimulator2015.Properties;
 using System;
 using System.Drawing;
 using System.IO;
@@ -25,7 +24,6 @@ namespace LaptopSimulator2015
             Console.Title = "LaptopSimulator2015";
             splash = new Splash();
             splash.Show();
-            Wnd32.fromForm(splash).MakeOverlay();
             Thread.Sleep(2000);
 #if !DEBUG
             FileStream filestream = new FileStream(".log", FileMode.Create);

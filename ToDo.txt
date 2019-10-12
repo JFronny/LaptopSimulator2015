@@ -1,4 +1,4 @@
-Maybe Linux builds? (P/Invoke would need to be interchangable, needs to be researched)
+Maybe Linux builds? (Possible with #if, need a function to check whether a key is down in Linux (see Base/Input))
 
 Ideas for content:
 - Goals:
